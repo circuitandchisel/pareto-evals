@@ -1,4 +1,4 @@
-# atxp-evals
+# pareto-evals
 
 Clean, reproducible benchmark suite for the self-hosted cascade **release candidate**.
 Built so that (a) every model call goes through **one swappable function**, and (b) each
