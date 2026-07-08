@@ -13,7 +13,7 @@ import os
 from datasets import get_dataset_config_names, load_dataset
 
 OUT = os.path.join(os.path.dirname(__file__), "mmmu_pro.json")
-REPO = "MMMU/MMMU-Pro"
+REPO = "MMMU/MMMU_Pro"
 PREFERRED = ["standard (10 options)", "standard", "standard (4 options)"]
 
 
