@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+.env
+.venv/
+venv/
+results/
+# datasets can be large / licensed — vendor deliberately, not by default
+datasets/*
+!datasets/.gitkeep
+!datasets/*.py
+!datasets/*.md
