@@ -31,17 +31,34 @@ def _prompt(it: dict) -> str:
 
 
 def _extract(text: str | None):
+    """Return the content of the LAST \\boxed{...}, brace-balanced (handles \\frac{a}{b})."""
     if not text:
         return None
-    boxed = re.findall(r"\\boxed\{([^{}]*)\}", text)
-    if boxed:
-        return boxed[-1].strip()
+    idx = text.rfind("\\boxed")
+    if idx != -1:
+        i = text.find("{", idx)
+        if i != -1:
+            depth = 0
+            for j in range(i, len(text)):
+                if text[j] == "{":
+                    depth += 1
+                elif text[j] == "}":
+                    depth -= 1
+                    if depth == 0:
+                        return text[i + 1:j].strip()
     nums = re.findall(r"-?\d+(?:/\d+)?", text)
     return nums[-1] if nums else None
 
 
 def _norm(s) -> str:
-    return re.sub(r"\s+", "", str(s)).replace("\\!", "").strip().rstrip(".").lower()
+    """Best-effort LaTeX-ish normalizer. NOTE: not true math equivalence — for the real
+    run, replace `grade` with a sympy-equivalence or LLM-judge grader (e.g. math-verify)."""
+    s = str(s)
+    s = re.sub(r"\\frac\{([^{}]+)\}\{([^{}]+)\}", r"(\1)/(\2)", s)
+    s = re.sub(r"\\d?frac", "", s)
+    for tok in ("\\left", "\\right", "\\,", "\\!", "\\ ", "$", "\\displaystyle"):
+        s = s.replace(tok, "")
+    return re.sub(r"\s+", "", s).strip().rstrip(".").lower()
 
 
 def solve(it: dict):
