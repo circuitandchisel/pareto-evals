@@ -7,12 +7,26 @@ from __future__ import annotations
 
 import json
 import os
+import random
 import statistics
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from typing import Callable
 
 from .cost import cost_since
+
+
+def _apply_limit(items: list[dict]) -> list[dict]:
+    """LIMIT=N env -> a REPRESENTATIVE seeded-random subsample of N items (never first-N).
+    LIMIT_SEED (default 0) fixes the draw. Used for smoke tests / quick reps."""
+    n = os.environ.get("LIMIT")
+    if not n:
+        return items
+    n = int(n)
+    if n >= len(items):
+        return items
+    rng = random.Random(int(os.environ.get("LIMIT_SEED", "0")))
+    return rng.sample(items, n)
 
 
 def _usage(u) -> dict | None:
@@ -35,6 +49,7 @@ def run_benchmark(
     cost_log: str | None = None,      # server cost log for authoritative $/task
 ) -> dict:
     os.makedirs(out_dir, exist_ok=True)
+    items = _apply_limit(items)
     t_start = time.time()
     rows: list[dict] = []
 
