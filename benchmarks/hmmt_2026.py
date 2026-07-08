@@ -69,8 +69,26 @@ def solve(it: dict):
     return _extract(content), meta
 
 
+try:
+    from math_verify import parse as _mv_parse, verify as _mv_verify
+    _HAVE_MV = True
+except Exception:
+    _HAVE_MV = False
+
+
 def grade(it: dict, pred) -> bool:
-    return pred is not None and _norm(pred) == _norm(it["answer"])
+    """Math-equivalence grading via `math-verify` (parses LaTeX/expressions and checks
+    symbolic equality — the standard used by MathArena/lm-eval). Falls back to the
+    normalized-string compare if math-verify isn't installed or errors on an item."""
+    if pred is None:
+        return False
+    gold = str(it["answer"])
+    if _HAVE_MV:
+        try:
+            return bool(_mv_verify(_mv_parse(gold), _mv_parse(str(pred))))
+        except Exception:
+            pass
+    return _norm(pred) == _norm(gold)
 
 
 def main():
