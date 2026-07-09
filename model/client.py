@@ -102,12 +102,23 @@ def model_complete(
             time.sleep(_BACKOFF_BASE_S * (2 ** attempt))
             attempt += 1
 
+    # Per-call cost straight from the cascade's response (_meta.cascade.cost_usd).
+    # This is concurrency-safe (attributed to THIS call), unlike summing a shared
+    # server cost log — so $/task stays correct even with many benchmarks in flight.
+    cost_usd = None
+    try:
+        extra = getattr(resp, "model_extra", None) or {}
+        cost_usd = ((extra.get("_meta") or {}).get("cascade") or {}).get("cost_usd")
+    except Exception:
+        cost_usd = None
+
     choice = resp.choices[0]
     meta = {
         "latency_s": latency,
         "finish_reason": choice.finish_reason,
         "tool_calls": getattr(choice.message, "tool_calls", None),
         "usage": getattr(resp, "usage", None),
+        "cost_usd": cost_usd,
         "retries": attempt,
         "raw": resp,
     }

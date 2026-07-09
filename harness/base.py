@@ -61,6 +61,8 @@ def run_benchmark(
                 "correct": bool(grade(it, pred)),
                 "latency_s": round(meta.get("latency_s", 0.0), 3),
                 "usage": _usage(meta.get("usage")),
+                "cost_usd": meta.get("cost_usd"),
+                "retries": meta.get("retries"),
                 "finish": meta.get("finish_reason"),
                 "pred": (str(pred)[:800] if pred is not None else None),
             }
@@ -75,6 +77,18 @@ def run_benchmark(
     correct = sum(1 for r in rows if r["correct"])
     errored = sum(1 for r in rows if r.get("error"))
     lats = [r["latency_s"] for r in rows if r.get("latency_s")]
+    # Authoritative cost = sum of per-item cost from each response (concurrency-safe).
+    # Fall back to the shared server cost log only if the endpoint returned no cost.
+    item_costs = [r["cost_usd"] for r in rows if r.get("cost_usd") is not None]
+    if item_costs:
+        cost_total = round(sum(item_costs), 6)
+        cost_source = "per_item_response"
+    elif cost_log:
+        cost_total = cost_since(cost_log, t_start)
+        cost_source = "server_log"
+    else:
+        cost_total = None
+        cost_source = None
     summary = {
         "benchmark": name,
         "n": n,
@@ -84,7 +98,10 @@ def run_benchmark(
         "latency_median_s": round(statistics.median(lats), 2) if lats else None,
         "latency_mean_s": round(statistics.mean(lats), 2) if lats else None,
         "wall_s": round(time.time() - t_start, 1),
-        "cost_usd_total": cost_since(cost_log, t_start) if cost_log else None,
+        "cost_usd_total": cost_total,
+        "cost_source": cost_source,
+        "n_priced": len(item_costs),
+        "total_retries": sum(r.get("retries") or 0 for r in rows),
     }
     if summary["cost_usd_total"] is not None and n:
         summary["cost_usd_per_task"] = round(summary["cost_usd_total"] / n, 5)
