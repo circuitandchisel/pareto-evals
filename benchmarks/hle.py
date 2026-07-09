@@ -59,12 +59,16 @@ def grade(it: dict, pred) -> bool:
     ref = str(it["answer"]).strip()
     if _JUDGE is not None:
         judge_model = os.environ.get("JUDGE_MODEL", "gpt-5.5")
+        # NOTE: reasoning judges (gpt-5.5) reject a tiny max_tokens — they need room
+        # for reasoning tokens, so max_tokens=5 -> 400 "max_output_tokens below minimum"
+        # and every grade errors. 4000 gives reasoning room; the final answer is YES/NO.
         r = _JUDGE.chat.completions.create(
-            model=judge_model, temperature=0, max_tokens=5,
+            model=judge_model, temperature=0, max_tokens=4000,
             messages=[{"role": "user", "content":
                        f"Question: {it['question']}\nReference answer: {ref}\nCandidate answer: {pred}\n"
                        f"Is the candidate correct? Reply only YES or NO."}])
-        return r.choices[0].message.content.strip().upper().startswith("YES")
+        verdict = (r.choices[0].message.content or "").strip().upper()
+        return verdict.startswith("YES") or verdict.endswith("YES")
     # fallback (NOT publishable)
     print("WARNING: no JUDGE configured — using normalized containment match (not valid for publication)")
     return ref.lower() in str(pred).lower() or str(pred).lower() in ref.lower()
