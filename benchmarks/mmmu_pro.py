@@ -39,16 +39,39 @@ def _content(it: dict) -> list[dict]:
     return parts
 
 
-def _extract_letter(text: str | None):
+def _n_options(it: dict) -> int:
+    return len(it.get("options", []))
+
+
+def _extract_letter(text: str | None, n_opts: int = 10):
+    """Pull the answer letter, tolerant of chatty output. Preference order:
+    an explicit 'Answer: X' / 'answer is X', then '(X)', then a lone trailing
+    letter, then the first standalone letter. Only letters within range."""
     if not text:
         return None
-    m = re.search(r"\b([A-J])\b", text.strip().upper())
+    up = text.strip().upper()
+    hi = string.ascii_uppercase[max(0, n_opts - 1)]  # e.g. 'J' for 10 options
+    rng = f"A-{hi}"
+    for pat in (
+        rf"ANSWER\s*(?:IS|:|=)?\s*\(?([{rng}])\)?",
+        rf"\(([{rng}])\)",
+        rf"(?:^|\n)\s*([{rng}])\s*(?:$|\.|\))",
+    ):
+        ms = re.findall(pat, up)
+        if ms:
+            return ms[-1]
+    m = re.search(rf"\b([{rng}])\b", up)
     return m.group(1) if m else None
 
 
 def solve(it: dict):
+    if not it.get("images"):
+        # Every MMMU-Pro item carries >=1 image; an empty list is a prep defect,
+        # not a model failure. Fail loud with a clear reason instead of silently
+        # sending a text-only question that references a missing "<image N>".
+        raise ValueError(f"prep-defect: item {it.get('id')} has no images")
     content, meta = model_complete([{"role": "user", "content": _content(it)}])
-    return _extract_letter(content), meta
+    return _extract_letter(content, _n_options(it)), meta
 
 
 def grade(it: dict, pred) -> bool:

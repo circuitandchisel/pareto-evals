@@ -14,14 +14,46 @@ function — they make their own HTTP calls — but they point at the SAME endpo
 """
 from __future__ import annotations
 
+import os
 import time
 from typing import Any
 
-from openai import OpenAI
+from openai import (
+    OpenAI,
+    APIConnectionError,
+    APITimeoutError,
+    RateLimitError,
+    InternalServerError,
+    APIStatusError,
+)
 
 from .config import CONFIG
 
 _client = OpenAI(base_url=CONFIG.base_url, api_key=CONFIG.api_key, timeout=CONFIG.request_timeout)
+
+# Transient upstream failures (rate limits, gateway/backend hiccups) are expected
+# at full-benchmark scale. The cascade itself already retries 429/5xx upstream, but
+# it can still surface a wrapped 5xx/backend-4xx to us; retry here too so a single
+# flaky call never zeros out an item. Retrying in THIS one entry point covers every
+# benchmark uniformly. Deterministic (no jitter) so runs stay reproducible.
+_MAX_RETRIES = int(os.environ.get("MODEL_MAX_RETRIES", "4"))
+_BACKOFF_BASE_S = float(os.environ.get("MODEL_BACKOFF_BASE_S", "2.0"))
+_RETRYABLE_STATUS = {408, 409, 425, 429, 500, 502, 503, 504}
+
+
+def _is_retryable(e: Exception) -> bool:
+    if isinstance(e, (APIConnectionError, APITimeoutError, RateLimitError, InternalServerError)):
+        return True
+    status = getattr(e, "status_code", None)
+    if isinstance(e, APIStatusError) and status in _RETRYABLE_STATUS:
+        return True
+    # The cascade wraps upstream failures in a 500 whose message looks like
+    #   [local] OpenRouter 502 for "model": {... "Backend returned HTTP 400" ...}
+    # These are transient upstream issues, not a defect in our request — retry them.
+    msg = str(getattr(e, "message", "") or e)
+    if "Backend returned HTTP" in msg or "OpenRouter 5" in msg or "OpenRouter 429" in msg:
+        return True
+    return False
 
 
 def model_complete(
@@ -57,9 +89,18 @@ def model_complete(
             kwargs["tool_choice"] = tool_choice
     kwargs.update(extra)
 
-    t0 = time.perf_counter()
-    resp = _client.chat.completions.create(**kwargs)
-    latency = time.perf_counter() - t0
+    attempt = 0
+    while True:
+        t0 = time.perf_counter()
+        try:
+            resp = _client.chat.completions.create(**kwargs)
+            latency = time.perf_counter() - t0
+            break
+        except Exception as e:  # noqa: BLE001 — decide by type/message below
+            if attempt >= _MAX_RETRIES or not _is_retryable(e):
+                raise
+            time.sleep(_BACKOFF_BASE_S * (2 ** attempt))
+            attempt += 1
 
     choice = resp.choices[0]
     meta = {
@@ -67,6 +108,7 @@ def model_complete(
         "finish_reason": choice.finish_reason,
         "tool_calls": getattr(choice.message, "tool_calls", None),
         "usage": getattr(resp, "usage", None),
+        "retries": attempt,
         "raw": resp,
     }
     return choice.message.content, meta
