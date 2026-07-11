@@ -76,18 +76,61 @@ except Exception:
     _HAVE_MV = False
 
 
+def _canon(s) -> str:
+    """Canonicalize LaTeX before math-verify: \\dfrac/\\tfrac -> \\frac, strip degree marks
+    and \\left/\\right. math-verify's parser silently fails on \\dfrac and some bare exprs."""
+    s = str(s)
+    s = s.replace("\\dfrac", "\\frac").replace("\\tfrac", "\\frac")
+    s = s.replace("^{\\circ}", "").replace("^\\circ", "").replace("\\circ", "")
+    s = s.replace("\\left", "").replace("\\right", "")
+    return s.strip()
+
+
+def _numeq(pf, gf):
+    """Numeric cross-check via sympy LaTeX parsing (guards math-verify structure
+    false-positives, e.g. 3+sqrt(11) vs 3+sqrt(12)). If both sides evaluate to finite
+    reals that differ, they are NOT equal. Returns None when it can't decide numerically."""
+    try:
+        from sympy.parsing.latex import parse_latex
+    except Exception:
+        return None
+    def _clean(x):
+        x = str(x).strip()
+        if x.startswith("$") and x.endswith("$"):
+            x = x[1:-1].strip()
+        m = re.match(r"^\\boxed\{(.*)\}$", x)
+        if m:
+            x = m.group(1)
+        return x
+    def _v(x):
+        try:
+            v = complex(parse_latex(_clean(x)).evalf())
+            return v.real if abs(v.imag) < 1e-9 else None
+        except Exception:
+            return None
+    a, b = _v(pf), _v(gf)
+    if a is not None and b is not None:
+        return abs(a - b) < 1e-6
+    return None
+
+
 def grade(it: dict, pred) -> bool:
-    """Math-equivalence grading via `math-verify` (parses LaTeX/expressions and checks
-    symbolic equality — the standard used by MathArena/lm-eval). Falls back to the
-    normalized-string compare if math-verify isn't installed or errors on an item."""
+    """Math-equivalence via math-verify, with LaTeX canonicalization + multi-delimiter parse
+    attempts (bare / $...$ / \\boxed{}) since the parser fails on \\dfrac and bare forms.
+    Falls back to normalized-string compare."""
     if pred is None:
         return False
     gold = str(it["answer"])
     if _HAVE_MV:
-        try:
-            return bool(_mv_verify(_mv_parse(gold), _mv_parse(str(pred))))
-        except Exception:
-            pass
+        p, g = _canon(pred), _canon(gold)
+        for pf, gf in ((p, g), ("$" + p + "$", "$" + g + "$"), ("\\boxed{" + p + "}", "\\boxed{" + g + "}")):
+            try:
+                if bool(_mv_verify(_mv_parse(gf), _mv_parse(pf))):
+                    if _numeq(pf, gf) is False:
+                        continue  # symbolic said equal but numbers differ -> false positive
+                    return True
+            except Exception:
+                pass
     return _norm(pred) == _norm(gold)
 
 

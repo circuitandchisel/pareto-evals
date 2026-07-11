@@ -75,7 +75,7 @@ def grade(it: dict, pred) -> bool:
 
 
 def main():
-    run_benchmark(f"hle_text_{MODE}", load_items(), solve, grade,
+    run_benchmark(os.environ.get("HLE_RESULT_NAME", f"hle_text_{MODE}"), load_items(), solve, grade,
                   concurrency=int(os.environ.get("CONC", "4")),
                   cost_log=os.environ.get("ATXP_MODEL_COST_LOG"))
 
