@@ -18,13 +18,14 @@ Third-party agentic harnesses can't import the function, so they point at the *s
 endpoint* via env — still a single swap point (see `agentic/README.md`).
 
 **The productionized endpoint now exists** — the same RC config this suite measured,
-pinned in git and served at a stable URL (contract + auth + examples:
+pinned in git and served through gpu-router (contract + auth + examples:
 <https://pareto.corp.circuitandchisel.com/docs>). No code change needed, env only:
 
 ```bash
-export PARETO_MODEL_BASE_URL=https://pareto.corp.circuitandchisel.com/v1
-export PARETO_MODEL_API_KEY=$(aws ssm get-parameter --region us-west-2 --with-decryption \
-    --name /pareto/svc-key-evals --query Parameter.Value --output text)
+export PARETO_MODEL_BASE_URL=https://gpu-router.corp.circuitandchisel.com/v1
+export PARETO_MODEL_API_KEY=$(aws secretsmanager get-secret-value --region us-west-2 \
+    --secret-id llm/gpu-router-api-key --query SecretString --output text)
+export PARETO_MODEL_NAME=pareto
 ```
 
 Local `:8097` on the bench box remains the dev instance (config experiments); the
@@ -66,7 +67,8 @@ results/    per-run .jsonl + .summary.json (gitignored)
 ```bash
 pip install -r requirements.txt
 export PARETO_MODEL_BASE_URL=http://localhost:8097/v1   # bench-box dev instance, or:
-# export PARETO_MODEL_BASE_URL=https://pareto.corp.circuitandchisel.com/v1  # stable RC (see above)
+# export PARETO_MODEL_BASE_URL=https://gpu-router.corp.circuitandchisel.com/v1  # stable RC via gpu-router
+# export PARETO_MODEL_NAME=pareto
 python -m benchmarks.arc_agi_2         # etc.
 ./run_all.sh                            # simple runners; agentic per agentic/README.md
 ```
