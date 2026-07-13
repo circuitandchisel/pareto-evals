@@ -81,7 +81,7 @@ def grade(it: dict, pred) -> bool:
 def main():
     run_benchmark("mmmu_pro", load_items(), solve, grade,
                   concurrency=int(os.environ.get("CONC", "4")),
-                  cost_log=os.environ.get("ATXP_MODEL_COST_LOG"))
+                  cost_log=os.environ.get("PARETO_MODEL_COST_LOG"))
 
 
 if __name__ == "__main__":
