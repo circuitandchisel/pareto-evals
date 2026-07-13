@@ -3,16 +3,16 @@
 These benchmarks run inside their **own official harnesses** (which own the tool/agent
 loop and spin up task containers). We do **not** re-implement them. They call the model
 over HTTP, so we point them at the **same endpoint** as the simple runners — set by
-`model/config.py` env (`ATXP_MODEL_BASE_URL`, default the cascade server). That endpoint
+`model/config.py` env (`PARETO_MODEL_BASE_URL`, default the cascade server). That endpoint
 is the single swap point: change it (here, or in `model/client.py` for the Python
-runners) to move from the self-hosted cascade to the productionized ATXP API.
+runners) to move from the self-hosted cascade to the productionized Pareto API.
 
 Common env for all of these:
 ```bash
-export OPENAI_API_BASE=$ATXP_MODEL_BASE_URL      # e.g. http://localhost:8097/v1
-export OPENAI_BASE_URL=$ATXP_MODEL_BASE_URL
-export OPENAI_API_KEY=${ATXP_MODEL_API_KEY:-dummy}
-export ATXP_MODEL_COST_LOG=/path/to/server_cost.jsonl   # for $/task
+export OPENAI_API_BASE=$PARETO_MODEL_BASE_URL      # e.g. http://localhost:8097/v1
+export OPENAI_BASE_URL=$PARETO_MODEL_BASE_URL
+export OPENAI_API_KEY=${PARETO_MODEL_API_KEY:-dummy}
+export PARETO_MODEL_COST_LOG=/path/to/server_cost.jsonl   # for $/task
 ```
 
 ---
@@ -41,7 +41,7 @@ Public harness (927 expert-verified agentic tasks; needs financial-data tool acc
 harness provides). Point its model config at our endpoint.
 ```bash
 git clone https://github.com/vals-ai/finance-agent-v2 && cd finance-agent-v2
-# configure model = openai-compatible @ $ATXP_MODEL_BASE_URL, then run their entrypoint
+# configure model = openai-compatible @ $PARETO_MODEL_BASE_URL, then run their entrypoint
 ```
 Status: **work: clone, wire their model config to our endpoint, provision their data tools.**
 

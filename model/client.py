@@ -5,7 +5,7 @@ here. Nothing else in this repo talks to the model directly.
 
   TODAY:  routes to our self-hosted cascade RC via its OpenAI-compatible endpoint
           (the cascade server; default http://localhost:8097/v1, model "route").
-  LATER:  to swap in the productionized ATXP model API, change ONLY this module
+  LATER:  to swap in the productionized Pareto API, change ONLY this module
           (point base_url at the API and adjust auth). No runner needs to change.
 
 Third-party agentic harnesses (harbor / mini-swe-agent / vals-ai) can't import this
