@@ -13,10 +13,25 @@ content, meta = model_complete(messages, tools=..., max_tokens=...)
 ```
 
 Today `model_complete` points at our self-hosted cascade over its OpenAI-compatible
-endpoint (`model/config.py`, default `http://localhost:8097/v1`, model `route`). **To swap
-in the productionized ATXP model API later, change only `model/client.py`** (base_url +
-auth). Third-party agentic harnesses can't import the function, so they point at the *same
+endpoint (`model/config.py`, default `http://localhost:8097/v1`, model `route`).
+Third-party agentic harnesses can't import the function, so they point at the *same
 endpoint* via env — still a single swap point (see `agentic/README.md`).
+
+**The productionized endpoint now exists** — the same RC config this suite measured,
+pinned in git and served at a stable URL (contract + auth + examples:
+<https://pareto.corp.circuitandchisel.com/docs>). No code change needed, env only:
+
+```bash
+export ATXP_MODEL_BASE_URL=https://pareto.corp.circuitandchisel.com/v1
+export ATXP_MODEL_API_KEY=$(aws ssm get-parameter --region us-west-2 --with-decryption \
+    --name /pareto/svc-key-evals --query Parameter.Value --output text)
+```
+
+Local `:8097` on the bench box remains the dev instance (config experiments); the
+stable endpoint is for numbers meant to be cited — its `rc.env` is change-controlled
+(gpu-router repo, PR + evals slice). One caveat: `ATXP_MODEL_COST_LOG` reads a
+server-side file, so `$/task` from the cost log only works where you can read the
+server's disk — for remote runs use `_meta.cascade.cost_usd` from responses instead.
 
 Config (env): `ATXP_MODEL_BASE_URL`, `ATXP_MODEL_API_KEY`, `ATXP_MODEL_NAME`,
 `ATXP_MODEL_MAX_TOKENS`, `ATXP_MODEL_COST_LOG` (server cost log → `$/task`).
@@ -50,7 +65,8 @@ results/    per-run .jsonl + .summary.json (gitignored)
 ## Run
 ```bash
 pip install -r requirements.txt
-export ATXP_MODEL_BASE_URL=http://localhost:8097/v1   # cascade RC endpoint
+export ATXP_MODEL_BASE_URL=http://localhost:8097/v1   # bench-box dev instance, or:
+# export ATXP_MODEL_BASE_URL=https://pareto.corp.circuitandchisel.com/v1  # stable RC (see above)
 python -m benchmarks.arc_agi_2         # etc.
 ./run_all.sh                            # simple runners; agentic per agentic/README.md
 ```
