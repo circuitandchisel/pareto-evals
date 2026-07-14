@@ -5,7 +5,7 @@ here. Nothing else in this repo talks to the model directly.
 
   TODAY:  routes to our self-hosted cascade RC via its OpenAI-compatible endpoint
           (the cascade server; default http://localhost:8097/v1, model "route").
-  LATER:  to swap in the productionized ATXP model API, change ONLY this module
+  LATER:  to swap in the productionized model API, change ONLY this module
           (point base_url at the API and adjust auth). No runner needs to change.
 
 Third-party agentic harnesses (harbor / mini-swe-agent / vals-ai) can't import this
@@ -108,7 +108,16 @@ def model_complete(
     cost_usd = None
     try:
         extra = getattr(resp, "model_extra", None) or {}
+        # Read cost from the response in priority order:
+        #   1) self-hosted cascade meta  2) top-level cost/cost_usd  3) usage.cost
         cost_usd = ((extra.get("_meta") or {}).get("cascade") or {}).get("cost_usd")
+        if cost_usd is None:
+            cost_usd = extra.get("cost_usd") or extra.get("cost")
+        if cost_usd is None:
+            _u = getattr(resp, "usage", None)
+            _ue = getattr(_u, "model_extra", None) or {}
+            cost_usd = _ue.get("cost") or _ue.get("cost_usd")
+        cost_usd = float(cost_usd) if cost_usd is not None else None
     except Exception:
         cost_usd = None
 

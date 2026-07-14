@@ -3,30 +3,30 @@
 These benchmarks run inside their **own official harnesses** (which own the tool/agent
 loop and spin up task containers). We do **not** re-implement them. They call the model
 over HTTP, so we point them at the **same endpoint** as the simple runners — set by
-`model/config.py` env (`ATXP_MODEL_BASE_URL`, default the cascade server). That endpoint
+`model/config.py` env (`MODEL_BASE_URL`, default the cascade server). That endpoint
 is the single swap point: change it (here, or in `model/client.py` for the Python
-runners) to move from the self-hosted cascade to the productionized ATXP API.
+runners) to move from the self-hosted cascade to the productionized model API.
 
 Common env for all of these:
 ```bash
-export OPENAI_API_BASE=$ATXP_MODEL_BASE_URL      # e.g. http://localhost:8097/v1
-export OPENAI_BASE_URL=$ATXP_MODEL_BASE_URL
-export OPENAI_API_KEY=${ATXP_MODEL_API_KEY:-dummy}
-export ATXP_MODEL_COST_LOG=/path/to/server_cost.jsonl   # for $/task
+export OPENAI_API_BASE=$MODEL_BASE_URL   # e.g. http://localhost:8097/v1
+export OPENAI_BASE_URL=$MODEL_BASE_URL
+export OPENAI_API_KEY=${MODEL_API_KEY:-dummy}
+export MODEL_COST_LOG=/path/to/server_cost.jsonl  # for $/task
 ```
 
 ---
 
-## 1. Terminal-Bench 2.1  — `harbor`
+## 1. Terminal-Bench 2.1 — `harbor`
 Official harness `harbor`, agent `terminus-2`. **Use 2.1, not 2.0** (2.1 fixed 28/89 tasks:
 drifted deps, too-tight timeouts, instruction/test mismatches; turn-limits → time-limits).
 ```bash
 harbor run -d terminal-bench@2.1 -a terminus-2 -m openai/route \
-  -n 4 --agent-timeout-multiplier 3 --yes -o results/terminal_bench_2_1
+ -n 4 --agent-timeout-multiplier 3 --yes -o results/terminal_bench_2_1
 ```
 Status: harness proven at 2.0 on our stack; **work: bump version to 2.1, re-pull task images.**
 
-## 2. SWE-Bench Pro  — `mini-swe-agent` + Scale grader
+## 2. SWE-Bench Pro — `mini-swe-agent` + Scale grader
 Agent: `mini-extra swebench` (backticks config — our models emit ```bash blocks, not tool_calls).
 Grading: official `scaleapi/SWE-bench_Pro-os` (`--use_local_docker --dockerhub_username=jefzda`,
 image repo path `/app`). Validated 100% on gold in prior work.
@@ -36,16 +36,16 @@ mini-extra swebench --subset pro --split test -m openai/route -w 4 -o results/sw
 ```
 Status: **work: full Pro set (not a slice), confirm jefzda images, run official grader.**
 
-## 3. Finance Agent v2  — `vals-ai/finance-agent-v2`
+## 3. Finance Agent v2 — `vals-ai/finance-agent-v2`
 Public harness (927 expert-verified agentic tasks; needs financial-data tool access the
 harness provides). Point its model config at our endpoint.
 ```bash
 git clone https://github.com/vals-ai/finance-agent-v2 && cd finance-agent-v2
-# configure model = openai-compatible @ $ATXP_MODEL_BASE_URL, then run their entrypoint
+# configure model = openai-compatible @ $MODEL_BASE_URL, then run their entrypoint
 ```
 Status: **work: clone, wire their model config to our endpoint, provision their data tools.**
 
-## 4. DRACO  — existing `draco-cascade-bench` harness
+## 4. DRACO — existing `draco-cascade-bench` harness
 Deep-research (tools: Exa web_search/web_fetch, maxSteps 20) + `gemini-3.1-pro-preview` judge
 on the weighted rubric. Contamination guard blocks `huggingface.co` + `r2cdn.perplexity.ai`.
 Cascade result we keep: **73.1 vs solo-Opus 68.9 at <½ cost.**
@@ -53,7 +53,7 @@ Harness lives in `draco-cascade-bench` (ported to `src/local/run.ts` on the benc
 `circuitandchisel/draco-bench-box`). It already calls the cascade via the router — same endpoint.
 ```bash
 # from the draco harness:
-npm run local -- --bench draco --limit 100      # points at the cascade endpoint
+npm run local -- --bench draco --limit 100   # points at the cascade endpoint
 ```
 Status: **works today.** Work: run full 100 on the frozen RC endpoint; keep the gemini judge.
 

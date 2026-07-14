@@ -18,6 +18,6 @@ def solve(it):
 def grade(it, pred):
     return pred is not None and str(pred).strip().upper()==str(it["answer"]).strip().upper()
 def main():
-    run_benchmark(os.environ.get("GPQA_RESULT_NAME","gpqa"), load_items(), solve, grade,
-                  concurrency=int(os.environ.get("CONC","6")), cost_log=os.environ.get("ATXP_MODEL_COST_LOG"))
+    run_benchmark(os.environ.get("RESULT_NAME") or "gpqa", load_items(), solve, grade,
+                  concurrency=int(os.environ.get("CONC","6")), cost_log=os.environ.get("MODEL_COST_LOG"))
 if __name__=="__main__": main()

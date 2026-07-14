@@ -9,3 +9,4 @@ datasets/*
 !datasets/.gitkeep
 !datasets/*.py
 !datasets/*.md
+*_summary.txt
