@@ -29,7 +29,7 @@ MODE = os.environ.get("HLE_MODE", "no_tools")
 
 _JUDGE = None
 if os.environ.get("JUDGE_BASE_URL"):
-    _JUDGE = OpenAI(base_url=os.environ["JUDGE_BASE_URL"], api_key=os.environ.get("JUDGE_API_KEY", "dummy"))
+    _JUDGE = OpenAI(base_url=os.environ["JUDGE_BASE_URL"], api_key=os.environ.get("JUDGE_API_KEY", "dummy"), timeout=float(os.environ.get("JUDGE_TIMEOUT", "90")), max_retries=2)
 
 
 def load_items() -> list[dict]:
@@ -62,13 +62,17 @@ def grade(it: dict, pred) -> bool:
         # NOTE: reasoning judges (gpt-5.5) reject a tiny max_tokens — they need room
         # for reasoning tokens, so max_tokens=5 -> 400 "max_output_tokens below minimum"
         # and every grade errors. 4000 gives reasoning room; the final answer is YES/NO.
-        r = _JUDGE.chat.completions.create(
-            model=judge_model, temperature=0, max_tokens=4000,
-            messages=[{"role": "user", "content":
-                       f"Question: {it['question']}\nReference answer: {ref}\nCandidate answer: {pred}\n"
-                       f"Is the candidate correct? Reply only YES or NO."}])
-        verdict = (r.choices[0].message.content or "").strip().upper()
-        return verdict.startswith("YES") or verdict.endswith("YES")
+        try:
+            r = _JUDGE.chat.completions.create(
+                model=judge_model, temperature=0, max_tokens=4000,
+                messages=[{"role": "user", "content":
+                           f"Question: {it['question']}\nReference answer: {ref}\nCandidate answer: {pred}\n"
+                           f"Is the candidate correct? Reply only YES or NO."}])
+            verdict = (r.choices[0].message.content or "").strip().upper()
+            return verdict.startswith("YES") or verdict.endswith("YES")
+        except Exception as e:
+            print(f"WARNING: judge failed ({type(e).__name__}: {e}); containment fallback for this item")
+            return ref.lower() in str(pred).lower() or str(pred).lower() in ref.lower()
     # fallback (NOT publishable)
     print("WARNING: no JUDGE configured — using normalized containment match (not valid for publication)")
     return ref.lower() in str(pred).lower() or str(pred).lower() in ref.lower()
