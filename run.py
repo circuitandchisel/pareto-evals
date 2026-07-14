@@ -42,8 +42,12 @@ BENCHMARKS: dict[str, dict] = {
     "arxiv_math": {"module": "benchmarks.arxiv_math", "judge": False, "grader": "symbolic math match"},
     "mmmu_pro":   {"module": "benchmarks.mmmu_pro",   "judge": False, "grader": "exact (MCQ)"},
     "arc_agi_2":  {"module": "benchmarks.arc_agi_2",  "judge": False, "grader": "exact grid"},
+    # Agentic (opt-in): needs Docker + mini-swe-agent + the SWE-rebench fork. Not in
+    # `--benchmarks all`; request it explicitly. See README "Agentic benchmark".
+    "swe_rebench": {"script": "agentic/run_swe.py", "agentic": True, "judge": False,
+                     "grader": "SWE-rebench fork (resolved)"},
 }
-DEFAULT_ORDER = ["gpqa", "hle", "arxiv_math", "mmmu_pro", "arc_agi_2"]
+DEFAULT_ORDER = ["gpqa", "hle", "arxiv_math", "mmmu_pro", "arc_agi_2"]  # 'all' (swe_rebench is opt-in)
 
 
 def load_env(path: str = ".env") -> None:
@@ -117,13 +121,23 @@ def run_benchmark_for_model(bench: str, m: dict, limit: int | None, concurrency:
         env["LIMIT"] = str(limit)
     else:
         env.pop("LIMIT", None)
-    # Judge (free-form graders) — passed straight through from .env if present.
-    for k in ("JUDGE_BASE_URL", "JUDGE_API_KEY", "JUDGE_MODEL", "JUDGE_TIMEOUT"):
+    # Per-model token prices (agentic $/task computes from usage × price; harmless elsewhere).
+    if m.get("in_price") is not None:
+        env["MODEL_INPUT_PRICE_PER_MTOK"] = str(m["in_price"])
+    if m.get("out_price") is not None:
+        env["MODEL_OUTPUT_PRICE_PER_MTOK"] = str(m["out_price"])
+    # Judge (free-form graders) + SWE overrides — passed straight through from .env if present.
+    for k in ("JUDGE_BASE_URL", "JUDGE_API_KEY", "JUDGE_MODEL", "JUDGE_TIMEOUT",
+              "SWE_DATASET", "SWE_SPLIT", "SWE_MINI_BIN", "SWE_GRADER_PYTHON", "SWE_FILTER_IDS"):
         if os.environ.get(k):
             env[k] = os.environ[k]
 
     print(f"  ▶ {bench} × {m['label']}  (limit={limit or 'full'}, model={m['model']})", flush=True)
-    proc = subprocess.run([sys.executable, "-m", info["module"]], cwd=ROOT, env=env)
+    if info.get("agentic"):
+        cmd = [sys.executable, str(ROOT / info["script"])]
+    else:
+        cmd = [sys.executable, "-m", info["module"]]
+    proc = subprocess.run(cmd, cwd=ROOT, env=env)
     if proc.returncode != 0:
         print(f"    ! {bench} × {m['label']} exited {proc.returncode} (see output above)", flush=True)
     return result_name
@@ -187,7 +201,8 @@ def main() -> None:
     load_env()
     ap = argparse.ArgumentParser(description="Pareto-evals head-to-head runner.")
     ap.add_argument("--benchmarks", default="all",
-                    help=f"comma list or 'all'. Known: {', '.join(DEFAULT_ORDER)}")
+                    help=f"comma list or 'all' (={', '.join(DEFAULT_ORDER)}). "
+                         f"Opt-in agentic: swe_rebench (needs Docker + SWE-rebench fork).")
     ap.add_argument("--slice", default=None,
                     help="'all' (default), an int (all benchmarks), or 'gpqa=100,hle=300'")
     ap.add_argument("--models", default="pareto,comparison",

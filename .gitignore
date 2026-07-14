@@ -10,3 +10,9 @@ datasets/*
 !datasets/*.py
 !datasets/*.md
 *_summary.txt
+logs/
+*_grade.json
+.venv-mini/
+.venv-swegrader/
+SWE-bench-fork/
+swe_out_*

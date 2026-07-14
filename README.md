@@ -28,8 +28,9 @@ and get a single table:
 | `mmmu_pro` | MMMU-Pro (multimodal MCQ) | exact | no |
 | `arc_agi_2` | ARC-AGI-2 (abstract grids) | exact grid | no |
 
-> **Agentic coding (SWE-rebench)** runs through a separate harness (Docker + the
-> SWE-rebench eval fork), not this runner — see [`agentic/README.md`](agentic/README.md).
+> **`swe_rebench`** (agentic coding) is also runnable through this runner but is
+> **opt-in** — it needs Docker + mini-swe-agent + the SWE-rebench fork, so it's excluded
+> from `--benchmarks all`. See [Agentic benchmark](#agentic-benchmark-swe_rebench) below.
 
 ---
 
@@ -173,6 +174,47 @@ correctness, token usage, cost, prediction), plus a `.summary.json` per run.
   (found to be contaminated for recent models). Run it explicitly if you want it.
 
 ---
+
+## Agentic benchmark (swe_rebench)
+
+`swe_rebench` runs real repository-fixing tasks through [mini-swe-agent](https://github.com/SWE-agent/mini-swe-agent)
+and grades them with the [SWE-rebench fork](https://github.com/SWE-rebench/SWE-bench-fork)
+of `swebench`. It slots into the same table (score = % resolved, plus $/task) but has
+**extra prerequisites**, so it's opt-in:
+
+1. **Docker** (each task runs in a container; images are pulled on first use — tens of GB
+   across the full split, so give the box ≥100 GB disk for large runs).
+2. **mini-swe-agent** installed in its own venv.
+3. **The SWE-rebench fork** of `swebench` installed in a venv (it reads each instance's
+   `install_config`, which stock `swebench` lacks for these repos).
+
+One-time setup:
+
+```bash
+bash scripts/bootstrap-swe.sh      # installs docker check + mini-swe-agent + the fork
+```
+
+Then point `.env` at them and set Pareto token prices (agentic $/task is `tokens × price`,
+because the agentic harness can't read an inline cost field):
+
+```bash
+SWE_MINI_BIN=/path/to/mini/venv/bin/mini-extra
+SWE_GRADER_PYTHON=/path/to/fork/venv/bin/python
+PARETO_INPUT_PRICE_PER_MTOK=...
+PARETO_OUTPUT_PRICE_PER_MTOK=...
+```
+
+Run it (add the comparison model's prices too if you include it):
+
+```bash
+python run.py --benchmarks swe_rebench --slice 30        # 30 clean instances
+python run.py --benchmarks gpqa,hle,swe_rebench          # mix API + agentic
+```
+
+Defaults to the contamination-clean `nebius/SWE-rebench-leaderboard` `2026_03` split
+(override with `SWE_DATASET` / `SWE_SPLIT`). **Note:** the endpoint must return standard
+`usage` token counts for $/task to be computed; if it returns none, the score is still
+reported and $/task is left blank.
 
 ## Reproducing a full head-to-head
 
