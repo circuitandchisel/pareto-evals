@@ -51,9 +51,37 @@ def _is_retryable(e: Exception) -> bool:
     #   [local] OpenRouter 502 for "model": {... "Backend returned HTTP 400" ...}
     # These are transient upstream issues, not a defect in our request — retry them.
     msg = str(getattr(e, "message", "") or e)
-    if "Backend returned HTTP" in msg or "OpenRouter 5" in msg or "OpenRouter 429" in msg:
+    if ("Backend returned HTTP" in msg or "OpenRouter 5" in msg or "OpenRouter 429" in msg
+            or "fetch failed" in msg or "upstream failure" in msg):
         return True
     return False
+
+
+_STREAM = os.environ.get("MODEL_STREAM", "").lower() in ("1", "true", "yes")
+
+
+def _consume_stream(stream) -> dict:
+    """Accumulate a streaming chat completion into content + usage + cost meta.
+
+    Streaming avoids the gpu-router's non-stream wall-clock timeout
+    (NON_STREAM_TIMEOUT_MS): as long as the backend keeps emitting chunks, a long
+    high-effort generation completes (governed only by TTFB + per-chunk stall).
+    """
+    parts, finish, usage, cost_meta = [], None, None, None
+    for chunk in stream:
+        ce = getattr(chunk, "model_extra", None) or {}
+        if ce.get("_meta"):
+            cost_meta = ce["_meta"]
+        if getattr(chunk, "usage", None) is not None:
+            usage = chunk.usage
+        chs = getattr(chunk, "choices", None) or []
+        if chs:
+            delta = getattr(chs[0], "delta", None)
+            if delta is not None and getattr(delta, "content", None):
+                parts.append(delta.content)
+            if getattr(chs[0], "finish_reason", None):
+                finish = chs[0].finish_reason
+    return {"content": ("".join(parts) or None), "finish": finish, "usage": usage, "cost_meta": cost_meta}
 
 
 def model_complete(
@@ -89,11 +117,18 @@ def model_complete(
             kwargs["tool_choice"] = tool_choice
     kwargs.update(extra)
 
+    # Streaming (opt-in via MODEL_STREAM) dodges the gpu-router non-stream wall
+    # timeout for long high-effort generations. Not used for tool calls.
+    if _STREAM and not tools:
+        kwargs["stream"] = True
+
+    streamed = None
     attempt = 0
     while True:
         t0 = time.perf_counter()
         try:
             resp = _client.chat.completions.create(**kwargs)
+            streamed = _consume_stream(resp) if kwargs.get("stream") else None
             latency = time.perf_counter() - t0
             break
         except Exception as e:  # noqa: BLE001 — decide by type/message below
@@ -101,6 +136,28 @@ def model_complete(
                 raise
             time.sleep(_BACKOFF_BASE_S * (2 ** attempt))
             attempt += 1
+
+    if streamed is not None:
+        # Cost from the streamed cascade _meta, else usage.cost, else None.
+        _cm = streamed.get("cost_meta") or {}
+        cost_usd = ((_cm.get("cascade") or {}).get("cost_usd"))
+        _u = streamed.get("usage")
+        if cost_usd is None and _u is not None:
+            _ue = getattr(_u, "model_extra", None) or {}
+            cost_usd = _ue.get("cost") or _ue.get("cost_usd")
+        try:
+            cost_usd = float(cost_usd) if cost_usd is not None else None
+        except (TypeError, ValueError):
+            cost_usd = None
+        return streamed.get("content"), {
+            "latency_s": latency,
+            "finish_reason": streamed.get("finish"),
+            "tool_calls": None,
+            "usage": _u,
+            "cost_usd": cost_usd,
+            "retries": attempt,
+            "raw": None,
+        }
 
     # Per-call cost straight from the cascade's response (_meta.cascade.cost_usd).
     # This is concurrency-safe (attributed to THIS call), unlike summing a shared
