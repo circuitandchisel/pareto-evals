@@ -46,6 +46,10 @@ BENCHMARKS: dict[str, dict] = {
     # `--benchmarks all`; request it explicitly. See README "Agentic benchmark".
     "swe_rebench": {"script": "agentic/run_swe.py", "agentic": True, "judge": False,
                      "grader": "SWE-rebench fork (resolved)"},
+    # Agentic (opt-in): SWE-Bench Verified via mini-swe-agent + the OFFICIAL swebench
+    # harness. Canonical images (swebench/sweb.eval.x86_64.*) exist -> real patches.
+    "swe_verified": {"script": "agentic/run_swe_verified.py", "agentic": True, "judge": False,
+                     "grader": "official SWE-bench Verified harness (resolved)"},
 }
 DEFAULT_ORDER = ["gpqa", "hle", "arxiv_math", "mmmu_pro", "arc_agi_2"]  # 'all' (swe_rebench is opt-in)
 
@@ -202,7 +206,7 @@ def main() -> None:
     ap = argparse.ArgumentParser(description="Pareto-evals head-to-head runner.")
     ap.add_argument("--benchmarks", default="all",
                     help=f"comma list or 'all' (={', '.join(DEFAULT_ORDER)}). "
-                         f"Opt-in agentic: swe_rebench (needs Docker + SWE-rebench fork).")
+                         f"Opt-in agentic: swe_rebench, swe_verified (need Docker + mini-swe-agent).")
     ap.add_argument("--slice", default=None,
                     help="'all' (default), an int (all benchmarks), or 'gpqa=100,hle=300'")
     ap.add_argument("--models", default="pareto,comparison",
