@@ -37,7 +37,7 @@ RESULTS = ROOT / "results"
 
 DATASET = os.environ.get("SWE_DATASET", "princeton-nlp/SWE-bench_Verified")
 SPLIT = os.environ.get("SWE_SPLIT", "test")
-MINI_BIN = os.environ.get("SWE_MINI_BIN", "mini-extra")          # mini-swe-agent entrypoint
+MINI_BIN = os.environ.get("SWE_MINI_BIN") or os.path.join(os.path.dirname(sys.executable), "mini-extra")  # venv-local mini-swe-agent
 GRADER_PY = os.environ.get("SWE_GRADER_PYTHON", sys.executable)  # official swebench harness
 
 
