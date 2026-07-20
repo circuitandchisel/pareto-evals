@@ -39,7 +39,7 @@ RESULTS = ROOT / "results"
 BENCHMARKS: dict[str, dict] = {
     "gpqa":       {"module": "benchmarks.gpqa",       "judge": False, "grader": "exact letter (A-D)"},
     "hle":        {"module": "benchmarks.hle",        "judge": True,  "grader": "LLM judge"},
-    "arxiv_math": {"module": "benchmarks.arxiv_math", "judge": False, "grader": "symbolic math match"},
+    "arxiv_math": {"module": "benchmarks.arxiv_math", "judge": True,  "grader": "symbolic OR gpt-5.5 equivalence judge"},
     "mmmu_pro":   {"module": "benchmarks.mmmu_pro",   "judge": False, "grader": "exact (MCQ)"},
     "arc_agi_2":  {"module": "benchmarks.arc_agi_2",  "judge": False, "grader": "exact grid"},
     # Agentic (opt-in): needs Docker + mini-swe-agent + the SWE-rebench fork. Not in
