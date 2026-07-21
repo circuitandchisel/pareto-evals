@@ -69,9 +69,21 @@ def run_benchmark(
         except Exception as e:  # never let one item kill the run
             return {"id": it.get("id"), "correct": False, "error": f"{type(e).__name__}: {e}"[:300]}
 
-    with ThreadPoolExecutor(max_workers=concurrency) as ex:
-        for fut in as_completed([ex.submit(_one, it) for it in items]):
-            rows.append(fut.result())
+    total = len(items)
+    jsonl_path = os.path.join(out_dir, f"{name}.jsonl")
+    # Incremental: write each row as it completes (flushed) + log progress, so a long
+    # run is visibly progressing and its partial results are recoverable (a crash or a
+    # kill leaves the completed items on disk). Rewritten once more at the end is
+    # unnecessary — this IS the file.
+    with ThreadPoolExecutor(max_workers=concurrency) as ex, open(jsonl_path, "w") as _jf:
+        for i, fut in enumerate(as_completed([ex.submit(_one, it) for it in items]), 1):
+            r = fut.result()
+            rows.append(r)
+            _jf.write(json.dumps(r) + "\n"); _jf.flush()
+            if i % 10 == 0 or i == total:
+                _ok = sum(1 for x in rows if x["correct"])
+                _er = sum(1 for x in rows if x.get("error"))
+                print(f"[{name}] progress {i}/{total}  ok={_ok} err={_er}", flush=True)
 
     n = len(rows)
     correct = sum(1 for r in rows if r["correct"])
@@ -106,9 +118,7 @@ def run_benchmark(
     if summary["cost_usd_total"] is not None and n:
         summary["cost_usd_per_task"] = round(summary["cost_usd_total"] / n, 5)
 
-    with open(os.path.join(out_dir, f"{name}.jsonl"), "w") as f:
-        for r in rows:
-            f.write(json.dumps(r) + "\n")
+    # jsonl already written incrementally above; just the summary here.
     with open(os.path.join(out_dir, f"{name}.summary.json"), "w") as f:
         json.dump(summary, f, indent=2)
 
