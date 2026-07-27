@@ -1,0 +1,21 @@
+{
+  "name": "draco-eval",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "DRACO (deep-research agentic) benchmark runner — points at any OpenAI-compatible endpoint.",
+  "scripts": {
+    "fetch-dataset": "tsx src/dataset.ts --download",
+    "bench": "tsx src/run.ts",
+    "report": "tsx src/report.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  }
+}

@@ -16,3 +16,9 @@ logs/
 .venv-swegrader/
 SWE-bench-fork/
 swe_out_*
+
+# vendored DRACO (TS) sub-harness
+draco/node_modules/
+draco/dist/
+draco/data/
+draco/.env

@@ -17,16 +17,17 @@ class ModelConfig:
     model: str             # model name the endpoint expects
     temperature: float
     max_tokens: int
-    cost_log: str | None   # server-side JSONL that records per-call cost (self-hosted only)
+    cost_log: str | None   # optional server-side JSONL that records per-call cost, if your endpoint writes one
     request_timeout: float
 
 
 def load() -> ModelConfig:
     return ModelConfig(
-        # Default = the self-hosted cascade server (leader/RC config) on the bench box.
-        base_url=os.environ.get("MODEL_BASE_URL", "http://localhost:8097/v1"),
+        # Your model's OpenAI-compatible endpoint. Set MODEL_BASE_URL / MODEL_NAME
+        # (run.py sets these per-model from PARETO_* / COMPARISON_*).
+        base_url=os.environ.get("MODEL_BASE_URL", "http://localhost:8000/v1"),
         api_key=os.environ.get("MODEL_API_KEY", "dummy"),
-        model=os.environ.get("MODEL_NAME", "route"),
+        model=os.environ.get("MODEL_NAME", "default"),
         temperature=float(os.environ.get("MODEL_TEMPERATURE", "0.0")),
         max_tokens=int(os.environ.get("MODEL_MAX_TOKENS", "8192")),
         cost_log=os.environ.get("MODEL_COST_LOG"),

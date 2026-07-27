@@ -28,9 +28,36 @@ and get a single table:
 | `mmmu_pro` | MMMU-Pro (multimodal MCQ) | exact | no |
 | `arc_agi_2` | ARC-AGI-2 (abstract grids) | exact grid | no |
 
-> **`swe_rebench`** (agentic coding) is also runnable through this runner but is
-> **opt-in** — it needs Docker + mini-swe-agent + the SWE-rebench fork, so it's excluded
-> from `--benchmarks all`. See [Agentic benchmark](#agentic-benchmark-swe_rebench) below.
+### Agentic (opt-in — need Docker + extra harnesses; excluded from `--benchmarks all`)
+
+| Name | What | Harness |
+|---|---|---|
+| `swe_verified` | SWE-bench Verified (500 real GitHub fixes) | `mini-swe-agent` + `swebench` grader (`run.py`) |
+| `swe_rebench` | SWE-rebench (clean agentic coding) | `mini-swe-agent` (`run.py`) |
+| Terminal-Bench 2.1 | agentic terminal tasks | [`harbor`](agentic/run_tb.sh) |
+| DRACO | deep-research, LLM-judged rubrics | vendored Node runner in [`draco/`](draco/) |
+
+See [`agentic/README.md`](agentic/README.md) for all four. They call your model over the
+same OpenAI-compatible endpoint — nothing provider-specific.
+
+### Datasets & licensing
+
+Datasets are **not** redistributed here — each `datasets/prepare_*.py` (and DRACO's
+`fetch-dataset`) downloads from the upstream source, which carries its own license and
+terms of use:
+
+| Benchmark | Source | License |
+|---|---|---|
+| GPQA-Diamond | `Idavidrein/gpqa` (HF) | CC BY 4.0 (gated) |
+| HLE | `cais/hle` (HF) | per dataset card |
+| MMMU-Pro | `MMMU/MMMU_Pro` (HF) | per dataset card |
+| ArXiv-math | MathArena | per source |
+| ARC-AGI-2 | ARC Prize | Apache-2.0 |
+| DRACO | `perplexity-ai/draco` (HF) | MIT |
+| SWE-bench Verified | `princeton-nlp/SWE-bench_Verified` (HF) | per dataset card |
+
+You are responsible for complying with each dataset's terms. This repo (the harness) is
+MIT-licensed; the datasets are not.
 
 ---
 

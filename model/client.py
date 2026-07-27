@@ -3,12 +3,11 @@
 Every benchmark — simple or agentic — resolves the model through `model_complete()`
 here. Nothing else in this repo talks to the model directly.
 
-  TODAY:  routes to our self-hosted cascade RC via its OpenAI-compatible endpoint
-          (the cascade server; default http://localhost:8097/v1, model "route").
-  LATER:  to swap in the productionized model API, change ONLY this module
-          (point base_url at the API and adjust auth). No runner needs to change.
+Point it at any OpenAI-compatible endpoint via MODEL_BASE_URL / MODEL_API_KEY /
+MODEL_NAME (run.py sets these per-model from your PARETO_* / COMPARISON_* config).
+To retarget the whole suite at a different endpoint, change ONLY this module.
 
-Third-party agentic harnesses (harbor / mini-swe-agent / vals-ai) can't import this
+Third-party agentic harnesses (harbor / mini-swe-agent) can't import this
 function — they make their own HTTP calls — but they point at the SAME endpoint via
 `model/config.py`, so the swap point is still singular. See `agentic/README.md`.
 """
@@ -32,7 +31,7 @@ from .config import CONFIG
 _client = OpenAI(base_url=CONFIG.base_url, api_key=CONFIG.api_key, timeout=CONFIG.request_timeout)
 
 # Transient upstream failures (rate limits, gateway/backend hiccups) are expected
-# at full-benchmark scale. The cascade itself already retries 429/5xx upstream, but
+# at full-benchmark scale. The endpoint may already retry 429/5xx upstream, but
 # it can still surface a wrapped 5xx/backend-4xx to us; retry here too so a single
 # flaky call never zeros out an item. Retrying in THIS one entry point covers every
 # benchmark uniformly. Deterministic (no jitter) so runs stay reproducible.
@@ -47,7 +46,7 @@ def _is_retryable(e: Exception) -> bool:
     status = getattr(e, "status_code", None)
     if isinstance(e, APIStatusError) and status in _RETRYABLE_STATUS:
         return True
-    # The cascade wraps upstream failures in a 500 whose message looks like
+    # Some endpoints wrap upstream failures in a 500 whose message looks like
     #   [local] OpenRouter 502 for "model": {... "Backend returned HTTP 400" ...}
     # These are transient upstream issues, not a defect in our request — retry them.
     msg = str(getattr(e, "message", "") or e)
@@ -63,7 +62,7 @@ _STREAM = os.environ.get("MODEL_STREAM", "").lower() in ("1", "true", "yes")
 def _consume_stream(stream) -> dict:
     """Accumulate a streaming chat completion into content + usage + cost meta.
 
-    Streaming avoids the gpu-router's non-stream wall-clock timeout
+    Streaming avoids some proxies' non-stream wall-clock timeout
     (NON_STREAM_TIMEOUT_MS): as long as the backend keeps emitting chunks, a long
     high-effort generation completes (governed only by TTFB + per-chunk stall).
     """
@@ -94,7 +93,7 @@ def model_complete(
     model: str | None = None,
     **extra: Any,
 ) -> tuple[str | None, dict]:
-    """One chat completion against the RC model.
+    """One chat completion against the configured model.
 
     Returns (content, meta):
       content : the assistant text (may be None if it only returned tool_calls)
@@ -102,7 +101,7 @@ def model_complete(
 
     Cost ($/task): latency is captured here (client-side, always available). Token
     usage is captured from the response when the endpoint returns it. The AUTHORITATIVE
-    self-hosted $/task comes from the server cost log (see `harness/cost.py`); the
+    $/task can come from a server cost log (see `harness/cost.py`); the
     productionized API will return usage/cost inline and this meta will carry it.
     """
     kwargs: dict[str, Any] = {
@@ -117,7 +116,7 @@ def model_complete(
             kwargs["tool_choice"] = tool_choice
     kwargs.update(extra)
 
-    # Streaming (opt-in via MODEL_STREAM) dodges the gpu-router non-stream wall
+    # Streaming (opt-in via MODEL_STREAM) dodges some proxies' non-stream wall
     # timeout for long high-effort generations. Not used for tool calls.
     if _STREAM and not tools:
         kwargs["stream"] = True
@@ -138,7 +137,7 @@ def model_complete(
             attempt += 1
 
     if streamed is not None:
-        # Cost from the streamed cascade _meta, else usage.cost, else None.
+        # Cost from the streamed _meta (if present), else usage.cost, else None.
         _cm = streamed.get("cost_meta") or {}
         cost_usd = ((_cm.get("cascade") or {}).get("cost_usd"))
         _u = streamed.get("usage")
@@ -159,14 +158,14 @@ def model_complete(
             "raw": None,
         }
 
-    # Per-call cost straight from the cascade's response (_meta.cascade.cost_usd).
+    # Per-call cost from the response, if the endpoint reports it (_meta.cascade.cost_usd).
     # This is concurrency-safe (attributed to THIS call), unlike summing a shared
     # server cost log — so $/task stays correct even with many benchmarks in flight.
     cost_usd = None
     try:
         extra = getattr(resp, "model_extra", None) or {}
         # Read cost from the response in priority order:
-        #   1) self-hosted cascade meta  2) top-level cost/cost_usd  3) usage.cost
+        #   1) _meta.cascade.cost_usd  2) top-level cost/cost_usd  3) usage.cost
         cost_usd = ((extra.get("_meta") or {}).get("cascade") or {}).get("cost_usd")
         if cost_usd is None:
             cost_usd = extra.get("cost_usd") or extra.get("cost")
