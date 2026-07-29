@@ -107,9 +107,14 @@ def model_complete(
     kwargs: dict[str, Any] = {
         "model": model or CONFIG.model,
         "messages": messages,
-        "temperature": CONFIG.temperature if temperature is None else temperature,
         "max_tokens": max_tokens or CONFIG.max_tokens,
     }
+    # Sampling is omitted entirely for endpoints that reject it (see
+    # ModelConfig.send_sampling). Omitting is not the same as sending a default:
+    # the endpoint applies its own sampling, so runs against such an endpoint are
+    # NOT greedy and not bit-reproducible — record that when reporting.
+    if CONFIG.send_sampling:
+        kwargs["temperature"] = CONFIG.temperature if temperature is None else temperature
     if tools:
         kwargs["tools"] = tools
         if tool_choice is not None:
@@ -131,6 +136,15 @@ def model_complete(
             latency = time.perf_counter() - t0
             break
         except Exception as e:  # noqa: BLE001 — decide by type/message below
+            # A rejected sampling parameter is a config error, not a blip: fail
+            # fast with the fix rather than burning retries on a guaranteed 400.
+            msg = str(getattr(e, "message", "") or e)
+            if "unsupported_parameter" in msg or "Unsupported sampling parameter" in msg:
+                raise RuntimeError(
+                    f"{msg}\n\nThis endpoint rejects sampling parameters. Set "
+                    f"MODEL_SEND_SAMPLING=false (or <PREFIX>_SEND_SAMPLING=false in .env) "
+                    f"for this model."
+                ) from e
             if attempt >= _MAX_RETRIES or not _is_retryable(e):
                 raise
             time.sleep(_BACKOFF_BASE_S * (2 ** attempt))
