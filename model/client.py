@@ -62,6 +62,13 @@ def _is_retryable(e: Exception) -> bool:
         return True
     if "incomplete chunked read" in msg or "peer closed connection" in msg:
         return True
+    # An endpoint can also fail a stream *in band* — emitting an SSE `error`
+    # event instead of dropping the socket. The SDK turns that into a bare
+    # APIError("An error occurred during streaming") with no status code, so
+    # neither the isinstance nor the status checks above see it. Match on the
+    # message rather than the class: a bare APIError otherwise covers real 4xx.
+    if "error occurred during streaming" in msg.lower():
+        return True
     return False
 
 
