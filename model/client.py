@@ -53,6 +53,15 @@ def _is_retryable(e: Exception) -> bool:
     if ("Backend returned HTTP" in msg or "OpenRouter 5" in msg or "OpenRouter 429" in msg
             or "fetch failed" in msg or "upstream failure" in msg):
         return True
+    # Streaming: a mid-stream disconnect surfaces as a raw httpx error from the
+    # chunk iterator, NOT wrapped by the SDK as APIConnectionError, so none of the
+    # checks above catch it. It is transient transport failure — retry it, or a
+    # streamed run silently loses every long generation the peer cuts short.
+    if type(e).__name__ in ("RemoteProtocolError", "ReadError", "ReadTimeout",
+                            "ConnectError", "IncompleteRead", "ChunkedEncodingError"):
+        return True
+    if "incomplete chunked read" in msg or "peer closed connection" in msg:
+        return True
     return False
 
 
@@ -125,6 +134,9 @@ def model_complete(
     # timeout for long high-effort generations. Not used for tool calls.
     if _STREAM and not tools:
         kwargs["stream"] = True
+        # OpenAI-compatible streaming omits usage unless explicitly requested;
+        # without this a streamed run has no token counts and therefore no $/task.
+        kwargs["stream_options"] = {"include_usage": True}
 
     streamed = None
     attempt = 0
