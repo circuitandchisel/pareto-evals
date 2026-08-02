@@ -79,6 +79,7 @@ def model_cfg(prefix: str) -> dict | None:
         "base_url": base,
         "api_key": os.environ.get(f"{prefix}_API_KEY", "dummy"),
         "model": os.environ.get(f"{prefix}_MODEL", "route"),
+        "send_sampling": os.environ.get(f"{prefix}_SEND_SAMPLING", "true").lower() not in ("false", "0", "no"),
         "in_price": _f(os.environ.get(f"{prefix}_INPUT_PRICE_PER_MTOK")),
         "out_price": _f(os.environ.get(f"{prefix}_OUTPUT_PRICE_PER_MTOK")),
     }
@@ -118,6 +119,7 @@ def run_benchmark_for_model(bench: str, m: dict, limit: int | None, concurrency:
     env["MODEL_BASE_URL"] = m["base_url"]
     env["MODEL_API_KEY"] = m["api_key"]
     env["MODEL_NAME"] = m["model"]
+    env["MODEL_SEND_SAMPLING"] = "true" if m.get("send_sampling", True) else "false"
     env["RESULT_NAME"] = result_name          # standardized across all benchmark mains
     env["CONC"] = str(concurrency)
     env["LIMIT_SEED"] = str(seed)

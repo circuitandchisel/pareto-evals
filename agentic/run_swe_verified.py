@@ -29,6 +29,7 @@ import json
 import os
 import random
 import subprocess
+import time
 import sys
 from pathlib import Path
 
@@ -105,7 +106,13 @@ def main() -> None:
         sys.exit(f"swe_verified: mini produced no predictions at {preds}")
 
     # 2) grade with the official swebench harness (canonical images + test specs)
-    run_id = f"{result_name}_grade"
+    #
+    # run_id MUST be unique per invocation. The harness caches results under
+    # logs/run_evaluation/<run_id>/<model>/<instance>/ and SILENTLY SKIPS any
+    # instance already present -- so re-running the same model with a fixed
+    # run_id re-emits the first run's grades and every repeat looks identical.
+    # SWE_RUN_ID pins it when you deliberately want to resume a graded run.
+    run_id = os.environ.get("SWE_RUN_ID") or f"{result_name}_grade_{int(time.time())}"
     subprocess.run(
         [GRADER_PY, "-m", "swebench.harness.run_evaluation",
          "--dataset_name", DATASET, "--split", SPLIT,
@@ -113,7 +120,10 @@ def main() -> None:
          "--max_workers", str(min(conc + 1, 4)), "--cache_level", "env"],
         cwd=ROOT,
     )
-    reports = sorted(glob.glob(str(ROOT / f"*{run_id}*.json")), key=os.path.getmtime)
+    # Glob on the unique run_id only. A looser pattern also matches OTHER models'
+    # reports for the same benchmark, and picking by mtime would then silently
+    # attribute another model's grades to this run if grading produced nothing.
+    reports = sorted(glob.glob(str(ROOT / f"*{run_id}.json")), key=os.path.getmtime)
     resolved: set[str] = set()
     if reports:
         rep = json.loads(Path(reports[-1]).read_text())

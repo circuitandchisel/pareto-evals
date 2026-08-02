@@ -53,6 +53,22 @@ def _is_retryable(e: Exception) -> bool:
     if ("Backend returned HTTP" in msg or "OpenRouter 5" in msg or "OpenRouter 429" in msg
             or "fetch failed" in msg or "upstream failure" in msg):
         return True
+    # Streaming: a mid-stream disconnect surfaces as a raw httpx error from the
+    # chunk iterator, NOT wrapped by the SDK as APIConnectionError, so none of the
+    # checks above catch it. It is transient transport failure — retry it, or a
+    # streamed run silently loses every long generation the peer cuts short.
+    if type(e).__name__ in ("RemoteProtocolError", "ReadError", "ReadTimeout",
+                            "ConnectError", "IncompleteRead", "ChunkedEncodingError"):
+        return True
+    if "incomplete chunked read" in msg or "peer closed connection" in msg:
+        return True
+    # An endpoint can also fail a stream *in band* — emitting an SSE `error`
+    # event instead of dropping the socket. The SDK turns that into a bare
+    # APIError("An error occurred during streaming") with no status code, so
+    # neither the isinstance nor the status checks above see it. Match on the
+    # message rather than the class: a bare APIError otherwise covers real 4xx.
+    if "error occurred during streaming" in msg.lower():
+        return True
     return False
 
 
@@ -107,9 +123,14 @@ def model_complete(
     kwargs: dict[str, Any] = {
         "model": model or CONFIG.model,
         "messages": messages,
-        "temperature": CONFIG.temperature if temperature is None else temperature,
         "max_tokens": max_tokens or CONFIG.max_tokens,
     }
+    # Sampling is omitted entirely for endpoints that reject it (see
+    # ModelConfig.send_sampling). Omitting is not the same as sending a default:
+    # the endpoint applies its own sampling, so runs against such an endpoint are
+    # NOT greedy and not bit-reproducible — record that when reporting.
+    if CONFIG.send_sampling:
+        kwargs["temperature"] = CONFIG.temperature if temperature is None else temperature
     if tools:
         kwargs["tools"] = tools
         if tool_choice is not None:
@@ -120,6 +141,9 @@ def model_complete(
     # timeout for long high-effort generations. Not used for tool calls.
     if _STREAM and not tools:
         kwargs["stream"] = True
+        # OpenAI-compatible streaming omits usage unless explicitly requested;
+        # without this a streamed run has no token counts and therefore no $/task.
+        kwargs["stream_options"] = {"include_usage": True}
 
     streamed = None
     attempt = 0
@@ -131,6 +155,15 @@ def model_complete(
             latency = time.perf_counter() - t0
             break
         except Exception as e:  # noqa: BLE001 — decide by type/message below
+            # A rejected sampling parameter is a config error, not a blip: fail
+            # fast with the fix rather than burning retries on a guaranteed 400.
+            msg = str(getattr(e, "message", "") or e)
+            if "unsupported_parameter" in msg or "Unsupported sampling parameter" in msg:
+                raise RuntimeError(
+                    f"{msg}\n\nThis endpoint rejects sampling parameters. Set "
+                    f"MODEL_SEND_SAMPLING=false (or <PREFIX>_SEND_SAMPLING=false in .env) "
+                    f"for this model."
+                ) from e
             if attempt >= _MAX_RETRIES or not _is_retryable(e):
                 raise
             time.sleep(_BACKOFF_BASE_S * (2 ** attempt))

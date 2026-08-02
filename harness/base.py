@@ -54,11 +54,14 @@ def run_benchmark(
     rows: list[dict] = []
 
     def _one(it: dict) -> dict:
+        t0 = time.time()
         try:
             pred, meta = solve(it)
             return {
                 "id": it.get("id"),
                 "correct": bool(grade(it, pred)),
+                "started_at": round(t0, 3),
+                "finished_at": round(time.time(), 3),
                 "latency_s": round(meta.get("latency_s", 0.0), 3),
                 "usage": _usage(meta.get("usage")),
                 "cost_usd": meta.get("cost_usd"),
@@ -67,7 +70,26 @@ def run_benchmark(
                 "pred": (str(pred)[:800] if pred is not None else None),
             }
         except Exception as e:  # never let one item kill the run
-            return {"id": it.get("id"), "correct": False, "error": f"{type(e).__name__}: {e}"[:300]}
+            # Record enough to correlate a failure with server-side logs: when it
+            # ran, how long it survived, and the provider's request id if the SDK
+            # attached one. Without these a failed item is undebuggable downstream.
+            rid = getattr(e, "request_id", None)
+            if rid is None:
+                resp = getattr(e, "response", None)
+                if resp is not None:
+                    try:
+                        rid = resp.headers.get("x-request-id") or resp.headers.get("request-id")
+                    except Exception:
+                        rid = None
+            return {
+                "id": it.get("id"),
+                "correct": False,
+                "started_at": round(t0, 3),
+                "finished_at": round(time.time(), 3),
+                "latency_s": round(time.time() - t0, 3),
+                "request_id": rid,
+                "error": f"{type(e).__name__}: {e}"[:300],
+            }
 
     total = len(items)
     jsonl_path = os.path.join(out_dir, f"{name}.jsonl")
