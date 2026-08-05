@@ -40,8 +40,21 @@ _BACKOFF_BASE_S = float(os.environ.get("MODEL_BACKOFF_BASE_S", "2.0"))
 _RETRYABLE_STATUS = {408, 409, 425, 429, 500, 502, 503, 504}
 
 
+class EmptyResponseError(Exception):
+    """Endpoint returned 200 with no usable choices.
+
+    OpenRouter surfaces an upstream provider failure this way: HTTP 200, but
+    `choices` is None or empty. Without this, `resp.choices[0]` raises a bare
+    TypeError('NoneType' object is not subscriptable) that no retry rule matches,
+    so a transient provider blip is recorded as a permanently failed item. Seen
+    at ~20% of items for one model under load, which silently corrupts a run.
+    """
+
+
 def _is_retryable(e: Exception) -> bool:
     if isinstance(e, (APIConnectionError, APITimeoutError, RateLimitError, InternalServerError)):
+        return True
+    if isinstance(e, EmptyResponseError):
         return True
     status = getattr(e, "status_code", None)
     if isinstance(e, APIStatusError) and status in _RETRYABLE_STATUS:
@@ -61,6 +74,12 @@ def _is_retryable(e: Exception) -> bool:
                             "ConnectError", "IncompleteRead", "ChunkedEncodingError"):
         return True
     if "incomplete chunked read" in msg or "peer closed connection" in msg:
+        return True
+    # A provider erroring mid-response can return a truncated body or an HTML
+    # error page, which surfaces from the SDK's parser as JSONDecodeError. That is
+    # a transient upstream failure, not a malformed request — retry it rather than
+    # losing the item. (Observed at ~1-2% of items per model under load.)
+    if type(e).__name__ in ("JSONDecodeError", "ValidationError"):
         return True
     # An endpoint can also fail a stream *in band* — emitting an SSE `error`
     # event instead of dropping the socket. The SDK turns that into a bare
@@ -152,6 +171,13 @@ def model_complete(
         try:
             resp = _client.chat.completions.create(**kwargs)
             streamed = _consume_stream(resp) if kwargs.get("stream") else None
+            # A 200 with no choices is an upstream failure wearing a success code.
+            # Raise here so it goes through the same retry path as a 5xx.
+            if streamed is None and not getattr(resp, "choices", None):
+                raise EmptyResponseError(
+                    f"no choices in response (id={getattr(resp, 'id', None)}, "
+                    f"model={getattr(resp, 'model', None)})"
+                )
             latency = time.perf_counter() - t0
             break
         except Exception as e:  # noqa: BLE001 — decide by type/message below
