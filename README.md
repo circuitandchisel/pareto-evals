@@ -6,7 +6,7 @@ and get a single table:
 
 | Benchmark | n | Pareto score | Pareto $/task | Opus score | Opus $/task |
 |---|---|---|---|---|---|
-| gpqa | 198 | 86.9% | $0.0251 | 88.4% | $0.0643 |
+| hle | 200 | 38.0% | $0.0674 | 33.0% | $0.1120 |
 | … | | | | | |
 
 - **Accuracy + cost-per-task only** — no latency tracking.
@@ -18,27 +18,50 @@ and get a single table:
 
 ---
 
-## The slate
+## The slate (v2)
+
+The v2 slate tracks what the 2026 frontier launches (GLM-5.3, Grok 4.6, DeepSeek-V4-Pro,
+Claude Fable 5, GPT-5.6 Sol) actually featured. Two shifts: classic MCQ benchmarks are
+mostly saturated and no longer featured (GPQA/ARC-AGI moved to **legacy**), and the
+center of gravity moved to **open, long-horizon agentic** benchmarks. A hard rule: every
+benchmark here is **open** — dataset + harness runnable by anyone. Featured-but-closed
+evals (GDPval-AA, Artificial Analysis indices, CursorBench, FrontierMath, Agents' Last
+Exam, ARC-AGI-3, etc.) are excluded by design.
+
+**Core (`--benchmarks all`):**
 
 | Name | What | Grader | Judge needed? |
 |---|---|---|---|
-| `gpqa` | GPQA-Diamond (graduate science MCQ) | exact letter A–D | no |
 | `hle` | Humanity's Last Exam (text, no tools) | LLM judge | **yes** |
 | `arxiv_math` | MathArena ArXiv problems (post-cutoff) | symbolic math match | no |
+| `hmmt_2026` | HMMT Feb 2026 competition math (AIME replacement) | normalized `\boxed{}` | no |
 | `mmmu_pro` | MMMU-Pro (multimodal MCQ) | exact | no |
-| `arc_agi_2` | ARC-AGI-2 (abstract grids) | exact grid | no |
+
+**Legacy (`--benchmarks legacy` — saturated / no longer featured in frontier launches):**
+
+| Name | What | Grader |
+|---|---|---|
+| `gpqa` | GPQA-Diamond (graduate science MCQ) | exact letter A–D |
+| `arc_agi_2` | ARC-AGI-2 (abstract grids) | exact grid |
 
 ### Agentic (opt-in — need Docker + extra harnesses; excluded from `--benchmarks all`)
 
-| Name | What | Harness |
-|---|---|---|
-| `swe_verified` | SWE-bench Verified (500 real GitHub fixes) | `mini-swe-agent` + `swebench` grader (`run.py`) |
-| `swe_rebench` | SWE-rebench (clean agentic coding) | `mini-swe-agent` (`run.py`) |
-| Terminal-Bench 2.1 | agentic terminal tasks | [`harbor`](agentic/run_tb.sh) |
-| DRACO | deep-research, LLM-judged rubrics | vendored Node runner in [`draco/`](draco/) |
+The v2 update is here — these are the open agentic benchmarks that showed up across the
+five launches:
 
-See [`agentic/README.md`](agentic/README.md) for all four. They call your model over the
-same OpenAI-compatible endpoint — nothing provider-specific.
+| Name | What | In N/5 launches | Harness |
+|---|---|---|---|
+| DeepSWE v1.1 | long-horizon SWE agent (113 tasks) | 4/5 | [`pier`](agentic/run_deepswe.sh) |
+| Terminal-Bench 3.0 (+2.1) | agentic terminal tasks (74 / 89) | 5/5 | [`harbor`](agentic/run_tb.sh) |
+| Toolathlon-Verified | tool-use / MCP orchestration (108) | 3/5 | [public service](agentic/run_toolathlon.sh) |
+| CyberGym | vulnerability reproduction (1,507 vulns) | 3/5 | [server + BYO agent](agentic/run_cybergym.sh) |
+| DRACO | deep-research, LLM-judged rubrics | — (kept) | vendored Node runner in [`draco/`](draco/) |
+
+**Legacy agentic** (still selectable; no 2026 launch featured them — DeepSWE supersedes):
+`swe_verified` (SWE-bench Verified) and `swe_rebench`, both via `mini-swe-agent`.
+
+See [`agentic/README.md`](agentic/README.md) for all of them. They call your model over
+the same OpenAI-compatible endpoint — nothing provider-specific.
 
 ### Datasets & licensing
 
@@ -48,13 +71,18 @@ terms of use:
 
 | Benchmark | Source | License |
 |---|---|---|
-| GPQA-Diamond | `Idavidrein/gpqa` (HF) | CC BY 4.0 (gated) |
 | HLE | `cais/hle` (HF) | per dataset card |
 | MMMU-Pro | `MMMU/MMMU_Pro` (HF) | per dataset card |
 | ArXiv-math | MathArena | per source |
-| ARC-AGI-2 | ARC Prize | Apache-2.0 |
+| HMMT Feb 2026 | MathArena HMMT-Feb-2026 | per source |
+| DeepSWE v1.1 | `datacurve-ai/deep-swe` (GitHub) | Apache-2.0 (Datacurve parts; upstream repos keep their own) |
+| Terminal-Bench 3.0 | `harbor-framework/terminal-bench` (Harbor Hub) | per repo |
+| Toolathlon-Verified | `hkust-nlp/Toolathlon` (GitHub) | **none stated** — review before redistributing |
+| CyberGym | `sunblaze-ucb/cybergym` (GitHub/HF) | Apache-2.0 |
 | DRACO | `perplexity-ai/draco` (HF) | MIT |
-| SWE-bench Verified | `princeton-nlp/SWE-bench_Verified` (HF) | per dataset card |
+| GPQA-Diamond *(legacy)* | `Idavidrein/gpqa` (HF) | CC BY 4.0 (gated) |
+| ARC-AGI-2 *(legacy)* | ARC Prize | Apache-2.0 |
+| SWE-bench Verified *(legacy)* | `princeton-nlp/SWE-bench_Verified` (HF) | per dataset card |
 
 You are responsible for complying with each dataset's terms. This repo (the harness) is
 MIT-licensed; the datasets are not.
@@ -197,8 +225,11 @@ correctness, token usage, cost, prediction), plus a `.summary.json` per run.
   are correct but written in an unusual form.
 - **Determinism:** temperature defaults to 0; slices are seeded. Transient upstream 5xx/429
   are retried (bounded) so one flaky call never zeros an item.
-- **`hmmt_2026`** ships in `benchmarks/` but is **excluded** from the default slate
-  (found to be contaminated for recent models). Run it explicitly if you want it.
+- **`hmmt_2026`** is the v2 core math benchmark (FrontierMath, the labs' preferred frontier-math
+  target, is gated by Epoch AI and can't be self-run). **Caveat:** competition sets risk
+  contamination once they predate a model's knowledge cutoff — treat a saturated score as a
+  contamination signal, and rotate to the newest MathArena set each cycle. Its `\boxed{}`
+  grader is also string-normalized; wire a sympy/LLM-judge grader (`grade` hook) for a real run.
 
 ---
 

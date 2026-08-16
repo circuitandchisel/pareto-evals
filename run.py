@@ -35,23 +35,28 @@ RESULTS = ROOT / "results"
 # Benchmark registry. Each entry maps a short name -> the module run via
 # `python -m <module>`. `judge=True` means the benchmark grades free-form answers
 # with an LLM judge (needs JUDGE_* in .env). All are non-agentic (single API call
-# per item). Agentic SWE-rebench uses a separate harness — see agentic/README.md.
+# per item). Agentic benchmarks use external harnesses — see agentic/README.md.
 BENCHMARKS: dict[str, dict] = {
-    "gpqa":       {"module": "benchmarks.gpqa",       "judge": False, "grader": "exact letter (A-D)"},
+    # ── Core slate (v2: what `--benchmarks all` runs) ──
     "hle":        {"module": "benchmarks.hle",        "judge": True,  "grader": "LLM judge"},
     "arxiv_math": {"module": "benchmarks.arxiv_math", "judge": True,  "grader": "symbolic OR gpt-5.5 equivalence judge"},
+    "hmmt_2026":  {"module": "benchmarks.hmmt_2026",  "judge": False, "grader": "normalized \\boxed{} equality"},
     "mmmu_pro":   {"module": "benchmarks.mmmu_pro",   "judge": False, "grader": "exact (MCQ)"},
-    "arc_agi_2":  {"module": "benchmarks.arc_agi_2",  "judge": False, "grader": "exact grid"},
+    # ── Legacy (retired from `all` in v2 — saturated / no longer featured in frontier
+    #    launches; still runnable by name or via `--benchmarks legacy`) ──
+    "gpqa":       {"module": "benchmarks.gpqa",       "judge": False, "grader": "exact letter (A-D)", "legacy": True},
+    "arc_agi_2":  {"module": "benchmarks.arc_agi_2",  "judge": False, "grader": "exact grid", "legacy": True},
     # Agentic (opt-in): needs Docker + mini-swe-agent + the SWE-rebench fork. Not in
     # `--benchmarks all`; request it explicitly. See README "Agentic benchmark".
     "swe_rebench": {"script": "agentic/run_swe.py", "agentic": True, "judge": False,
-                     "grader": "SWE-rebench fork (resolved)"},
+                     "grader": "SWE-rebench fork (resolved)", "legacy": True},
     # Agentic (opt-in): SWE-Bench Verified via mini-swe-agent + the OFFICIAL swebench
     # harness. Canonical images (swebench/sweb.eval.x86_64.*) exist -> real patches.
     "swe_verified": {"script": "agentic/run_swe_verified.py", "agentic": True, "judge": False,
-                     "grader": "official SWE-bench Verified harness (resolved)"},
+                     "grader": "official SWE-bench Verified harness (resolved)", "legacy": True},
 }
-DEFAULT_ORDER = ["gpqa", "hle", "arxiv_math", "mmmu_pro", "arc_agi_2"]  # 'all' (swe_rebench is opt-in)
+DEFAULT_ORDER = ["hle", "arxiv_math", "hmmt_2026", "mmmu_pro"]  # 'all'
+LEGACY_ORDER = ["gpqa", "arc_agi_2"]                            # 'legacy' (non-agentic only)
 
 
 def load_env(path: str = ".env") -> None:
@@ -207,8 +212,11 @@ def main() -> None:
     load_env()
     ap = argparse.ArgumentParser(description="Pareto-evals head-to-head runner.")
     ap.add_argument("--benchmarks", default="all",
-                    help=f"comma list or 'all' (={', '.join(DEFAULT_ORDER)}). "
-                         f"Opt-in agentic: swe_rebench, swe_verified (need Docker + mini-swe-agent).")
+                    help=f"comma list, 'all' (={', '.join(DEFAULT_ORDER)}), or 'legacy' "
+                         f"(={', '.join(LEGACY_ORDER)}). Opt-in legacy agentic: swe_rebench, "
+                         f"swe_verified (need Docker + mini-swe-agent). The v2 agentic slate "
+                         f"(deepswe, terminal-bench, toolathlon, cybergym) runs via agentic/ "
+                         f"wrappers, not run.py — see agentic/README.md.")
     ap.add_argument("--slice", default=None,
                     help="'all' (default), an int (all benchmarks), or 'gpqa=100,hle=300'")
     ap.add_argument("--models", default="pareto,comparison",
@@ -218,7 +226,15 @@ def main() -> None:
     ap.add_argument("--out", default="results/comparison.md")
     args = ap.parse_args()
 
-    benches = DEFAULT_ORDER if args.benchmarks == "all" else [b.strip() for b in args.benchmarks.split(",")]
+    benches = []
+    for tok in (t.strip() for t in args.benchmarks.split(",")):
+        if tok == "all":
+            benches += DEFAULT_ORDER
+        elif tok == "legacy":
+            benches += LEGACY_ORDER
+        elif tok:
+            benches.append(tok)
+    benches = list(dict.fromkeys(benches))  # dedupe, keep order
     for b in benches:
         if b not in BENCHMARKS:
             sys.exit(f"unknown benchmark '{b}'. Known: {', '.join(BENCHMARKS)}")
