@@ -15,7 +15,8 @@
 #            to prior published numbers. Legacy-registry id.
 # Select with TB_VERSION=3.0 (default) or TB_VERSION=2.1.
 #
-# Prereqs:  uv tool install 'harbor[modal]'   (or: pip install harbor; https://github.com/harbor-framework/harbor)
+# Prereqs:  uv tool install 'harbor[modal]'   (harbor is NOT on PyPI as `pip install
+#           harbor`; use uv. https://github.com/harbor-framework/harbor)
 #           # Use CURRENT harbor (>= v0.21.0). TB 3.0 needs the new task.toml schema
 #           # (separate verifier containers); a TB-2.1-era install will not grade it.
 #           Docker running (tasks execute in containers), or --env modal.
@@ -48,10 +49,10 @@ case "$TB_VERSION" in
     # TB 3.0 has 4 GPU-only tasks that fail on a plain Docker box. Exclude them
     # unless the sandbox has a GPU (set TB_INCLUDE_GPU=1 or use --env modal).
     if [ "${TB_INCLUDE_GPU:-0}" != "1" ] && [ "$ENV_MODE" != "modal" ]; then
-      EXTRA+=(--exclude-task-names 'fp8-rmsnorm-gemm' \
-              --exclude-task-names 'math-eval-grader' \
-              --exclude-task-names 'exam-pdf-eval' \
-              --exclude-task-names 'jax-speedrun-gpu')
+      EXTRA+=(--exclude-task-name 'fp8-rmsnorm-gemm' \
+              --exclude-task-name 'math-eval-grader' \
+              --exclude-task-name 'exam-pdf-eval' \
+              --exclude-task-name 'jax-speedrun-gpu')
       echo "NOTE: excluding TB3's 4 GPU tasks (set TB_INCLUDE_GPU=1 or TB_ENV=modal to include)." >&2
     fi
     # TB3 tasks set their own timeouts (up to 8h); do NOT impose a global multiplier.
