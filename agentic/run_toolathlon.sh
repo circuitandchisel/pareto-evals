@@ -54,7 +54,14 @@ if [ ! -f "$TOOLATHLON_DIR/eval_client.py" ]; then
 fi
 
 echo "Toolathlon-Verified: model=$MODEL_NAME  mode=$MODE  workers=$CONC  out=$OUT"
-( cd "$TOOLATHLON_DIR" && python eval_client.py run \
+# `eval_client.py run` submits the job, starts a detached worker that serves model
+# calls (private mode tunnels them over a WebSocket) + downloads results, and returns
+# immediately. We `setsid` it so the worker survives this shell exiting, then poll
+# `status` until the job reaches a terminal state — otherwise the worker's process
+# group is SIGHUP'd the moment the wrapper returns and the job stalls with no model.
+# The server handles ONE job at a time, so a stale job must be cancelled first.
+RUN_LOG="$(mktemp)"
+( cd "$TOOLATHLON_DIR" && setsid python eval_client.py run \
     --mode "$MODE" \
     --base-url "$MODEL_BASE_URL" \
     --model-name "$MODEL_NAME" \
@@ -64,6 +71,31 @@ echo "Toolathlon-Verified: model=$MODEL_NAME  mode=$MODE  workers=$CONC  out=$OU
     --server-port "$SERVER_PORT" \
     --ws-proxy-port "$WS_PROXY_PORT" \
     --workers "$CONC" \
-    "${TASK_LIST_ARGS[@]}" )
+    "${TASK_LIST_ARGS[@]}" ) 2>&1 | tee "$RUN_LOG"
 
-echo "Done. Score = average_success_rate in $TOOLATHLON_DIR/$OUT/eval_stats.json."
+JOB_ID="$(grep -oE 'job_[a-f0-9]+' "$RUN_LOG" | head -1)"
+if [ -z "$JOB_ID" ]; then
+  echo "ERROR: could not parse a Job ID from the run output (see above)." >&2
+  rm -f "$RUN_LOG"; exit 1
+fi
+
+echo "Polling job $JOB_ID until complete (worker runs detached; safe to Ctrl-C — reattach with"
+echo "  cd $TOOLATHLON_DIR && python eval_client.py status --job-id $JOB_ID --server-host $SERVER_HOST --server-port $SERVER_PORT)"
+DEADLINE=$(( $(date +%s) + ${TOOLATHLON_MAX_WAIT:-7200} ))
+while :; do
+  S="$(cd "$TOOLATHLON_DIR" && python eval_client.py status \
+        --job-id "$JOB_ID" --server-host "$SERVER_HOST" --server-port "$SERVER_PORT" 2>&1)"
+  ST="$(printf '%s\n' "$S" | sed -nE 's/.*Status: *([A-Za-z]+).*/\1/p' | head -1 | tr 'A-Z' 'a-z')"
+  echo "  status=${ST:-unknown}  ($(date -u +%H:%M:%S)Z)"
+  case "$ST" in completed|failed|cancelled|error) break ;; esac
+  if [ "$(date +%s)" -ge "$DEADLINE" ]; then echo "  ! timed out waiting (job still $ST)"; break; fi
+  sleep 30
+done
+rm -f "$RUN_LOG"
+
+STATS="$TOOLATHLON_DIR/$OUT/eval_stats.json"
+if [ -f "$STATS" ]; then
+  python3 -c "import json;d=json.load(open('$STATS'));print('Done. average_success_rate =', d.get('average_success_rate'))"
+else
+  echo "Done (status=$ST). eval_stats.json not present yet at $STATS — poll status manually."
+fi
