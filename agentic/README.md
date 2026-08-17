@@ -44,8 +44,8 @@ straight at it.
 The 2026 frontier launches (GLM-5.3, Grok 4.6, DeepSeek-V4-Pro, Claude Fable 5,
 GPT-5.6 Sol) featured almost entirely agentic, long-horizon benchmarks. These four are
 the **open** ones (dataset + harness runnable by anyone) that appeared across those
-releases. All are launched with a small `./run_*.sh` wrapper that pins the exact
-upstream invocation.
+releases. Each has a small `./run_*.sh` wrapper that pins the exact upstream
+invocation, and `run_slate.sh` runs the whole slate in one command.
 
 | Wrapper | Benchmark | In N/5 launches | Category | Headline metric |
 |---|---|---|---|---|
@@ -53,6 +53,34 @@ upstream invocation.
 | `run_tb.sh` | Terminal-Bench 3.0 (74 tasks) + 2.1 (89) | 5/5 | Terminal/CLI agent | resolved / total |
 | `run_toolathlon.sh` | Toolathlon-Verified (HKUST, 108 tasks) | 3/5 | Tool-use / MCP orchestration | `average_success_rate` (Pass@1) |
 | `run_cybergym.sh` | CyberGym (UC Berkeley, 1,507 vulns) | 3/5 | Vulnerability reproduction | fraction with a working PoC |
+
+### Run the whole slate in one command — `run_slate.sh`
+
+```bash
+MODEL_BASE_URL=https://your-endpoint/v1 MODEL_API_KEY=sk-... MODEL_NAME=your-model \
+  ./agentic/run_slate.sh
+```
+
+Runs all four wrappers in sequence against one model and prints a combined
+pass/fail summary with each benchmark's output dir. A benchmark that fails is
+reported and the slate continues to the next one.
+
+- **Subset:** `SLATE="deepswe tb" ./agentic/run_slate.sh` (space/comma list).
+- **Prereqs** are the union of the four wrappers' prereqs (Docker + harbor + pier +
+  the CyberGym clone/data + the Toolathlon clone) — see the per-benchmark sections
+  below.
+- **Against Pareto**, start `strip_proxy.py` first (see the proxy section) and point
+  the slate at it; DeepSWE needs the safe-port instance via a per-benchmark override:
+  ```bash
+  MODEL_BASE_URL=http://172.17.0.1:8900/v1 DEEPSWE_MODEL_BASE_URL=http://172.17.0.1/v1 \
+  MODEL_API_KEY=sk-... MODEL_NAME=your-model ./agentic/run_slate.sh
+  ```
+  (`<NAME>_MODEL_BASE_URL` overrides the base URL for one member — `NAME` ∈
+  `DEEPSWE|TB|TOOLATHLON|CYBERGYM`.)
+
+> The slate is **not** a `run.py` benchmark. `python run.py` (`--benchmarks all`)
+> runs only the core non-agentic slate (`hle, arxiv_math, hmmt_2026, mmmu_pro`);
+> the agentic slate always runs through these wrappers.
 
 **Legacy (kept, not in the v2 headline):** `run_swe_verified.py` and `run_swe.py`
 (SWE-bench Verified / SWE-rebench). No 2026 launch featured SWE-bench Verified —
