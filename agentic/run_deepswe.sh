@@ -39,10 +39,16 @@ if [ "${DEEPSWE_CHAT:-1}" = "1" ]; then
   CHAT_OVERRIDE=(--ak model_class=litellm)
 fi
 
-# mini-swe-agent reads these from the host env, injects them into the sandbox, and
-# auto-allowlists the base URL (tasks are otherwise no-network).
+# pier runs the agent in a sandboxed environment, so host-level exports do NOT
+# reach mini-swe-agent's litellm call — the model credentials must be injected
+# explicitly with pier's --agent-env (-ae). We also keep the host exports for any
+# host-side tooling. pier auto-allowlists the base URL (tasks are otherwise no-network).
 export OPENAI_API_KEY="$MODEL_API_KEY" MSWEA_API_KEY="$MODEL_API_KEY"
 export OPENAI_BASE_URL="$MODEL_BASE_URL" OPENAI_API_BASE="$MODEL_BASE_URL"
+AGENT_ENV=(--ae "OPENAI_API_KEY=$MODEL_API_KEY" \
+           --ae "OPENAI_API_BASE=$MODEL_BASE_URL" \
+           --ae "OPENAI_BASE_URL=$MODEL_BASE_URL" \
+           --ae "MSWEA_API_KEY=$MODEL_API_KEY")
 
 if [ ! -d "$DEEPSWE_DIR/tasks" ]; then
   echo "ERROR: $DEEPSWE_DIR/tasks not found. Clone it first:" >&2
@@ -56,6 +62,7 @@ pier run \
   --agent mini-swe-agent \
   --model "openai/$MODEL_NAME" \
   "${CHAT_OVERRIDE[@]}" \
+  "${AGENT_ENV[@]}" \
   -n "$CONC" \
   -e "$ENV_MODE" \
   -o "$OUT" ${LIMIT:+-l "$LIMIT"}

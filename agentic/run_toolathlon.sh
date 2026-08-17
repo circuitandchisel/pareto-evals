@@ -32,6 +32,7 @@ set -euo pipefail
 MODEL_BASE_URL="${MODEL_BASE_URL:?set MODEL_BASE_URL (OpenAI-compatible /v1 base)}"
 MODEL_API_KEY="${MODEL_API_KEY:-dummy}"
 MODEL_NAME="${MODEL_NAME:-your-model}"
+PYBIN="${TOOLATHLON_PYTHON:-python3}"           # the interpreter with httpx/typer/websockets
 TOOLATHLON_DIR="${TOOLATHLON_DIR:-./Toolathlon}"
 OUT="${OUT:-toolathlon_$(date -u +%Y%m%d-%H%M%S)}"
 CONC="${CONC:-10}"                              # public service caps workers at 10
@@ -61,7 +62,7 @@ echo "Toolathlon-Verified: model=$MODEL_NAME  mode=$MODE  workers=$CONC  out=$OU
 # group is SIGHUP'd the moment the wrapper returns and the job stalls with no model.
 # The server handles ONE job at a time, so a stale job must be cancelled first.
 RUN_LOG="$(mktemp)"
-( cd "$TOOLATHLON_DIR" && setsid python eval_client.py run \
+( cd "$TOOLATHLON_DIR" && setsid "$PYBIN" eval_client.py run \
     --mode "$MODE" \
     --base-url "$MODEL_BASE_URL" \
     --model-name "$MODEL_NAME" \
@@ -83,7 +84,7 @@ echo "Polling job $JOB_ID until complete (worker runs detached; safe to Ctrl-C â
 echo "  cd $TOOLATHLON_DIR && python eval_client.py status --job-id $JOB_ID --server-host $SERVER_HOST --server-port $SERVER_PORT)"
 DEADLINE=$(( $(date +%s) + ${TOOLATHLON_MAX_WAIT:-7200} ))
 while :; do
-  S="$(cd "$TOOLATHLON_DIR" && python eval_client.py status \
+  S="$(cd "$TOOLATHLON_DIR" && "$PYBIN" eval_client.py status \
         --job-id "$JOB_ID" --server-host "$SERVER_HOST" --server-port "$SERVER_PORT" 2>&1)"
   ST="$(printf '%s\n' "$S" | sed -nE 's/.*Status: *([A-Za-z]+).*/\1/p' | head -1 | tr 'A-Z' 'a-z')"
   echo "  status=${ST:-unknown}  ($(date -u +%H:%M:%S)Z)"
@@ -95,7 +96,7 @@ rm -f "$RUN_LOG"
 
 STATS="$TOOLATHLON_DIR/$OUT/eval_stats.json"
 if [ -f "$STATS" ]; then
-  python3 -c "import json;d=json.load(open('$STATS'));print('Done. average_success_rate =', d.get('average_success_rate'))"
+  "$PYBIN" -c "import json;d=json.load(open('$STATS'));print('Done. average_success_rate =', d.get('average_success_rate'))"
 else
   echo "Done (status=$ST). eval_stats.json not present yet at $STATS â€” poll status manually."
 fi

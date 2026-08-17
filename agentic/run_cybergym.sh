@@ -34,6 +34,7 @@ set -euo pipefail
 MODEL_BASE_URL="${MODEL_BASE_URL:?set MODEL_BASE_URL (OpenAI-compatible /v1 base)}"
 MODEL_API_KEY="${MODEL_API_KEY:-dummy}"
 MODEL_NAME="${MODEL_NAME:-your-model}"
+PYBIN="${CYBERGYM_PYTHON:-python3}"                     # interpreter with cybergym + docker/simple_parsing/tomli_w
 CYBERGYM_DIR="${CYBERGYM_DIR:-.}"                       # clone of sunblaze-ucb/cybergym
 CYBERGYM_DATA_DIR="${CYBERGYM_DATA_DIR:?set CYBERGYM_DATA_DIR (downloaded task data)}"
 AGENT="${CYBERGYM_AGENT:-openhands}"                    # openhands|codex|enigma|cybench
@@ -60,10 +61,19 @@ else
   read -r -a TASKS <<< "$SMOKE_TASKS"
 fi
 
+# Agent scaffolds differ in how they take the model endpoint. The wrapper always
+# exports OPENAI_API_KEY + LLM_BASE_URL (the codex-style env hook). Agents that take
+# the endpoint as flags instead get them via CYBERGYM_AGENT_ARGS, appended verbatim
+# to the runner. OpenHands needs BOTH --base_url AND --api_key: it only reads
+# OPENAI_API_KEY from the env for gpt-/o3/o4 model names, so any other model name
+# (e.g. a self-hosted alias) sends an "EMPTY" key and 401s unless --api_key is given.
+#   CYBERGYM_AGENT_ARGS="--base_url $MODEL_BASE_URL --api_key $MODEL_API_KEY --timeout 1800"
+read -r -a CG_EXTRA <<< "${CYBERGYM_AGENT_ARGS:-}"
+
 mkdir -p "$POC_DIR"
 echo "CyberGym: model=$MODEL_NAME  agent=$AGENT  diff=$DIFFICULTY  tasks=${#TASKS[@]}  out=$OUT"
 echo "  starting scoring server on http://$HOST:$PORT ..."
-python3 -m cybergym.server --host "$HOST" --port "$PORT" \
+"$PYBIN" -m cybergym.server --host "$HOST" --port "$PORT" \
   --mask_map_path "$CYBERGYM_DIR/mask_map.json" \
   --log_dir "$POC_DIR" --db_path "$POC_DIR/poc.db" &
 SERVER_PID=$!
@@ -72,7 +82,7 @@ sleep 5
 
 for TASK_ID in "${TASKS[@]}"; do
   echo "  ▶ $TASK_ID"
-  python3 "$CYBERGYM_DIR/$AGENT_RUNNER" \
+  "$PYBIN" "$CYBERGYM_DIR/$AGENT_RUNNER" \
     --model "$MODEL_NAME" \
     --log_dir "$OUT/logs" \
     --tmp_dir "$OUT/tmp" \
@@ -80,11 +90,12 @@ for TASK_ID in "${TASKS[@]}"; do
     --data_dir "$CYBERGYM_DATA_DIR" \
     --max_iter "$MAX_ITER" \
     --server "http://$HOST:$PORT" \
-    --difficulty "$DIFFICULTY" || echo "    ! $TASK_ID errored (continuing)"
+    --difficulty "$DIFFICULTY" \
+    "${CG_EXTRA[@]}" || echo "    ! $TASK_ID errored (continuing)"
 done
 
 echo "Aggregating..."
-python3 "$CYBERGYM_DIR/scripts/verify_agent_result.py" \
+"$PYBIN" "$CYBERGYM_DIR/scripts/verify_agent_result.py" \
   --server "http://$HOST:$PORT" \
   --pocdb_path "$POC_DIR/poc.db" \
   --agent_id "${CYBERGYM_AGENT_ID:-$AGENT}" || true
