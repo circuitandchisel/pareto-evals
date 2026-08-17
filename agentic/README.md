@@ -15,6 +15,30 @@ export MODEL_NAME="your-model"
 These are **opt-in** (excluded from `--benchmarks all`) because they need Docker and
 extra tooling.
 
+## Sampling-param proxy (`strip_proxy.py`) — needed for Pareto
+
+These harnesses drive your model through reference agents (mini-swe-agent,
+terminus-2, OpenHands) that **hard-code sampling params** — `temperature=0`, often
+a `stop` sequence. The **Pareto gpu-router rejects any non-default sampler with
+HTTP 400** (it accepts only `temperature=1`/`top_p=1`/… and an empty `stop`), so
+every agent call fails on the first request. `strip_proxy.py` sits in front of the
+endpoint, strips the offending keys, and forwards everything else (auth, path,
+streaming). Point the wrappers' `MODEL_BASE_URL` at it.
+
+```bash
+# host-side harnesses (Terminal-Bench, Toolathlon, CyberGym):
+UPSTREAM="$PARETO_BASE_URL" PORT=8900 python3 agentic/strip_proxy.py &
+export MODEL_BASE_URL=http://172.17.0.1:8900/v1   # Docker gateway (reachable from host + containers)
+
+# DeepSWE only: pier isolates the agent behind a squid egress proxy that allows
+# ONLY ports 80/443, so run a SECOND instance on a safe port for that harness:
+sudo env UPSTREAM="$PARETO_BASE_URL" PORT=80 python3 agentic/strip_proxy.py &
+#   ...then run_deepswe.sh with MODEL_BASE_URL=http://172.17.0.1/v1
+```
+
+If your endpoint accepts standard sampling params, skip this — point the wrappers
+straight at it.
+
 ## The v2 agentic slate
 
 The 2026 frontier launches (GLM-5.3, Grok 4.6, DeepSeek-V4-Pro, Claude Fable 5,
