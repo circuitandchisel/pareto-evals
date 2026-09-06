@@ -22,11 +22,13 @@ and get a single table:
 
 The v2 slate tracks what the 2026 frontier launches (GLM-5.3, Grok 4.6, DeepSeek-V4-Pro,
 Claude Fable 5, GPT-5.6 Sol) actually featured. Two shifts: classic MCQ benchmarks are
-mostly saturated and no longer featured (GPQA/ARC-AGI moved to **legacy**), and the
+mostly saturated and no longer featured (GPQA/ARC-AGI-2 moved to **legacy**), and the
 center of gravity moved to **open, long-horizon agentic** benchmarks. A hard rule: every
 benchmark here is **open** — dataset + harness runnable by anyone. Featured-but-closed
 evals (GDPval-AA, Artificial Analysis indices, CursorBench, FrontierMath, Agents' Last
-Exam, ARC-AGI-3, etc.) are excluded by design.
+Exam, etc.) are excluded by design. ARC-AGI-3 is the one partial exception: its 25
+**public** games + official harness are open (free API key), so we run those; the 110
+semi-private/private games behind the leaderboard are not reproducible by anyone else.
 
 **Core (`--benchmarks all`):**
 
@@ -52,9 +54,10 @@ five launches:
 | Name | What | In N/5 launches | Harness |
 |---|---|---|---|
 | DeepSWE v1.1 | long-horizon SWE agent (113 tasks) | 4/5 | [`pier`](agentic/run_deepswe.sh) |
-| Terminal-Bench 3.0 (+2.1) | agentic terminal tasks (74 / 89) | 5/5 | [`harbor`](agentic/run_tb.sh) |
+| Terminal-Bench 4.0 (+3.0, 2.1) | agentic terminal tasks (66 / 74 / 89) | 5/5 (as 3.0/2.1) | [`harbor`](agentic/run_tb.sh) |
 | Toolathlon-Verified | tool-use / MCP orchestration (108) | 3/5 | [public service](agentic/run_toolathlon.sh) |
 | CyberGym | vulnerability reproduction (1,507 vulns) | 3/5 | [server + BYO agent](agentic/run_cybergym.sh) |
+| ARC-AGI-3 (public set) | interactive reasoning — 25 public game envs, human-efficiency-normalized | — (added 2026-09; leaderboard uses the semi-private set) | [official `arc-agi-3-benchmarking`](agentic/run_arc_agi_3.sh) |
 | DRACO | deep-research, LLM-judged rubrics | — (kept) | vendored Node runner in [`draco/`](draco/) |
 
 **Legacy agentic** (still selectable; no 2026 launch featured them — DeepSWE supersedes):
@@ -76,9 +79,10 @@ terms of use:
 | ArXiv-math | MathArena | per source |
 | HMMT Feb 2026 | MathArena HMMT-Feb-2026 | per source |
 | DeepSWE v1.1 | `datacurve-ai/deep-swe` (GitHub) | Apache-2.0 (Datacurve parts; upstream repos keep their own) |
-| Terminal-Bench 3.0 | `harbor-framework/terminal-bench` (Harbor Hub) | per repo |
+| Terminal-Bench 4.0 / 3.0 | `harbor-framework/terminal-bench` (Harbor Hub) | per repo |
 | Toolathlon-Verified | `hkust-nlp/Toolathlon` (GitHub) | **none stated** — review before redistributing |
 | CyberGym | `sunblaze-ucb/cybergym` (GitHub/HF) | Apache-2.0 |
+| ARC-AGI-3 (public) | hosted game API at `arcprize.org` (free key); harness `arcprize/arc-agi-3-benchmarking` | harness MIT; games served under ARC Prize's terms (scorecards are stored on their server) |
 | DRACO | `perplexity-ai/draco` (HF) | MIT |
 | GPQA-Diamond *(legacy)* | `Idavidrein/gpqa` (HF) | CC BY 4.0 (gated) |
 | ARC-AGI-2 *(legacy)* | ARC Prize | Apache-2.0 |

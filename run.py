@@ -215,7 +215,7 @@ def main() -> None:
                     help=f"comma list, 'all' (={', '.join(DEFAULT_ORDER)}), or 'legacy' "
                          f"(={', '.join(LEGACY_ORDER)}). Opt-in legacy agentic: swe_rebench, "
                          f"swe_verified (need Docker + mini-swe-agent). The v2 agentic slate "
-                         f"(deepswe, terminal-bench, toolathlon, cybergym) runs via agentic/ "
+                         f"(deepswe, terminal-bench, toolathlon, cybergym, arc-agi-3) runs via agentic/ "
                          f"wrappers, not run.py — see agentic/README.md.")
     ap.add_argument("--slice", default=None,
                     help="'all' (default), an int (all benchmarks), or 'gpqa=100,hle=300'")
