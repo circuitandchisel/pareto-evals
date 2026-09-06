@@ -2,25 +2,27 @@
 # =============================================================================
 # v2 agentic slate — run the whole slate in one swoop.
 #
-# The 2026 launch benchmarks (DeepSWE, Terminal-Bench 3.0, Toolathlon, CyberGym)
-# each run under their own harness via a ./run_*.sh wrapper. This is the one-command
-# alias that runs all four against a single model and prints a combined summary.
+# The 2026 launch benchmarks (DeepSWE, Terminal-Bench 4.0, Toolathlon, CyberGym) plus
+# ARC-AGI-3 (public set) each run under their own harness via a ./run_*.sh wrapper. This
+# is the one-command alias that runs all five against a single model and prints a
+# combined summary.
 # It only orchestrates the individual wrappers — each is still runnable on its own,
 # and every env knob those wrappers document still works (it's inherited here).
 #
 #   MODEL_BASE_URL=https://your-endpoint/v1  MODEL_API_KEY=sk-...  MODEL_NAME=your-model \
 #     ./agentic/run_slate.sh
 #
-# Prereqs are the union of the four wrappers' prereqs (Docker + harbor + pier +
-# .../ the CyberGym clone & data). See the per-benchmark sections in this README.
+# Prereqs are the union of the five wrappers' prereqs (Docker + harbor + pier +
+# .../ the CyberGym clone & data + the arc-agi-3-benchmarking clone and a free
+# ARC_API_KEY from arcprize.org). See the per-benchmark sections in this README.
 # Against the Pareto endpoint you also need strip_proxy.py (see the proxy section);
 # point the slate at it with the per-benchmark base-URL overrides below.
 #
 # Knobs:
-#   SLATE="deepswe tb"                 # subset (space/comma list; default: all four)
+#   SLATE="deepswe tb"                 # subset (space/comma list; default: all five)
 #   SLATE_OUT=slate_<UTC>              # parent output dir (per-benchmark subdirs under it)
 #   <NAME>_MODEL_BASE_URL=...          # per-benchmark base-URL override (NAME in
-#                                      #   DEEPSWE|TB|TOOLATHLON|CYBERGYM). DeepSWE needs
+#                                      #   DEEPSWE|TB|TOOLATHLON|CYBERGYM|ARC3). DeepSWE needs
 #                                      #   this when using the strip proxy — pier's egress
 #                                      #   allows only ports 80/443, so run the proxy on a
 #                                      #   safe port and set DEEPSWE_MODEL_BASE_URL to it.
@@ -32,7 +34,7 @@ HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 MODEL_BASE_URL="${MODEL_BASE_URL:?set MODEL_BASE_URL (OpenAI-compatible /v1 base)}"
 MODEL_API_KEY="${MODEL_API_KEY:-dummy}"
 MODEL_NAME="${MODEL_NAME:?set MODEL_NAME}"
-SLATE="${SLATE:-deepswe tb toolathlon cybergym}"
+SLATE="${SLATE:-deepswe tb toolathlon cybergym arc3}"
 SLATE="${SLATE//,/ }"
 OUT_ROOT="${SLATE_OUT:-slate_$(date -u +%Y%m%d-%H%M%S)}"
 mkdir -p "$OUT_ROOT"
@@ -43,6 +45,7 @@ declare -A SCRIPT=(
   [tb]=run_tb.sh
   [toolathlon]=run_toolathlon.sh
   [cybergym]=run_cybergym.sh
+  [arc3]=run_arc_agi_3.sh       # needs ARC_API_KEY (free, arcprize.org); fails fast without it
 )
 declare -A STATUS RESULT
 
