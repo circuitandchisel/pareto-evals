@@ -83,6 +83,23 @@ case "$TB_VERSION" in
 esac
 LIMIT="${LIMIT:-$DEFAULT_LIMIT}"
 
+# Context window for a CUSTOM model name. terminus-2 asks LiteLLM for the model's
+# max_input_tokens to drive proactive context summarization; for a name LiteLLM
+# doesn't know (any pareto-* / self-hosted slug) harbor falls back to 1,000,000,
+# so summarization never fires and a 262k-window model returns 400
+# context_length_exceeded on long trajectories — which terminus-2 then retries
+# until the task timeout (seen 2026-09-10 against pareto-26.9: 3/63 TB-4.0 tasks
+# lost this way). Set MODEL_MAX_INPUT_TOKENS a bit under the served window
+# (e.g. 250000 for a 262144 model). Values are parsed by harbor as JSON.
+if [ -n "${MODEL_MAX_INPUT_TOKENS:-}" ]; then
+  EXTRA+=(--agent-kwarg "model_info={\"max_input_tokens\": ${MODEL_MAX_INPUT_TOKENS}, \"max_output_tokens\": ${MODEL_MAX_OUTPUT_TOKENS:-32768}}")
+  echo "NOTE: registering model_info max_input_tokens=${MODEL_MAX_INPUT_TOKENS} for openai/$MODEL_NAME (proactive summarization)." >&2
+fi
+
+# Optional exact-name task subset (one per line), e.g. to rerun a few tasks.
+if [ -n "${TASKS_FILE:-}" ]; then
+  while IFS= read -r t; do [ -n "$t" ] && EXTRA+=(--include-task-name "$t"); done < "$TASKS_FILE"
+fi
 echo "TB-$TB_VERSION: dataset=$DATASET  agent=$AGENT  model=openai/$MODEL_NAME  limit=$LIMIT  conc=$CONC  env=$ENV_MODE  out=$OUT"
 harbor run \
   -d "$DATASET" \
