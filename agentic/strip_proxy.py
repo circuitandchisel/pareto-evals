@@ -69,6 +69,25 @@ _ulock = threading.Lock()
 _MAX_INFLIGHT = int(os.environ.get("MAX_INFLIGHT", "0") or "0")
 _SEM = threading.BoundedSemaphore(_MAX_INFLIGHT) if _MAX_INFLIGHT > 0 else None
 
+# Optional: stream upstream on the harness's behalf. UPSTREAM_STREAM=1 turns a
+# NON-streaming /chat/completions request into a streaming one upstream and
+# reassembles the SSE frames into the single JSON object the harness asked for.
+# Why: some gateways answer a non-streaming call only when the whole generation
+# is done and time out long generations (a long file write is thousands of
+# tokens), while a streaming call is bounded only by time-to-first-token — and
+# the harnesses (terminus-2, mini-swe-agent via litellm) only speak non-stream.
+# Client requests that already stream are passed through untouched.
+_UPSTREAM_STREAM = os.environ.get("UPSTREAM_STREAM", "").lower() in ("1", "true", "yes")
+
+# Optional: make every trajectory's FIRST user message unique. PROMPT_NONCE=client
+# prefixes it with a tag derived from the calling container's address;
+# PROMPT_NONCE=<text> uses that text. Why: when the same task set runs in many
+# parallel copies (a load test), identical first messages collide on the
+# cascade's per-trajectory leader state (keyed by the first user message) and
+# share prompt-cache prefixes that distinct real users would never share. The
+# tag is one short line, e.g. "[session 172-17-0-9]".
+_PROMPT_NONCE = os.environ.get("PROMPT_NONCE", "")
+
 
 def _log(msg):
     sys.stderr.write(msg + "\n")
@@ -86,12 +105,116 @@ def _record_usage(path, latency_ms, usage, model):
         "prompt_tokens": usage.get("prompt_tokens"),
         "completion_tokens": usage.get("completion_tokens"),
         "total_tokens": usage.get("total_tokens"),
+        # present on Pareto responses: prompt-cache hits and the served-cost estimate
+        "cached_tokens": (usage.get("prompt_tokens_details") or {}).get("cached_tokens") if isinstance(usage.get("prompt_tokens_details"), dict) else None,
+        "cost": usage.get("cost"),
     }
     try:
         with _ulock, open(USAGE_LOG, "a") as f:
             f.write(json.dumps(row) + "\n")
     except Exception as e:  # logging must never break the proxy
         _log(f"[usage-log error] {e}")
+
+
+def _tag_first_user_message(obj, client_ip):
+    """Prefix the first user message with the session tag; True if the body changed."""
+    tag = client_ip.replace(".", "-").replace(":", "-") if _PROMPT_NONCE == "client" else _PROMPT_NONCE
+    prefix = f"[session {tag}]\n"
+    for m in obj.get("messages") or []:
+        if not isinstance(m, dict) or m.get("role") != "user":
+            continue
+        c = m.get("content")
+        if isinstance(c, str):
+            if not c.startswith("[session "):
+                m["content"] = prefix + c
+                return True
+            return False
+        if isinstance(c, list):
+            for part in c:
+                if isinstance(part, dict) and part.get("type") == "text" and isinstance(part.get("text"), str):
+                    if not part["text"].startswith("[session "):
+                        part["text"] = prefix + part["text"]
+                        return True
+                    return False
+        return False
+    return False
+
+
+def _reassemble_chat_completion(up):
+    """Fold an OpenAI chat-completions SSE stream into the equivalent non-stream JSON.
+
+    Text deltas concatenate; tool_calls merge by index (id/type/function.name from the
+    first frame that carries them, function.arguments concatenated); finish_reason is
+    the last non-null one; usage rides the final frame (stream_options.include_usage).
+    A provider-authored in-band `error` frame becomes the response's `error` field.
+    """
+    out = {"object": "chat.completion", "choices": []}
+    choices = {}  # index -> {"message": {...}, "finish_reason": ...}
+    buf = b""
+    error = None
+    while True:
+        chunk = up.read(4096)
+        if not chunk:
+            break
+        buf += chunk
+        while b"\n\n" in buf:
+            event, buf = buf.split(b"\n\n", 1)
+            for raw in event.split(b"\n"):
+                raw = raw.strip()
+                if not raw.startswith(b"data:"):
+                    continue
+                payload = raw[len(b"data:"):].strip()
+                if payload in (b"", b"[DONE]"):
+                    continue
+                try:
+                    frame = json.loads(payload)
+                except (ValueError, TypeError):
+                    continue
+                if not isinstance(frame, dict):
+                    continue
+                if frame.get("error") and not frame.get("choices"):
+                    error = frame["error"]
+                    continue
+                for k in ("id", "model", "created", "system_fingerprint"):
+                    if frame.get(k) is not None:
+                        out[k] = frame[k]
+                if frame.get("usage"):
+                    out["usage"] = frame["usage"]
+                for ch in frame.get("choices") or []:
+                    idx = ch.get("index", 0)
+                    c = choices.setdefault(idx, {"index": idx, "message": {"role": "assistant", "content": ""}, "finish_reason": None})
+                    d = ch.get("delta") or {}
+                    if d.get("role"):
+                        c["message"]["role"] = d["role"]
+                    if isinstance(d.get("content"), str):
+                        c["message"]["content"] += d["content"]
+                    if isinstance(d.get("reasoning_content"), str):
+                        c["message"]["reasoning_content"] = c["message"].get("reasoning_content", "") + d["reasoning_content"]
+                    for tc in d.get("tool_calls") or []:
+                        calls = c["message"].setdefault("tool_calls", [])
+                        ti = tc.get("index", len(calls))
+                        while len(calls) <= ti:
+                            calls.append({"id": None, "type": "function", "function": {"name": "", "arguments": ""}})
+                        slot = calls[ti]
+                        if tc.get("id"):
+                            slot["id"] = tc["id"]
+                        if tc.get("type"):
+                            slot["type"] = tc["type"]
+                        fn = tc.get("function") or {}
+                        if fn.get("name"):
+                            slot["function"]["name"] = fn["name"]
+                        if isinstance(fn.get("arguments"), str):
+                            slot["function"]["arguments"] += fn["arguments"]
+                    if ch.get("finish_reason"):
+                        c["finish_reason"] = ch["finish_reason"]
+    for idx in sorted(choices):
+        c = choices[idx]
+        if c["message"].get("content") == "" and c["message"].get("tool_calls"):
+            c["message"]["content"] = None
+        out["choices"].append(c)
+    if error is not None:
+        out["error"] = error
+    return json.dumps(out).encode()
 
 
 class Handler(BaseHTTPRequestHandler):
@@ -116,6 +239,7 @@ class Handler(BaseHTTPRequestHandler):
         body = self.rfile.read(length) if length else b""
 
         stripped = []
+        reassemble = False  # UPSTREAM_STREAM: we stream upstream, the client gets one JSON object
         if body:
             try:
                 obj = json.loads(body)
@@ -124,7 +248,17 @@ class Handler(BaseHTTPRequestHandler):
                         if k in STRIP:
                             obj.pop(k)
                             stripped.append(k)
-                    if stripped:
+                    if (_UPSTREAM_STREAM and method == "POST" and self.path.endswith("/chat/completions")
+                            and not obj.get("stream")):
+                        obj["stream"] = True
+                        so = obj.get("stream_options") if isinstance(obj.get("stream_options"), dict) else {}
+                        so["include_usage"] = True
+                        obj["stream_options"] = so
+                        reassemble = True
+                    if _PROMPT_NONCE and _tag_first_user_message(obj, self.client_address[0]):
+                        reassemble = reassemble or True  # body changed either way
+                        stripped.append("+nonce")
+                    if stripped or reassemble:
                         body = json.dumps(obj).encode()
             except (ValueError, TypeError):
                 pass  # not JSON — forward untouched
@@ -161,6 +295,20 @@ class Handler(BaseHTTPRequestHandler):
             return
 
         ctype = up.headers.get("Content-Type", "application/json")
+        if reassemble and "event-stream" in ctype:
+            data = _reassemble_chat_completion(up)
+            self.send_response(up.status)
+            self.send_header("Content-Type", "application/json")
+            self.send_header("Content-Length", str(len(data)))
+            self.end_headers()
+            self.wfile.write(data)
+            if USAGE_LOG:
+                try:
+                    obj = json.loads(data)
+                    _record_usage(self.path, (time.time() - _t0) * 1000.0, obj.get("usage"), obj.get("model"))
+                except (ValueError, TypeError):
+                    pass
+            return
         self.send_response(up.status)
         self.send_header("Content-Type", ctype)
         if "event-stream" in ctype:  # stream SSE straight through, chunked
@@ -223,5 +371,5 @@ class Handler(BaseHTTPRequestHandler):
 
 
 if __name__ == "__main__":
-    _log(f"strip-proxy: {BIND}:{PORT} -> {UPSTREAM} (stripping {sorted(STRIP)})")
+    _log(f"strip-proxy: {BIND}:{PORT} -> {UPSTREAM} (stripping {sorted(STRIP)}; upstream_stream={_UPSTREAM_STREAM})")
     ThreadingHTTPServer((BIND, PORT), Handler).serve_forever()

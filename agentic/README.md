@@ -36,6 +36,13 @@ sudo env UPSTREAM="$PARETO_BASE_URL" PORT=80 python3 agentic/strip_proxy.py &
 #   ...then run_deepswe.sh with MODEL_BASE_URL=http://172.17.0.1/v1
 ```
 
+**Behind a gateway with a non-streaming timeout** (one that answers a non-streaming
+call only once the whole generation is done and times out long agent steps, e.g. a
+multi-thousand-token file write), add `UPSTREAM_STREAM=1`: the proxy turns each
+non-streaming `/chat/completions` into a streaming call upstream and folds the SSE
+frames (text, tool_calls, finish_reason, usage) back into the single JSON object the
+agent asked for. Requests the agent already streams pass through unchanged.
+
 If your endpoint accepts standard sampling params, skip this — point the wrappers
 straight at it.
 
