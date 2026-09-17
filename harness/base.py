@@ -48,6 +48,9 @@ def run_benchmark(
     out_dir: str = "results",
     cost_log: str | None = None,      # server cost log for authoritative $/task
 ) -> dict:
+    # OUT_DIR env overrides the default so slice runs (run_slice.sh) can land
+    # in a per-run directory without touching every benchmark module.
+    out_dir = os.environ.get("OUT_DIR", out_dir)
     os.makedirs(out_dir, exist_ok=True)
     items = _apply_limit(items)
     t_start = time.time()
