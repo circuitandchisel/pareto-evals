@@ -120,6 +120,8 @@ def run_benchmark_for_model(bench: str, m: dict, limit: int | None, concurrency:
     """Run one benchmark against one model in a subprocess. Returns the result name."""
     info = BENCHMARKS[bench]
     result_name = f"{bench}__{m['key']}"
+    for suffix in (".jsonl", ".summary.json"):
+        (RESULTS / f"{result_name}{suffix}").unlink(missing_ok=True)
     env = dict(os.environ)
     env["MODEL_BASE_URL"] = m["base_url"]
     env["MODEL_API_KEY"] = m["api_key"]
@@ -150,7 +152,9 @@ def run_benchmark_for_model(bench: str, m: dict, limit: int | None, concurrency:
         cmd = [sys.executable, "-m", info["module"]]
     proc = subprocess.run(cmd, cwd=ROOT, env=env)
     if proc.returncode != 0:
-        print(f"    ! {bench} × {m['label']} exited {proc.returncode} (see output above)", flush=True)
+        raise RuntimeError(f"{bench} × {m['label']} exited {proc.returncode}; results will not be aggregated")
+    if not (RESULTS / f"{result_name}.jsonl").is_file():
+        raise RuntimeError(f"{bench} × {m['label']} produced no results")
     return result_name
 
 
@@ -257,6 +261,10 @@ def main() -> None:
     print(f"Models: {', '.join(m['label'] for m in (pareto, comp) if m)}")
     print(f"Slices: " + ", ".join(f"{b}={slices[b] or 'full'}" for b in benches) + "\n")
 
+    out = ROOT / args.out
+    csv = out.with_suffix(".csv")
+    for report in (out, csv):
+        report.unlink(missing_ok=True)
     table_rows = []
     for b in benches:
         row = {"bench": b}
@@ -264,7 +272,10 @@ def main() -> None:
             if not m:
                 row[role] = {"n": 0, "score": None, "cost_per_task": None}
                 continue
-            name = run_benchmark_for_model(b, m, slices[b], args.concurrency, args.seed)
+            try:
+                name = run_benchmark_for_model(b, m, slices[b], args.concurrency, args.seed)
+            except RuntimeError as error:
+                sys.exit(str(error))
             row[role] = score_and_cost(name, m)
         table_rows.append(row)
         # incremental line so long runs show progress
@@ -275,11 +286,9 @@ def main() -> None:
     table = render_table(table_rows, pareto["label"] if pareto else "Pareto",
                          comp["label"] if comp else None)
     print("\n" + table + "\n")
-    out = ROOT / args.out
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(table + "\n")
     # also CSV
-    csv = out.with_suffix(".csv")
     hdr = ["benchmark", "n", "pareto_score", "pareto_cost_per_task"]
     if comp:
         hdr += ["comparison_score", "comparison_cost_per_task"]
