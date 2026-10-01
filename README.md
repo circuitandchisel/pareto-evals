@@ -218,6 +218,14 @@ Written to `results/comparison.md` and `results/comparison.csv`. Per-item detail
 run is in `results/<benchmark>__pareto.jsonl` and `…__comparison.jsonl` (one row per item:
 correctness, token usage, cost, prediction), plus a `.summary.json` per run.
 
+Per-response cost averages use only items with a known cost, including explicit
+zero costs; missing costs are not treated as free tasks. The summary's `n_priced`
+field records how many items have a response cost, and `cost_usd_total` is their
+known subtotal, not an estimate of missing costs. When no response costs exist,
+an optional server-log total is divided by all tasks. The comparison runner can
+add token-price estimates for unpriced responses, so its cost coverage may be
+higher than the summary's.
+
 ---
 
 ## Notes on graders & fairness
