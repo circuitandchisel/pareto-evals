@@ -1,0 +1,1254 @@
+{
+  "scenario": "40 synthetic HLE tasks per version through the actual proxy: 20 LF, 20 CRLF; all upstream answers are correct",
+  "live_model_calls": 0,
+  "results": {
+    "before": {
+      "commit": "984f576dc58d41aa6dd34448b831fe2e64243c0b",
+      "proxy_command": "UPSTREAM_STREAM=1 python agentic/strip_proxy.py",
+      "benchmark_command": "python -m benchmarks.hle",
+      "exit_code": 0,
+      "calls": {
+        "lf": 20,
+        "crlf": 20,
+        "judge": 20
+      },
+      "groups": {
+        "lf": {
+          "n": 20,
+          "correct": 20,
+          "errors": 0,
+          "with_usage": 20
+        },
+        "crlf": {
+          "n": 20,
+          "correct": 0,
+          "errors": 20,
+          "with_usage": 0
+        }
+      },
+      "summary": {
+        "benchmark": "evidence",
+        "n": 40,
+        "resolved": 20,
+        "accuracy": 50.0,
+        "errored": 20,
+        "latency_median_s": 0.0,
+        "latency_mean_s": 0.01,
+        "wall_s": 0.1,
+        "cost_usd_total": null,
+        "cost_source": null,
+        "n_priced": 0,
+        "total_retries": 0
+      },
+      "rows": [
+        {
+          "id": "lf-1",
+          "correct": true,
+          "started_at": 1790884520.072,
+          "finished_at": 1790884520.112,
+          "latency_s": 0.038,
+          "usage": {
+            "prompt": 10,
+            "completion": 2,
+            "total": 12
+          },
+          "cost_usd": null,
+          "retries": 0,
+          "finish": "stop",
+          "pred": "4"
+        },
+        {
+          "id": "lf-0",
+          "correct": true,
+          "started_at": 1790884520.072,
+          "finished_at": 1790884520.113,
+          "latency_s": 0.039,
+          "usage": {
+            "prompt": 10,
+            "completion": 2,
+            "total": 12
+          },
+          "cost_usd": null,
+          "retries": 0,
+          "finish": "stop",
+          "pred": "4"
+        },
+        {
+          "id": "lf-3",
+          "correct": true,
+          "started_at": 1790884520.072,
+          "finished_at": 1790884520.114,
+          "latency_s": 0.04,
+          "usage": {
+            "prompt": 10,
+            "completion": 2,
+            "total": 12
+          },
+          "cost_usd": null,
+          "retries": 0,
+          "finish": "stop",
+          "pred": "4"
+        },
+        {
+          "id": "lf-2",
+          "correct": true,
+          "started_at": 1790884520.072,
+          "finished_at": 1790884520.114,
+          "latency_s": 0.041,
+          "usage": {
+            "prompt": 10,
+            "completion": 2,
+            "total": 12
+          },
+          "cost_usd": null,
+          "retries": 0,
+          "finish": "stop",
+          "pred": "4"
+        },
+        {
+          "id": "lf-4",
+          "correct": true,
+          "started_at": 1790884520.112,
+          "finished_at": 1790884520.116,
+          "latency_s": 0.003,
+          "usage": {
+            "prompt": 10,
+            "completion": 2,
+            "total": 12
+          },
+          "cost_usd": null,
+          "retries": 0,
+          "finish": "stop",
+          "pred": "4"
+        },
+        {
+          "id": "lf-6",
+          "correct": true,
+          "started_at": 1790884520.114,
+          "finished_at": 1790884520.117,
+          "latency_s": 0.002,
+          "usage": {
+            "prompt": 10,
+            "completion": 2,
+            "total": 12
+          },
+          "cost_usd": null,
+          "retries": 0,
+          "finish": "stop",
+          "pred": "4"
+        },
+        {
+          "id": "lf-5",
+          "correct": true,
+          "started_at": 1790884520.113,
+          "finished_at": 1790884520.118,
+          "latency_s": 0.003,
+          "usage": {
+            "prompt": 10,
+            "completion": 2,
+            "total": 12
+          },
+          "cost_usd": null,
+          "retries": 0,
+          "finish": "stop",
+          "pred": "4"
+        },
+        {
+          "id": "lf-7",
+          "correct": true,
+          "started_at": 1790884520.114,
+          "finished_at": 1790884520.118,
+          "latency_s": 0.002,
+          "usage": {
+            "prompt": 10,
+            "completion": 2,
+            "total": 12
+          },
+          "cost_usd": null,
+          "retries": 0,
+          "finish": "stop",
+          "pred": "4"
+        },
+        {
+          "id": "lf-8",
+          "correct": true,
+          "started_at": 1790884520.116,
+          "finished_at": 1790884520.121,
+          "latency_s": 0.003,
+          "usage": {
+            "prompt": 10,
+            "completion": 2,
+            "total": 12
+          },
+          "cost_usd": null,
+          "retries": 0,
+          "finish": "stop",
+          "pred": "4"
+        },
+        {
+          "id": "lf-10",
+          "correct": true,
+          "started_at": 1790884520.118,
+          "finished_at": 1790884520.121,
+          "latency_s": 0.002,
+          "usage": {
+            "prompt": 10,
+            "completion": 2,
+            "total": 12
+          },
+          "cost_usd": null,
+          "retries": 0,
+          "finish": "stop",
+          "pred": "4"
+        },
+        {
+          "id": "lf-9",
+          "correct": true,
+          "started_at": 1790884520.117,
+          "finished_at": 1790884520.122,
+          "latency_s": 0.004,
+          "usage": {
+            "prompt": 10,
+            "completion": 2,
+            "total": 12
+          },
+          "cost_usd": null,
+          "retries": 0,
+          "finish": "stop",
+          "pred": "4"
+        },
+        {
+          "id": "lf-11",
+          "correct": true,
+          "started_at": 1790884520.118,
+          "finished_at": 1790884520.122,
+          "latency_s": 0.002,
+          "usage": {
+            "prompt": 10,
+            "completion": 2,
+            "total": 12
+          },
+          "cost_usd": null,
+          "retries": 0,
+          "finish": "stop",
+          "pred": "4"
+        },
+        {
+          "id": "lf-12",
+          "correct": true,
+          "started_at": 1790884520.121,
+          "finished_at": 1790884520.125,
+          "latency_s": 0.003,
+          "usage": {
+            "prompt": 10,
+            "completion": 2,
+            "total": 12
+          },
+          "cost_usd": null,
+          "retries": 0,
+          "finish": "stop",
+          "pred": "4"
+        },
+        {
+          "id": "lf-15",
+          "correct": true,
+          "started_at": 1790884520.122,
+          "finished_at": 1790884520.126,
+          "latency_s": 0.002,
+          "usage": {
+            "prompt": 10,
+            "completion": 2,
+            "total": 12
+          },
+          "cost_usd": null,
+          "retries": 0,
+          "finish": "stop",
+          "pred": "4"
+        },
+        {
+          "id": "lf-13",
+          "correct": true,
+          "started_at": 1790884520.121,
+          "finished_at": 1790884520.126,
+          "latency_s": 0.003,
+          "usage": {
+            "prompt": 10,
+            "completion": 2,
+            "total": 12
+          },
+          "cost_usd": null,
+          "retries": 0,
+          "finish": "stop",
+          "pred": "4"
+        },
+        {
+          "id": "lf-14",
+          "correct": true,
+          "started_at": 1790884520.122,
+          "finished_at": 1790884520.127,
+          "latency_s": 0.003,
+          "usage": {
+            "prompt": 10,
+            "completion": 2,
+            "total": 12
+          },
+          "cost_usd": null,
+          "retries": 0,
+          "finish": "stop",
+          "pred": "4"
+        },
+        {
+          "id": "lf-16",
+          "correct": true,
+          "started_at": 1790884520.125,
+          "finished_at": 1790884520.128,
+          "latency_s": 0.003,
+          "usage": {
+            "prompt": 10,
+            "completion": 2,
+            "total": 12
+          },
+          "cost_usd": null,
+          "retries": 0,
+          "finish": "stop",
+          "pred": "4"
+        },
+        {
+          "id": "lf-18",
+          "correct": true,
+          "started_at": 1790884520.126,
+          "finished_at": 1790884520.129,
+          "latency_s": 0.002,
+          "usage": {
+            "prompt": 10,
+            "completion": 2,
+            "total": 12
+          },
+          "cost_usd": null,
+          "retries": 0,
+          "finish": "stop",
+          "pred": "4"
+        },
+        {
+          "id": "lf-19",
+          "correct": true,
+          "started_at": 1790884520.127,
+          "finished_at": 1790884520.13,
+          "latency_s": 0.002,
+          "usage": {
+            "prompt": 10,
+            "completion": 2,
+            "total": 12
+          },
+          "cost_usd": null,
+          "retries": 0,
+          "finish": "stop",
+          "pred": "4"
+        },
+        {
+          "id": "crlf-0",
+          "correct": false,
+          "started_at": 1790884520.128,
+          "finished_at": 1790884520.131,
+          "latency_s": 0.003,
+          "request_id": null,
+          "error": "EmptyResponseError: no choices in response (id=None, model=None)"
+        },
+        {
+          "id": "lf-17",
+          "correct": true,
+          "started_at": 1790884520.126,
+          "finished_at": 1790884520.131,
+          "latency_s": 0.004,
+          "usage": {
+            "prompt": 10,
+            "completion": 2,
+            "total": 12
+          },
+          "cost_usd": null,
+          "retries": 0,
+          "finish": "stop",
+          "pred": "4"
+        },
+        {
+          "id": "crlf-1",
+          "correct": false,
+          "started_at": 1790884520.129,
+          "finished_at": 1790884520.131,
+          "latency_s": 0.002,
+          "request_id": null,
+          "error": "EmptyResponseError: no choices in response (id=None, model=None)"
+        },
+        {
+          "id": "crlf-2",
+          "correct": false,
+          "started_at": 1790884520.13,
+          "finished_at": 1790884520.132,
+          "latency_s": 0.002,
+          "request_id": null,
+          "error": "EmptyResponseError: no choices in response (id=None, model=None)"
+        },
+        {
+          "id": "crlf-4",
+          "correct": false,
+          "started_at": 1790884520.131,
+          "finished_at": 1790884520.133,
+          "latency_s": 0.002,
+          "request_id": null,
+          "error": "EmptyResponseError: no choices in response (id=None, model=None)"
+        },
+        {
+          "id": "crlf-5",
+          "correct": false,
+          "started_at": 1790884520.131,
+          "finished_at": 1790884520.133,
+          "latency_s": 0.002,
+          "request_id": null,
+          "error": "EmptyResponseError: no choices in response (id=None, model=None)"
+        },
+        {
+          "id": "crlf-6",
+          "correct": false,
+          "started_at": 1790884520.132,
+          "finished_at": 1790884520.133,
+          "latency_s": 0.001,
+          "request_id": null,
+          "error": "EmptyResponseError: no choices in response (id=None, model=None)"
+        },
+        {
+          "id": "crlf-7",
+          "correct": false,
+          "started_at": 1790884520.133,
+          "finished_at": 1790884520.134,
+          "latency_s": 0.001,
+          "request_id": null,
+          "error": "EmptyResponseError: no choices in response (id=None, model=None)"
+        },
+        {
+          "id": "crlf-3",
+          "correct": false,
+          "started_at": 1790884520.131,
+          "finished_at": 1790884520.134,
+          "latency_s": 0.004,
+          "request_id": null,
+          "error": "EmptyResponseError: no choices in response (id=None, model=None)"
+        },
+        {
+          "id": "crlf-8",
+          "correct": false,
+          "started_at": 1790884520.133,
+          "finished_at": 1790884520.135,
+          "latency_s": 0.002,
+          "request_id": null,
+          "error": "EmptyResponseError: no choices in response (id=None, model=None)"
+        },
+        {
+          "id": "crlf-9",
+          "correct": false,
+          "started_at": 1790884520.133,
+          "finished_at": 1790884520.135,
+          "latency_s": 0.002,
+          "request_id": null,
+          "error": "EmptyResponseError: no choices in response (id=None, model=None)"
+        },
+        {
+          "id": "crlf-10",
+          "correct": false,
+          "started_at": 1790884520.134,
+          "finished_at": 1790884520.136,
+          "latency_s": 0.002,
+          "request_id": null,
+          "error": "EmptyResponseError: no choices in response (id=None, model=None)"
+        },
+        {
+          "id": "crlf-12",
+          "correct": false,
+          "started_at": 1790884520.135,
+          "finished_at": 1790884520.136,
+          "latency_s": 0.001,
+          "request_id": null,
+          "error": "EmptyResponseError: no choices in response (id=None, model=None)"
+        },
+        {
+          "id": "crlf-11",
+          "correct": false,
+          "started_at": 1790884520.134,
+          "finished_at": 1790884520.137,
+          "latency_s": 0.002,
+          "request_id": null,
+          "error": "EmptyResponseError: no choices in response (id=None, model=None)"
+        },
+        {
+          "id": "crlf-14",
+          "correct": false,
+          "started_at": 1790884520.136,
+          "finished_at": 1790884520.137,
+          "latency_s": 0.001,
+          "request_id": null,
+          "error": "EmptyResponseError: no choices in response (id=None, model=None)"
+        },
+        {
+          "id": "crlf-13",
+          "correct": false,
+          "started_at": 1790884520.135,
+          "finished_at": 1790884520.138,
+          "latency_s": 0.002,
+          "request_id": null,
+          "error": "EmptyResponseError: no choices in response (id=None, model=None)"
+        },
+        {
+          "id": "crlf-15",
+          "correct": false,
+          "started_at": 1790884520.136,
+          "finished_at": 1790884520.138,
+          "latency_s": 0.002,
+          "request_id": null,
+          "error": "EmptyResponseError: no choices in response (id=None, model=None)"
+        },
+        {
+          "id": "crlf-16",
+          "correct": false,
+          "started_at": 1790884520.137,
+          "finished_at": 1790884520.139,
+          "latency_s": 0.002,
+          "request_id": null,
+          "error": "EmptyResponseError: no choices in response (id=None, model=None)"
+        },
+        {
+          "id": "crlf-18",
+          "correct": false,
+          "started_at": 1790884520.138,
+          "finished_at": 1790884520.139,
+          "latency_s": 0.001,
+          "request_id": null,
+          "error": "EmptyResponseError: no choices in response (id=None, model=None)"
+        },
+        {
+          "id": "crlf-19",
+          "correct": false,
+          "started_at": 1790884520.138,
+          "finished_at": 1790884520.139,
+          "latency_s": 0.001,
+          "request_id": null,
+          "error": "EmptyResponseError: no choices in response (id=None, model=None)"
+        },
+        {
+          "id": "crlf-17",
+          "correct": false,
+          "started_at": 1790884520.137,
+          "finished_at": 1790884520.139,
+          "latency_s": 0.002,
+          "request_id": null,
+          "error": "EmptyResponseError: no choices in response (id=None, model=None)"
+        }
+      ],
+      "stdout": "[evidence] progress 10/40  ok=10 err=0\n[evidence] progress 20/40  ok=19 err=1\n[evidence] progress 30/40  ok=20 err=10\n[evidence] progress 40/40  ok=20 err=20\n[evidence] 50.0%  (20/40, 20 err)  lat_med=0.0s  $/task=None\n",
+      "stderr": "",
+      "proxy_log": "strip-proxy: 127.0.0.1:51719 -> http://127.0.0.1:51718/v1 (stripping ['frequency_penalty', 'min_p', 'presence_penalty', 'repetition_penalty', 'stop', 'temperature', 'top_k', 'top_p']; upstream_stream=True)\n",
+      "parser_split_checks": {
+        "lf": {
+          "partitions": 348,
+          "recovered": 348
+        },
+        "crlf": {
+          "partitions": 356,
+          "recovered": 0
+        }
+      }
+    },
+    "after": {
+      "commit": "e059b89c7652d8447780e0bcdbe716c1f3bc5518",
+      "proxy_command": "UPSTREAM_STREAM=1 python agentic/strip_proxy.py",
+      "benchmark_command": "python -m benchmarks.hle",
+      "exit_code": 0,
+      "calls": {
+        "lf": 20,
+        "crlf": 20,
+        "judge": 40
+      },
+      "groups": {
+        "lf": {
+          "n": 20,
+          "correct": 20,
+          "errors": 0,
+          "with_usage": 20
+        },
+        "crlf": {
+          "n": 20,
+          "correct": 20,
+          "errors": 0,
+          "with_usage": 20
+        }
+      },
+      "summary": {
+        "benchmark": "evidence",
+        "n": 40,
+        "resolved": 40,
+        "accuracy": 100.0,
+        "errored": 0,
+        "latency_median_s": 0.0,
+        "latency_mean_s": 0.01,
+        "wall_s": 0.1,
+        "cost_usd_total": null,
+        "cost_source": null,
+        "n_priced": 0,
+        "total_retries": 0
+      },
+      "rows": [
+        {
+          "id": "lf-2",
+          "correct": true,
+          "started_at": 1790884520.439,
+          "finished_at": 1790884520.475,
+          "latency_s": 0.034,
+          "usage": {
+            "prompt": 10,
+            "completion": 2,
+            "total": 12
+          },
+          "cost_usd": null,
+          "retries": 0,
+          "finish": "stop",
+          "pred": "4"
+        },
+        {
+          "id": "lf-3",
+          "correct": true,
+          "started_at": 1790884520.439,
+          "finished_at": 1790884520.475,
+          "latency_s": 0.034,
+          "usage": {
+            "prompt": 10,
+            "completion": 2,
+            "total": 12
+          },
+          "cost_usd": null,
+          "retries": 0,
+          "finish": "stop",
+          "pred": "4"
+        },
+        {
+          "id": "lf-0",
+          "correct": true,
+          "started_at": 1790884520.439,
+          "finished_at": 1790884520.476,
+          "latency_s": 0.035,
+          "usage": {
+            "prompt": 10,
+            "completion": 2,
+            "total": 12
+          },
+          "cost_usd": null,
+          "retries": 0,
+          "finish": "stop",
+          "pred": "4"
+        },
+        {
+          "id": "lf-1",
+          "correct": true,
+          "started_at": 1790884520.439,
+          "finished_at": 1790884520.477,
+          "latency_s": 0.036,
+          "usage": {
+            "prompt": 10,
+            "completion": 2,
+            "total": 12
+          },
+          "cost_usd": null,
+          "retries": 0,
+          "finish": "stop",
+          "pred": "4"
+        },
+        {
+          "id": "lf-4",
+          "correct": true,
+          "started_at": 1790884520.475,
+          "finished_at": 1790884520.478,
+          "latency_s": 0.003,
+          "usage": {
+            "prompt": 10,
+            "completion": 2,
+            "total": 12
+          },
+          "cost_usd": null,
+          "retries": 0,
+          "finish": "stop",
+          "pred": "4"
+        },
+        {
+          "id": "lf-5",
+          "correct": true,
+          "started_at": 1790884520.475,
+          "finished_at": 1790884520.479,
+          "latency_s": 0.003,
+          "usage": {
+            "prompt": 10,
+            "completion": 2,
+            "total": 12
+          },
+          "cost_usd": null,
+          "retries": 0,
+          "finish": "stop",
+          "pred": "4"
+        },
+        {
+          "id": "lf-7",
+          "correct": true,
+          "started_at": 1790884520.477,
+          "finished_at": 1790884520.48,
+          "latency_s": 0.002,
+          "usage": {
+            "prompt": 10,
+            "completion": 2,
+            "total": 12
+          },
+          "cost_usd": null,
+          "retries": 0,
+          "finish": "stop",
+          "pred": "4"
+        },
+        {
+          "id": "lf-6",
+          "correct": true,
+          "started_at": 1790884520.476,
+          "finished_at": 1790884520.481,
+          "latency_s": 0.004,
+          "usage": {
+            "prompt": 10,
+            "completion": 2,
+            "total": 12
+          },
+          "cost_usd": null,
+          "retries": 0,
+          "finish": "stop",
+          "pred": "4"
+        },
+        {
+          "id": "lf-8",
+          "correct": true,
+          "started_at": 1790884520.478,
+          "finished_at": 1790884520.483,
+          "latency_s": 0.003,
+          "usage": {
+            "prompt": 10,
+            "completion": 2,
+            "total": 12
+          },
+          "cost_usd": null,
+          "retries": 0,
+          "finish": "stop",
+          "pred": "4"
+        },
+        {
+          "id": "lf-9",
+          "correct": true,
+          "started_at": 1790884520.479,
+          "finished_at": 1790884520.484,
+          "latency_s": 0.003,
+          "usage": {
+            "prompt": 10,
+            "completion": 2,
+            "total": 12
+          },
+          "cost_usd": null,
+          "retries": 0,
+          "finish": "stop",
+          "pred": "4"
+        },
+        {
+          "id": "lf-10",
+          "correct": true,
+          "started_at": 1790884520.48,
+          "finished_at": 1790884520.484,
+          "latency_s": 0.003,
+          "usage": {
+            "prompt": 10,
+            "completion": 2,
+            "total": 12
+          },
+          "cost_usd": null,
+          "retries": 0,
+          "finish": "stop",
+          "pred": "4"
+        },
+        {
+          "id": "lf-11",
+          "correct": true,
+          "started_at": 1790884520.481,
+          "finished_at": 1790884520.485,
+          "latency_s": 0.003,
+          "usage": {
+            "prompt": 10,
+            "completion": 2,
+            "total": 12
+          },
+          "cost_usd": null,
+          "retries": 0,
+          "finish": "stop",
+          "pred": "4"
+        },
+        {
+          "id": "lf-12",
+          "correct": true,
+          "started_at": 1790884520.483,
+          "finished_at": 1790884520.487,
+          "latency_s": 0.003,
+          "usage": {
+            "prompt": 10,
+            "completion": 2,
+            "total": 12
+          },
+          "cost_usd": null,
+          "retries": 0,
+          "finish": "stop",
+          "pred": "4"
+        },
+        {
+          "id": "lf-13",
+          "correct": true,
+          "started_at": 1790884520.484,
+          "finished_at": 1790884520.488,
+          "latency_s": 0.002,
+          "usage": {
+            "prompt": 10,
+            "completion": 2,
+            "total": 12
+          },
+          "cost_usd": null,
+          "retries": 0,
+          "finish": "stop",
+          "pred": "4"
+        },
+        {
+          "id": "lf-14",
+          "correct": true,
+          "started_at": 1790884520.484,
+          "finished_at": 1790884520.488,
+          "latency_s": 0.003,
+          "usage": {
+            "prompt": 10,
+            "completion": 2,
+            "total": 12
+          },
+          "cost_usd": null,
+          "retries": 0,
+          "finish": "stop",
+          "pred": "4"
+        },
+        {
+          "id": "lf-15",
+          "correct": true,
+          "started_at": 1790884520.485,
+          "finished_at": 1790884520.49,
+          "latency_s": 0.003,
+          "usage": {
+            "prompt": 10,
+            "completion": 2,
+            "total": 12
+          },
+          "cost_usd": null,
+          "retries": 0,
+          "finish": "stop",
+          "pred": "4"
+        },
+        {
+          "id": "lf-16",
+          "correct": true,
+          "started_at": 1790884520.487,
+          "finished_at": 1790884520.49,
+          "latency_s": 0.003,
+          "usage": {
+            "prompt": 10,
+            "completion": 2,
+            "total": 12
+          },
+          "cost_usd": null,
+          "retries": 0,
+          "finish": "stop",
+          "pred": "4"
+        },
+        {
+          "id": "lf-18",
+          "correct": true,
+          "started_at": 1790884520.488,
+          "finished_at": 1790884520.492,
+          "latency_s": 0.002,
+          "usage": {
+            "prompt": 10,
+            "completion": 2,
+            "total": 12
+          },
+          "cost_usd": null,
+          "retries": 0,
+          "finish": "stop",
+          "pred": "4"
+        },
+        {
+          "id": "lf-17",
+          "correct": true,
+          "started_at": 1790884520.488,
+          "finished_at": 1790884520.492,
+          "latency_s": 0.003,
+          "usage": {
+            "prompt": 10,
+            "completion": 2,
+            "total": 12
+          },
+          "cost_usd": null,
+          "retries": 0,
+          "finish": "stop",
+          "pred": "4"
+        },
+        {
+          "id": "lf-19",
+          "correct": true,
+          "started_at": 1790884520.49,
+          "finished_at": 1790884520.493,
+          "latency_s": 0.003,
+          "usage": {
+            "prompt": 10,
+            "completion": 2,
+            "total": 12
+          },
+          "cost_usd": null,
+          "retries": 0,
+          "finish": "stop",
+          "pred": "4"
+        },
+        {
+          "id": "crlf-0",
+          "correct": true,
+          "started_at": 1790884520.49,
+          "finished_at": 1790884520.494,
+          "latency_s": 0.003,
+          "usage": {
+            "prompt": 10,
+            "completion": 2,
+            "total": 12
+          },
+          "cost_usd": null,
+          "retries": 0,
+          "finish": "stop",
+          "pred": "4"
+        },
+        {
+          "id": "crlf-1",
+          "correct": true,
+          "started_at": 1790884520.492,
+          "finished_at": 1790884520.495,
+          "latency_s": 0.003,
+          "usage": {
+            "prompt": 10,
+            "completion": 2,
+            "total": 12
+          },
+          "cost_usd": null,
+          "retries": 0,
+          "finish": "stop",
+          "pred": "4"
+        },
+        {
+          "id": "crlf-3",
+          "correct": true,
+          "started_at": 1790884520.493,
+          "finished_at": 1790884520.496,
+          "latency_s": 0.002,
+          "usage": {
+            "prompt": 10,
+            "completion": 2,
+            "total": 12
+          },
+          "cost_usd": null,
+          "retries": 0,
+          "finish": "stop",
+          "pred": "4"
+        },
+        {
+          "id": "crlf-2",
+          "correct": true,
+          "started_at": 1790884520.492,
+          "finished_at": 1790884520.497,
+          "latency_s": 0.004,
+          "usage": {
+            "prompt": 10,
+            "completion": 2,
+            "total": 12
+          },
+          "cost_usd": null,
+          "retries": 0,
+          "finish": "stop",
+          "pred": "4"
+        },
+        {
+          "id": "crlf-4",
+          "correct": true,
+          "started_at": 1790884520.494,
+          "finished_at": 1790884520.498,
+          "latency_s": 0.003,
+          "usage": {
+            "prompt": 10,
+            "completion": 2,
+            "total": 12
+          },
+          "cost_usd": null,
+          "retries": 0,
+          "finish": "stop",
+          "pred": "4"
+        },
+        {
+          "id": "crlf-5",
+          "correct": true,
+          "started_at": 1790884520.495,
+          "finished_at": 1790884520.499,
+          "latency_s": 0.003,
+          "usage": {
+            "prompt": 10,
+            "completion": 2,
+            "total": 12
+          },
+          "cost_usd": null,
+          "retries": 0,
+          "finish": "stop",
+          "pred": "4"
+        },
+        {
+          "id": "crlf-6",
+          "correct": true,
+          "started_at": 1790884520.496,
+          "finished_at": 1790884520.5,
+          "latency_s": 0.002,
+          "usage": {
+            "prompt": 10,
+            "completion": 2,
+            "total": 12
+          },
+          "cost_usd": null,
+          "retries": 0,
+          "finish": "stop",
+          "pred": "4"
+        },
+        {
+          "id": "crlf-7",
+          "correct": true,
+          "started_at": 1790884520.497,
+          "finished_at": 1790884520.501,
+          "latency_s": 0.003,
+          "usage": {
+            "prompt": 10,
+            "completion": 2,
+            "total": 12
+          },
+          "cost_usd": null,
+          "retries": 0,
+          "finish": "stop",
+          "pred": "4"
+        },
+        {
+          "id": "crlf-8",
+          "correct": true,
+          "started_at": 1790884520.498,
+          "finished_at": 1790884520.502,
+          "latency_s": 0.004,
+          "usage": {
+            "prompt": 10,
+            "completion": 2,
+            "total": 12
+          },
+          "cost_usd": null,
+          "retries": 0,
+          "finish": "stop",
+          "pred": "4"
+        },
+        {
+          "id": "crlf-9",
+          "correct": true,
+          "started_at": 1790884520.499,
+          "finished_at": 1790884520.503,
+          "latency_s": 0.003,
+          "usage": {
+            "prompt": 10,
+            "completion": 2,
+            "total": 12
+          },
+          "cost_usd": null,
+          "retries": 0,
+          "finish": "stop",
+          "pred": "4"
+        },
+        {
+          "id": "crlf-10",
+          "correct": true,
+          "started_at": 1790884520.5,
+          "finished_at": 1790884520.504,
+          "latency_s": 0.003,
+          "usage": {
+            "prompt": 10,
+            "completion": 2,
+            "total": 12
+          },
+          "cost_usd": null,
+          "retries": 0,
+          "finish": "stop",
+          "pred": "4"
+        },
+        {
+          "id": "crlf-11",
+          "correct": true,
+          "started_at": 1790884520.501,
+          "finished_at": 1790884520.505,
+          "latency_s": 0.003,
+          "usage": {
+            "prompt": 10,
+            "completion": 2,
+            "total": 12
+          },
+          "cost_usd": null,
+          "retries": 0,
+          "finish": "stop",
+          "pred": "4"
+        },
+        {
+          "id": "crlf-13",
+          "correct": true,
+          "started_at": 1790884520.503,
+          "finished_at": 1790884520.506,
+          "latency_s": 0.003,
+          "usage": {
+            "prompt": 10,
+            "completion": 2,
+            "total": 12
+          },
+          "cost_usd": null,
+          "retries": 0,
+          "finish": "stop",
+          "pred": "4"
+        },
+        {
+          "id": "crlf-12",
+          "correct": true,
+          "started_at": 1790884520.502,
+          "finished_at": 1790884520.506,
+          "latency_s": 0.003,
+          "usage": {
+            "prompt": 10,
+            "completion": 2,
+            "total": 12
+          },
+          "cost_usd": null,
+          "retries": 0,
+          "finish": "stop",
+          "pred": "4"
+        },
+        {
+          "id": "crlf-14",
+          "correct": true,
+          "started_at": 1790884520.504,
+          "finished_at": 1790884520.508,
+          "latency_s": 0.003,
+          "usage": {
+            "prompt": 10,
+            "completion": 2,
+            "total": 12
+          },
+          "cost_usd": null,
+          "retries": 0,
+          "finish": "stop",
+          "pred": "4"
+        },
+        {
+          "id": "crlf-15",
+          "correct": true,
+          "started_at": 1790884520.505,
+          "finished_at": 1790884520.509,
+          "latency_s": 0.003,
+          "usage": {
+            "prompt": 10,
+            "completion": 2,
+            "total": 12
+          },
+          "cost_usd": null,
+          "retries": 0,
+          "finish": "stop",
+          "pred": "4"
+        },
+        {
+          "id": "crlf-16",
+          "correct": true,
+          "started_at": 1790884520.506,
+          "finished_at": 1790884520.51,
+          "latency_s": 0.002,
+          "usage": {
+            "prompt": 10,
+            "completion": 2,
+            "total": 12
+          },
+          "cost_usd": null,
+          "retries": 0,
+          "finish": "stop",
+          "pred": "4"
+        },
+        {
+          "id": "crlf-17",
+          "correct": true,
+          "started_at": 1790884520.507,
+          "finished_at": 1790884520.51,
+          "latency_s": 0.003,
+          "usage": {
+            "prompt": 10,
+            "completion": 2,
+            "total": 12
+          },
+          "cost_usd": null,
+          "retries": 0,
+          "finish": "stop",
+          "pred": "4"
+        },
+        {
+          "id": "crlf-18",
+          "correct": true,
+          "started_at": 1790884520.508,
+          "finished_at": 1790884520.511,
+          "latency_s": 0.002,
+          "usage": {
+            "prompt": 10,
+            "completion": 2,
+            "total": 12
+          },
+          "cost_usd": null,
+          "retries": 0,
+          "finish": "stop",
+          "pred": "4"
+        },
+        {
+          "id": "crlf-19",
+          "correct": true,
+          "started_at": 1790884520.509,
+          "finished_at": 1790884520.511,
+          "latency_s": 0.002,
+          "usage": {
+            "prompt": 10,
+            "completion": 2,
+            "total": 12
+          },
+          "cost_usd": null,
+          "retries": 0,
+          "finish": "stop",
+          "pred": "4"
+        }
+      ],
+      "stdout": "[evidence] progress 10/40  ok=10 err=0\n[evidence] progress 20/40  ok=20 err=0\n[evidence] progress 30/40  ok=30 err=0\n[evidence] progress 40/40  ok=40 err=0\n[evidence] 100.0%  (40/40, 0 err)  lat_med=0.0s  $/task=None\n",
+      "stderr": "",
+      "proxy_log": "strip-proxy: 127.0.0.1:51787 -> http://127.0.0.1:51718/v1 (stripping ['frequency_penalty', 'min_p', 'presence_penalty', 'repetition_penalty', 'stop', 'temperature', 'top_k', 'top_p']; upstream_stream=True)\n",
+      "parser_split_checks": {
+        "lf": {
+          "partitions": 348,
+          "recovered": 348
+        },
+        "crlf": {
+          "partitions": 356,
+          "recovered": 356
+        }
+      }
+    }
+  }
+}

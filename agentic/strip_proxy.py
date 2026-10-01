@@ -39,6 +39,7 @@ Env vars: UPSTREAM (required, /v1 base), PORT (default 8900), BIND (default
 (comma-separated override of the stripped keys).
 """
 import os
+import re
 import sys
 import json
 import time
@@ -157,8 +158,8 @@ def _reassemble_chat_completion(up):
         if not chunk:
             break
         buf += chunk
-        while b"\n\n" in buf:
-            event, buf = buf.split(b"\n\n", 1)
+        while separator := re.search(br"\r?\n\r?\n", buf):
+            event, buf = buf[:separator.start()], buf[separator.end():]
             for raw in event.split(b"\n"):
                 raw = raw.strip()
                 if not raw.startswith(b"data:"):
