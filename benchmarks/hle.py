@@ -56,6 +56,8 @@ def solve(it: dict):
 
 
 def grade(it: dict, pred) -> bool:
+    if pred is None or not str(pred).strip():
+        return False
     ref = str(it["answer"]).strip()
     if _JUDGE is not None:
         judge_model = os.environ.get("JUDGE_MODEL", "gpt-5.5")
