@@ -29,9 +29,9 @@
         {
           "id": "priced",
           "correct": true,
-          "started_at": 1790875093.269,
-          "finished_at": 1790875093.298,
-          "latency_s": 0.028,
+          "started_at": 1790884461.113,
+          "finished_at": 1790884461.134,
+          "latency_s": 0.021,
           "usage": {
             "prompt": 10,
             "completion": 10,
@@ -45,8 +45,8 @@
         {
           "id": "unpriced",
           "correct": true,
-          "started_at": 1790875093.298,
-          "finished_at": 1790875093.299,
+          "started_at": 1790884461.134,
+          "finished_at": 1790884461.136,
           "latency_s": 0.001,
           "usage": {
             "prompt": 10,
@@ -89,9 +89,9 @@
         {
           "id": "priced",
           "correct": true,
-          "started_at": 1790875093.605,
-          "finished_at": 1790875093.63,
-          "latency_s": 0.024,
+          "started_at": 1790884461.374,
+          "finished_at": 1790884461.396,
+          "latency_s": 0.021,
           "usage": {
             "prompt": 10,
             "completion": 10,
@@ -105,8 +105,8 @@
         {
           "id": "unpriced",
           "correct": true,
-          "started_at": 1790875093.63,
-          "finished_at": 1790875093.632,
+          "started_at": 1790884461.396,
+          "finished_at": 1790884461.397,
           "latency_s": 0.001,
           "usage": {
             "prompt": 10,
