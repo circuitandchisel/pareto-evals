@@ -218,6 +218,12 @@ Written to `results/comparison.md` and `results/comparison.csv`. Per-item detail
 run is in `results/<benchmark>__pareto.jsonl` and `…__comparison.jsonl` (one row per item:
 correctness, token usage, cost, prediction), plus a `.summary.json` per run.
 
+If a benchmark subprocess fails or produces no result file, the command exits
+nonzero without publishing a comparison. Previous comparison reports and the
+selected run's old result files are removed before replacement, so they cannot
+be mistaken for current results. Partial JSONL from a failed run is kept for
+debugging, not scored by the comparison runner.
+
 ---
 
 ## Notes on graders & fairness
