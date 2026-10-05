@@ -39,10 +39,12 @@ def main():
         items = [{"id": str(i), "problem": _first(ex, Q), "answer": _first(ex, A)}
                  for i, ex in enumerate(ds)]
         items = [it for it in items if it["problem"] and it["answer"] is not None]
+        if not items:
+            raise SystemExit(f"No valid HMMT items prepared from {repo}")
         json.dump(items, open(OUT, "w"))
         print(f"wrote {len(items)} HMMT-2026 items from {repo} -> {OUT}")
         return
-    print("No HMMT-2026 source auto-resolved. Provide datasets/hmmt_2026.json manually "
+    raise SystemExit("No HMMT-2026 source auto-resolved. Provide datasets/hmmt_2026.json manually "
           "([{id,problem,answer}]).")
 
 

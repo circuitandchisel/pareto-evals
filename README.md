@@ -76,7 +76,7 @@ terms of use:
 |---|---|---|
 | HLE | `cais/hle` (HF) | per dataset card |
 | MMMU-Pro | `MMMU/MMMU_Pro` (HF) | per dataset card |
-| ArXiv-math | MathArena | per source |
+| ArXiv-math | `MathArena/arxivmath-0526` (HF) | CC BY-SA 4.0 |
 | HMMT Feb 2026 | MathArena HMMT-Feb-2026 | per source |
 | DeepSWE v1.1 | `datacurve-ai/deep-swe` (GitHub) | Apache-2.0 (Datacurve parts; upstream repos keep their own) |
 | Terminal-Bench 4.0 / 3.0 | `harbor-framework/terminal-bench` (Harbor Hub) | per repo |
@@ -90,6 +90,33 @@ terms of use:
 
 You are responsible for complying with each dataset's terms. This repo (the harness) is
 MIT-licensed; the datasets are not.
+
+### Dataset download commands
+
+After installing `requirements.txt`, prepare all six non-agentic datasets:
+
+```bash
+# Export HF_TOKEN in your shell, or use an existing Hugging Face login.
+# The account must have accepted the access terms for cais/hle and Idavidrein/gpqa.
+python datasets/prepare_all.py
+
+# Or prepare only selected benchmarks:
+python datasets/prepare_all.py --benchmarks gpqa arxiv_math
+```
+
+This downloads and prepares files locally under `datasets/`; it does not upload to
+S3 or call a model. It includes the four core benchmarks plus legacy GPQA and
+ARC-AGI-2, not the external agentic harnesses. Scripts use the shell's `HF_TOKEN`
+or cached Hugging Face login; they do not load `.env`. MMMU-Pro produces a large
+image-containing JSON file (roughly 540 MB). Preparation stops at the first failure;
+reruns regenerate selected outputs and may reuse upstream download caches.
+
+The new GPQA and ArXivMath scripts pin upstream revisions and validate row counts
+(198 and 40). GPQA choice order uses seed 0 and each record ID, so repeated
+preparation gives the same questions and answer letters. ArXivMath uses the
+published `train` split as its evaluation set and preserves source-paper metadata.
+The older preparation scripts still follow their upstream defaults; this command
+does not yet provide version locking for all six datasets.
 
 ---
 
@@ -115,6 +142,8 @@ python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 
 cp .env.example .env        # then edit .env with your credentials
+
+python datasets/prepare_all.py  # requires authorized HF login/token for HLE and GPQA
 
 # smoke test: 10 GPQA items, both models
 python run.py --benchmarks gpqa --slice 10
