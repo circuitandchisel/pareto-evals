@@ -29,7 +29,7 @@ def main():
     except Exception as e:
         print("FAILED to load cais/hle:", str(e)[:250])
         print("If gated: accept terms at https://huggingface.co/datasets/cais/hle and export HF_TOKEN.")
-        return
+        raise SystemExit(1) from e
     print("row schema:", list(ds[0].keys()))
     items = []
     for i, ex in enumerate(ds):
@@ -39,6 +39,8 @@ def main():
         a = _first(ex, A_FIELDS)
         if q and a is not None:
             items.append({"id": ex.get("id", str(i)), "question": q, "answer": a})
+    if not items:
+        raise SystemExit("No text-only HLE items prepared")
     json.dump(items, open(OUT, "w"))
     print(f"wrote {len(items)} text-only HLE items -> {OUT}")
 

@@ -29,7 +29,7 @@ def main():
             n += 1
         print(f"ARC-AGI-2 evaluation tasks copied: {n} -> {DEST}")
         if n == 0:
-            print("WARNING: no evaluation JSONs found — check the repo layout (data/evaluation/).")
+            raise SystemExit("No evaluation JSONs found — check the repo layout (data/evaluation/).")
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
 
