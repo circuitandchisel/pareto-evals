@@ -27,7 +27,7 @@ Loaded by import path from the run_*.sh wrappers (nothing installed into harbor'
 Agent kwargs (`--agent-kwarg key=value`):
   reasoning_effort=<level>   minimal|low|medium|high|xhigh|max|ultra|none (default high);
                              "default" leaves Hermes's own default (medium)
-  version=<ref>              hermes-agent git branch/tag to install (default: main, like Nous)
+  version=<ref>              hermes-agent git branch/tag (or commit SHA) to install (default: main, like Nous)
   max_turns=<int>            Hermes agent.max_turns (default: Hermes's own — unlimited)
   toolsets=<csv>             Hermes --toolsets
   extra_skill_dirs=<csv>     in-image dirs copied into $HERMES_HOME/skills if present
@@ -42,6 +42,7 @@ import yaml
 from pydantic import Field
 
 import json
+import re
 
 from harbor.agents.installed.hermes import Hermes, HermesOptions
 from harbor.environments.base import BaseEnvironment
@@ -95,7 +96,16 @@ class HermesAgent(Hermes):
     async def install(self, environment: BaseEnvironment) -> None:
         # Same as harbor's Hermes.install (0.24.0) except for the version probe at the end.
         await self.ensure_system_dependencies(environment, ("curl", "git", "ripgrep", "xz"))
-        branch_flag = f" --branch {self._version}" if self._version else ""
+        # install.sh takes --branch <name> or --commit <sha>; harbor only knows --branch, so a
+        # pinned SHA (what you want for a multi-hour run whose containers install at different
+        # times) is routed to --commit here.
+        v = (self._version or "").strip()
+        if not v:
+            branch_flag = ""
+        elif re.fullmatch(r"[0-9a-f]{7,40}", v):
+            branch_flag = f" --commit {v}"
+        else:
+            branch_flag = f" --branch {v}"
         await self.exec_as_agent(
             environment,
             command=(
