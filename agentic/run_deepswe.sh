@@ -30,6 +30,10 @@ MODEL_API_KEY="${MODEL_API_KEY:-dummy}"
 MODEL_NAME="${MODEL_NAME:-your-model}"          # pier/litellm sees this as openai/$MODEL_NAME
 DEEPSWE_DIR="${DEEPSWE_DIR:-./deep-swe}"        # git clone of datacurve-ai/deep-swe
 CONC="${CONC:-4}"
+# TASKS_FILE: newline-separated task names -> exact task set via --include-task-name
+# (pier filters first, then applies -l). Use it to pin a slice across arms.
+TASK_INCLUDES=()
+if [ -n "${TASKS_FILE:-}" ]; then while IFS= read -r t; do [ -n "$t" ] && TASK_INCLUDES+=(-i "$t"); done < "$TASKS_FILE"; fi
 OUT="${OUT:-deepswe_$(date -u +%Y%m%d-%H%M%S)}"
 ENV_MODE="${DEEPSWE_ENV:-docker}"               # docker (default) or modal
 # Chat-Completions endpoints must override the Responses-API default that the
@@ -65,7 +69,7 @@ pier run \
   "${AGENT_ENV[@]}" \
   -n "$CONC" \
   -e "$ENV_MODE" \
-  -o "$OUT" ${LIMIT:+-l "$LIMIT"}
+  -o "$OUT" ${LIMIT:+-l "$LIMIT"} "${TASK_INCLUDES[@]}"
 
 echo "Done. Score = mean reward over trials in $OUT/*/verifier/reward.json"
 echo "       (or read stats.evals[...].metrics[0].reward in $OUT/result.json)."

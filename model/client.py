@@ -88,6 +88,12 @@ def _is_retryable(e: Exception) -> bool:
     # message rather than the class: a bare APIError otherwise covers real 4xx.
     if "error occurred during streaming" in msg.lower():
         return True
+    # OpenRouter-style upstream deadline: the provider stopped generating after its
+    # own wall-clock cap ("Provider timed out after 300413ms"). Wall-clock, not
+    # token-based, so a retry can finish when the provider is less loaded. Seen on
+    # ~3% of HLE / ~10% of ArXivMath items against stealth/union-alpha (2026-09-14).
+    if "provider timed out" in msg.lower():
+        return True
     return False
 
 
@@ -101,8 +107,9 @@ def _consume_stream(stream) -> dict:
     (NON_STREAM_TIMEOUT_MS): as long as the backend keeps emitting chunks, a long
     high-effort generation completes (governed only by TTFB + per-chunk stall).
     """
-    parts, finish, usage, cost_meta = [], None, None, None
+    parts, finish, usage, cost_meta, served = [], None, None, None, None
     for chunk in stream:
+        served = getattr(chunk, "model", None) or served   # routers report the served model per response
         ce = getattr(chunk, "model_extra", None) or {}
         if ce.get("_meta"):
             cost_meta = ce["_meta"]
@@ -115,7 +122,7 @@ def _consume_stream(stream) -> dict:
                 parts.append(delta.content)
             if getattr(chs[0], "finish_reason", None):
                 finish = chs[0].finish_reason
-    return {"content": ("".join(parts) or None), "finish": finish, "usage": usage, "cost_meta": cost_meta}
+    return {"content": ("".join(parts) or None), "finish": finish, "usage": usage, "cost_meta": cost_meta, "served_model": served}
 
 
 def model_complete(
@@ -214,6 +221,7 @@ def model_complete(
             "usage": _u,
             "cost_usd": cost_usd,
             "retries": attempt,
+            "served_model": streamed.get("served_model"),
             "raw": None,
         }
 
@@ -244,6 +252,7 @@ def model_complete(
         "usage": getattr(resp, "usage", None),
         "cost_usd": cost_usd,
         "retries": attempt,
+        "served_model": getattr(resp, "model", None),
         "raw": resp,
     }
     return choice.message.content, meta

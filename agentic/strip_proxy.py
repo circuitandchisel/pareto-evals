@@ -60,6 +60,15 @@ STRIP = {k.strip() for k in os.environ.get("STRIP_PARAMS", _DEFAULT_STRIP).split
 # own wrappers score only pass/fail — cost per task and latency are derived from
 # this log (tokens x configured price). No effect when USAGE_LOG is unset.
 USAGE_LOG = os.environ.get("USAGE_LOG")
+
+# Optional upstream retry. RETRY_UPSTREAM=N re-sends a request whose upstream
+# answer is 429/5xx (or a transport error) up to N more times, backing off
+# 1,2,4,.. s (capped at 60 s), so an agent harness with no retry of its own does
+# not lose a whole trajectory to a flaky router. Added 2026-09-30 for Cloudflare's
+# `cloudflare/auto`, which answered ~65% of requests with HTTP 500
+# (cf-aig-routing-reason: fallback_candidate_unavailable) even one at a time.
+_RETRY_UPSTREAM = int(os.environ.get("RETRY_UPSTREAM", "0") or "0")
+_RETRY_STATUS = {408, 409, 425, 429, 500, 502, 503, 504}
 _ulock = threading.Lock()
 
 # Optional global concurrency cap. MAX_INFLIGHT>0 bounds the number of requests
@@ -94,14 +103,17 @@ def _log(msg):
     sys.stderr.flush()
 
 
-def _record_usage(path, latency_ms, usage, model):
+def _record_usage(path, latency_ms, usage, model, request_model=None, retries=0):
     if not USAGE_LOG or not isinstance(usage, dict):
         return
     row = {
         "ts": round(time.time(), 3),
         "path": path,
+        "port": PORT,                    # which proxy instance (= which lane) saw the call
         "latency_ms": round(latency_ms, 1),
-        "model": model,
+        "model": model,                  # served model, from the response
+        "request_model": request_model,  # slug the harness asked for (router slates: differs)
+        "retries": retries,              # upstream retries spent (RETRY_UPSTREAM)
         "prompt_tokens": usage.get("prompt_tokens"),
         "completion_tokens": usage.get("completion_tokens"),
         "total_tokens": usage.get("total_tokens"),
@@ -240,10 +252,12 @@ class Handler(BaseHTTPRequestHandler):
 
         stripped = []
         reassemble = False  # UPSTREAM_STREAM: we stream upstream, the client gets one JSON object
+        request_model = None
         if body:
             try:
                 obj = json.loads(body)
                 if isinstance(obj, dict):
+                    request_model = obj.get("model")
                     for k in list(obj):
                         if k in STRIP:
                             obj.pop(k)
@@ -272,27 +286,42 @@ class Handler(BaseHTTPRequestHandler):
         if stripped:
             _log(f"[strip] {method} {self.path} removed {stripped}")
 
-        req = urllib.request.Request(url, data=body, headers=headers, method=method)
         _t0 = time.time()
-        try:
-            up = urllib.request.urlopen(req, timeout=1800)
-        except urllib.error.HTTPError as e:
-            data = e.read()
-            _log(f"[upstream {e.code}] {method} {self.path}: {data[:200]!r}")
-            self.send_response(e.code)
-            self.send_header("Content-Type", e.headers.get("Content-Type", "application/json"))
-            self.send_header("Content-Length", str(len(data)))
-            self.end_headers()
-            self.wfile.write(data)
-            return
-        except Exception as e:  # noqa: BLE001 — surface any transport error to the client
-            msg = json.dumps({"error": {"message": f"proxy: {e}", "type": "proxy_error"}}).encode()
-            self.send_response(502)
-            self.send_header("Content-Type", "application/json")
-            self.send_header("Content-Length", str(len(msg)))
-            self.end_headers()
-            self.wfile.write(msg)
-            return
+        attempt = 0
+        while True:
+            req = urllib.request.Request(url, data=body, headers=headers, method=method)
+            try:
+                up = urllib.request.urlopen(req, timeout=1800)
+                break
+            except urllib.error.HTTPError as e:
+                data = e.read()
+                if attempt < _RETRY_UPSTREAM and e.code in _RETRY_STATUS and method == "POST":
+                    attempt += 1
+                    wait = min(2 ** (attempt - 1), 60)
+                    _log(f"[upstream {e.code}] {method} {self.path}: retry {attempt}/{_RETRY_UPSTREAM} in {wait}s: {data[:160]!r}")
+                    time.sleep(wait)
+                    continue
+                _log(f"[upstream {e.code}] {method} {self.path}: giving up after {attempt} retries: {data[:200]!r}")
+                self.send_response(e.code)
+                self.send_header("Content-Type", e.headers.get("Content-Type", "application/json"))
+                self.send_header("Content-Length", str(len(data)))
+                self.end_headers()
+                self.wfile.write(data)
+                return
+            except Exception as e:  # noqa: BLE001 — surface any transport error to the client
+                if attempt < _RETRY_UPSTREAM and method == "POST":
+                    attempt += 1
+                    wait = min(2 ** (attempt - 1), 60)
+                    _log(f"[upstream error] {method} {self.path}: retry {attempt}/{_RETRY_UPSTREAM} in {wait}s: {e}")
+                    time.sleep(wait)
+                    continue
+                msg = json.dumps({"error": {"message": f"proxy: {e}", "type": "proxy_error"}}).encode()
+                self.send_response(502)
+                self.send_header("Content-Type", "application/json")
+                self.send_header("Content-Length", str(len(msg)))
+                self.end_headers()
+                self.wfile.write(msg)
+                return
 
         ctype = up.headers.get("Content-Type", "application/json")
         if reassemble and "event-stream" in ctype:
@@ -305,7 +334,8 @@ class Handler(BaseHTTPRequestHandler):
             if USAGE_LOG:
                 try:
                     obj = json.loads(data)
-                    _record_usage(self.path, (time.time() - _t0) * 1000.0, obj.get("usage"), obj.get("model"))
+                    _record_usage(self.path, (time.time() - _t0) * 1000.0, obj.get("usage"), obj.get("model"),
+                                  request_model, attempt)
                 except (ValueError, TypeError):
                     pass
             return
@@ -325,7 +355,7 @@ class Handler(BaseHTTPRequestHandler):
                 self.wfile.flush()
             self.wfile.write(b"0\r\n\r\n")
             if USAGE_LOG:
-                self._record_stream_usage(tail, (time.time() - _t0) * 1000.0)
+                self._record_stream_usage(tail, (time.time() - _t0) * 1000.0, request_model, attempt)
         else:
             data = up.read()
             self.send_header("Content-Length", str(len(data)))
@@ -336,11 +366,11 @@ class Handler(BaseHTTPRequestHandler):
                     obj = json.loads(data)
                     if isinstance(obj, dict):
                         _record_usage(self.path, (time.time() - _t0) * 1000.0,
-                                      obj.get("usage"), obj.get("model"))
+                                      obj.get("usage"), obj.get("model"), request_model, attempt)
                 except (ValueError, TypeError):
                     pass
 
-    def _record_stream_usage(self, tail, latency_ms):
+    def _record_stream_usage(self, tail, latency_ms, request_model=None, retries=0):
         # OpenAI streams end with SSE data lines; the usage block (when
         # stream_options.include_usage is on) rides the final data frame.
         model = None
@@ -361,7 +391,7 @@ class Handler(BaseHTTPRequestHandler):
                 if obj.get("usage"):
                     usage = obj["usage"]
         if usage:
-            _record_usage(self.path, latency_ms, usage, model)
+            _record_usage(self.path, latency_ms, usage, model, request_model, retries)
 
     def do_POST(self):
         self._proxy("POST")
@@ -371,5 +401,5 @@ class Handler(BaseHTTPRequestHandler):
 
 
 if __name__ == "__main__":
-    _log(f"strip-proxy: {BIND}:{PORT} -> {UPSTREAM} (stripping {sorted(STRIP)}; upstream_stream={_UPSTREAM_STREAM})")
+    _log(f"strip-proxy: {BIND}:{PORT} -> {UPSTREAM} (stripping {sorted(STRIP)}; upstream_stream={_UPSTREAM_STREAM}; retry_upstream={_RETRY_UPSTREAM})")
     ThreadingHTTPServer((BIND, PORT), Handler).serve_forever()

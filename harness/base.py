@@ -67,6 +67,7 @@ def run_benchmark(
                 "cost_usd": meta.get("cost_usd"),
                 "retries": meta.get("retries"),
                 "finish": meta.get("finish_reason"),
+                "served_model": meta.get("served_model"),
                 "pred": (str(pred)[:800] if pred is not None else None),
             }
         except Exception as e:  # never let one item kill the run
