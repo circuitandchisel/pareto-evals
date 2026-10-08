@@ -57,10 +57,13 @@ invocation, and `run_slate.sh` runs the whole slate in one command.
 | Wrapper | Benchmark | In N/5 launches | Category | Headline metric |
 |---|---|---|---|---|
 | `run_deepswe.sh` | DeepSWE v1.1 (Datacurve, 113 tasks) | 4/5 | Long-horizon SWE agent | mean binary `reward` |
-| `run_tb.sh` | Terminal-Bench 4.0 (66 tasks; 3.0 = 74, 2.1 = 89 selectable) | 5/5 (as 3.0/2.1) | Terminal/CLI agent | resolved / total |
+| `run_tb.sh` | Terminal-Bench 4.0 (66 tasks; 3.0 = 74, 2.1 = 89 selectable; agent terminus-2 or `TB_AGENT=dirac`) | 5/5 (as 3.0/2.1) | Terminal/CLI agent | resolved / total |
 | `run_toolathlon.sh` | Toolathlon-Verified (HKUST, 108 tasks) | 3/5 | Tool-use / MCP orchestration | `average_success_rate` (Pass@1) |
 | `run_cybergym.sh` | CyberGym (UC Berkeley, 1,507 vulns) | 3/5 | Vulnerability reproduction | fraction with a working PoC |
 | `run_arc_agi_3.sh` | ARC-AGI-3 public set (ARC Prize, 25 games) | — (added 2026-09) | Interactive reasoning / skill acquisition | mean per-game score, 0–100 (human action-efficiency) |
+| `run_tb_science.sh` | Terminal-Bench-Science 0.1 (70 tasks) | — (Hermes Index suite, 2026-10) | Scientific research workflows in the terminal | resolved / total |
+| `run_skillsbench.sh` | SkillsBench (87 tasks, curated skills) | — (Hermes Index suite, 2026-10) | Agent skill use | resolved / total ("clean": leaked tasks dropped) |
+| `run_hermes_index.sh` | the three open Hermes Index suites (TB 4.0 + the two above) through the **Hermes Agent** harness, then `hermes_index.py` | — | Hermes Index estimate | mean of 4 suites (Hermes Bench predicted) + $/task |
 
 ### Run the whole slate in one command — `run_slate.sh`
 
@@ -117,7 +120,8 @@ Score = mean `reward` over `<out>/*/verifier/reward.json` (or
 `stats.evals[...].metrics[0].reward` in `<out>/result.json`).
 
 ## Terminal-Bench 4.0 (+ 3.0, 2.1) — `run_tb.sh`
-External harness `harbor` with the `terminus-2` reference agent. Terminal-Bench is now a
+External harness `harbor` with the `terminus-2` reference agent by default, or
+[Dirac](https://dirac.run) with `TB_AGENT=dirac` (see below). Terminal-Bench is now a
 continuous, semver'd benchmark; **the wrapper defaults to 4.0** (released 2026-08-26):
 3.0's 74 tasks minus 8 removed for saturation / refusals / leaked solutions / quality
 = **66 tasks**, 19 tasks fixed, task resources (time, CPU, memory) calibrated and a flat
@@ -140,6 +144,34 @@ Both have **H100-only tasks** (4.0: `fp8-rmsnorm-gemm`, `math-eval-grader`,
 `jax-speedrun-gpu`; 3.0 also `exam-pdf-eval`) that the wrapper excludes on a plain
 Docker box; set `TB_INCLUDE_GPU=1` or `TB_ENV=modal` to include them. Score =
 resolved/total across `<out>/*/*/result.json` (`verifier_result.rewards.reward == 1`).
+
+**Agent choice.** `TB_AGENT` selects the scaffold. `terminus-2` (default) is harbor's
+reference agent, the one the launch posts use. `TB_AGENT=hermes` runs NousResearch's
+Hermes Agent the way the [Hermes Index](#hermes-index) does (reasoning effort high;
+`harbor_agents/hermes_agent.py`; harbor ≥ 0.24.0) — the index's TB4 number is this
+wrapper's default run (4.0, Docker, 3 GPU tasks excluded = 63 tasks) with that agent.
+`TB_AGENT=dirac` runs
+[Dirac](https://dirac.run) — the open-source, token-efficiency-focused Cline fork
+(hash-anchored edits, AST tools, parallel tool calls) that posted 65.2% on TB-2 with
+gemini-3-flash-preview, ahead of every agent on the leaderboard at the time. The adapter
+lives in `agentic/harbor_agents/dirac_agent.py` and is loaded by import path; harbor
+npm-installs `dirac-cli` (Node 22 via nvm) into each task container and runs
+`dirac task --provider $MODEL_BASE_URL --model $MODEL_NAME --json --yolo`, so the same
+`MODEL_*` variables apply. Any other value is handed to harbor as a built-in agent name
+or a `module.path:ClassName` import path.
+
+```bash
+TB_AGENT=dirac MODEL_BASE_URL=... MODEL_API_KEY=... MODEL_NAME=... ./agentic/run_tb.sh
+# knobs: DIRAC_VERSION (pin npm version), DIRAC_TIMEOUT_SEC (Dirac's own -t),
+#        DIRAC_MAX_MISTAKES (--max-consecutive-mistakes), DIRAC_AGENT_KWARGS="k=v ..."
+```
+
+Scores from different agents are **not comparable** with each other — TB measures the
+model+scaffold pair — so label runs with the agent. Per-trial Dirac transcripts land in
+`<out>/*/*/agent/dirac.txt` (JSON lines); token and cost totals are summed into each
+trial's `result.json` `agent_result`. `MODEL_MAX_INPUT_TOKENS` maps to Dirac's
+`--auto-condense --auto-condense-at N` (AI compaction at that context size) instead of
+terminus-2's `model_info` summarization hint.
 
 ## Toolathlon-Verified — `run_toolathlon.sh`
 HKUST-NLP's tool-use / MCP-orchestration benchmark: 108 verified tasks over 32 apps and
@@ -238,6 +270,105 @@ run will lose games to endpoint errors; check `AGENT EXIT REASON` lines in the b
 logs before trusting a score.
 
 ---
+
+## Hermes Index
+
+[Nous Research's Hermes Index](https://portal.nousresearch.com/bench) (launched
+2026-10-06) ranks models by how they perform **inside Hermes Agent**, Nous's open-source
+agent (MIT, `NousResearch/hermes-agent`). It is the plain mean of four suites' scores,
+reported next to the plain mean of their $/task, every run pass@1 with reasoning effort
+set to high where the model offers it:
+
+| Suite | Tasks | Open? | Here |
+|---|---|---|---|
+| Hermes Bench | 150 (25 scenarios: skills, research, charts, memory, tool use, safety) | **no** — Nous-internal | predicted (below) |
+| Terminal-Bench 4.0, GPU tasks removed | 63 | yes | `run_tb.sh` (`TB_VERSION=4.0`, Docker, default GPU exclusion) |
+| Terminal-Bench-Science 0.1 | 70 | yes | `run_tb_science.sh` |
+| SkillsBench, "clean" score | 87 minus leaked | yes | `run_skillsbench.sh` |
+
+All four go through the same harness, so this slate runs the three open suites with
+**`TB_AGENT=hermes`**: harbor's built-in Hermes installed agent (it installs
+`hermes-agent` from `main` into each task container — 6–10 min per container — and
+runs `hermes --yolo chat -q <instruction> -Q --provider openai-api`, honouring
+`OPENAI_BASE_URL`/`OPENAI_API_KEY`, i.e. the same `MODEL_*` variables as every other
+wrapper), subclassed in `harbor_agents/hermes_agent.py` to set
+`agent.reasoning_effort: high` and to surface in-image skills to Hermes. **harbor ≥
+0.24.0** is required (the `openai/<model>` → `openai-api` provider routing landed there;
+older harbor sends it to OpenRouter). Hermes sends its own sampling params, so against
+Pareto run it through `strip_proxy.py` like the other harnesses.
+
+```bash
+uv tool install --force 'harbor[modal]>=0.24.0'
+MODEL_BASE_URL=https://your-endpoint/v1 MODEL_API_KEY=sk-... MODEL_NAME=your-model \
+MODEL_INPUT_PRICE_PER_MTOK=3 MODEL_OUTPUT_PRICE_PER_MTOK=15 \
+  ./agentic/run_hermes_index.sh            # tb4 + tbsci + skills, then the estimate
+SUITES="skills" ... ./agentic/run_hermes_index.sh   # subset; per-suite summaries only
+```
+
+Each suite is also runnable on its own (`run_tb.sh` with `TB_AGENT=hermes`,
+`run_tb_science.sh`, `run_skillsbench.sh` — the latter two default to the Hermes agent;
+`TB_AGENT=terminus-2` gives harbor's reference agent instead). Knobs:
+`HERMES_REASONING` (default `high`), `HERMES_VERSION` (git tag/branch of hermes-agent to
+install; default `main`, like Nous — pin for reproducibility), `HERMES_MAX_TURNS`,
+`HERMES_TOOLSETS`, `HERMES_AGENT_KWARGS`, plus `CONC`, `TB_ENV`, `OUT`, `LIMIT`,
+`TASKS_FILE`/`TB_EXCLUDE_FILE` as in `run_tb.sh`.
+
+**Scoring and the extrapolation — `hermes_index.py`.** It reads each suite's harbor
+output (`result.json` per trial: `verifier_result.rewards.reward`, `agent_result`
+tokens), prices tokens with `MODEL_*_PRICE_PER_MTOK` (Hermes reports tokens, not cost;
+`--usage-log suite=path` takes a `strip_proxy.py` USAGE_LOG for inline-cost endpoints
+such as Pareto), and then predicts Hermes Bench from the open suites with a fit on the
+14-row launch leaderboard shipped in `hermes_index/leaderboard_2026-10-06.csv`:
+HB score ≈ linear in the SkillsBench and TB4 scores (HB only spans 54–77 while the open
+suites span 0–70, and it tracks SkillsBench most closely), capped at the best HB on the
+board; HB $/task ≈ log-linear in the SkillsBench and TB4 $/task. The index is then the
+mean of the three measured scores and the predicted HB, likewise for $/task. Leave-one-out
+over the published rows (`python3 agentic/hermes_index.py --check`): **index MAE 0.9
+points, worst 2.4; $/task within ±2%** — printed with every estimate, together with the
+index range you would get for any Hermes Bench score on the board, and where the estimate
+would rank on the launch leaderboard.
+
+```bash
+# what-if from numbers you already have (scores in %, $/task):
+python3 agentic/hermes_index.py --scores tb4=54,tbsci=52.9,skills=69.6 --costs tb4=6.27,tbsci=12.65,skills=0.51
+# per-suite summary of one run (clean SkillsBench score, $/task), no index:
+python3 agentic/hermes_index.py --skills skillsbench_<ts> --summary
+```
+
+**Caveats.**
+- *Hermes Bench is predicted, not measured.* Treat the index as "≈ ±1 point"; the three
+  open scores are the measurements. Refit automatically picks up new rows if you append
+  to the leaderboard CSV (the first commented lines record provenance; `*`-marked
+  provisional entries are noted in the `provisional` column).
+- *SkillsBench skills.* The Hub package keeps each task's curated skills in
+  `environment/skills/`, and only 2/87 Dockerfiles copy them into the image (SkillsBench's
+  own `bench` CLI injects them). `run_skillsbench.sh` therefore downloads the dataset once
+  into `SKILLSBENCH_DIR` and patches every task (`COPY skills /harbor/skills` +
+  `[environment] skills_dir = "/harbor/skills"`), which harbor passes to the agent and the
+  Hermes adapter copies into Hermes's skills directory. How Nous surfaced the skills to
+  Hermes is not published; this is the benchmark's "curated skills" condition.
+  `SKILLSBENCH_NO_SKILLS=1` runs the unpatched copy (the paper's no-skills ablation).
+- *SkillsBench "clean" score.* Nous drops tasks where the agent found the public
+  SkillsBench repo and used its solutions (tasks allow internet). `hermes_index.py` flags
+  a trial whose Hermes transcript mentions the repo / HF dataset / site and reports raw
+  and clean; review the flagged tasks — it is a regex, not a judgment.
+- *Task counts.* TB4 denominators on the leaderboard are 63 (= 66 − 3 H100 tasks), which
+  is this wrapper's default on Docker; `TB_ENV=modal` or `TB_INCLUDE_GPU=1` would include
+  them and break comparability. TB-Science denominators are 70.
+- *Costs.* Nous prices input, cache-hit, cache-write, reasoning and answer tokens
+  separately at each provider's list price. The adapter reads Hermes's session totals
+  (input / cache-read / cache-write / output tokens — harbor's stock adapter reports 0 for
+  current Hermes) into `agent_result`, so `tokens × price` honours
+  `MODEL_CACHE_PRICE_PER_MTOK` when set; without prices, `hermes_index.py` falls back to
+  Hermes's own list-price estimate from the session record (`cost_status: estimated`),
+  and a strip_proxy USAGE_LOG with inline cost is exact.
+- *Hermes version.* Nous does not publish the hermes-agent commit used. The adapter
+  installs `main` by default; set `HERMES_VERSION=<tag>` to pin a run. (With hermes-agent
+  `main` as of 2026-10, harbor ≤ 0.24.0's own install step fails every trial in setup:
+  Hermes treats harbor's `HERMES_HOME=/tmp/hermes` as a separate data root that needs
+  `hermes pm repair` first, and `hermes version` became `hermes --version`. The adapter's
+  install step does the repair and probes either spelling, so current main and older tags
+  both work.)
 
 ## Legacy SWE benchmarks
 

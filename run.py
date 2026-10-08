@@ -30,7 +30,9 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
-RESULTS = ROOT / "results"
+# EVAL_RESULTS_DIR: per-run isolation override — concurrent run.py instances
+# on one box otherwise truncate/append the same working files (torn jsonl).
+RESULTS = Path(os.environ["EVAL_RESULTS_DIR"]) if os.environ.get("EVAL_RESULTS_DIR") else ROOT / "results"
 
 # Benchmark registry. Each entry maps a short name -> the module run via
 # `python -m <module>`. `judge=True` means the benchmark grades free-form answers
@@ -215,8 +217,9 @@ def main() -> None:
                     help=f"comma list, 'all' (={', '.join(DEFAULT_ORDER)}), or 'legacy' "
                          f"(={', '.join(LEGACY_ORDER)}). Opt-in legacy agentic: swe_rebench, "
                          f"swe_verified (need Docker + mini-swe-agent). The v2 agentic slate "
-                         f"(deepswe, terminal-bench, toolathlon, cybergym, arc-agi-3) runs via agentic/ "
-                         f"wrappers, not run.py — see agentic/README.md.")
+                         f"(deepswe, terminal-bench, toolathlon, cybergym, arc-agi-3) and the Hermes Index "
+                         f"suites (tb4 / tb-science / skillsbench via agentic/run_hermes_index.sh) run via "
+                         f"agentic/ wrappers, not run.py — see agentic/README.md.")
     ap.add_argument("--slice", default=None,
                     help="'all' (default), an int (all benchmarks), or 'gpqa=100,hle=300'")
     ap.add_argument("--models", default="pareto,comparison",

@@ -30,15 +30,36 @@
 #   MODEL_BASE_URL=https://your-endpoint/v1  MODEL_API_KEY=sk-...  MODEL_NAME=your-model \
 #     ./run_tb.sh
 #
+# Agent: harbor's terminus-2 reference agent by default. TB_AGENT=hermes swaps in
+# NousResearch's Hermes Agent as run for the Hermes Index (reasoning effort high; needs
+# harbor >= 0.24.0; knobs HERMES_REASONING / HERMES_VERSION / HERMES_MAX_TURNS /
+# HERMES_AGENT_KWARGS — see harbor_agents/hermes_agent.py). The Hermes Index's TB4 number
+# is exactly this wrapper's default: 4.0 on Docker, the 3 GPU tasks excluded = 63 tasks.
+# TB_AGENT=dirac swaps in Dirac
+# (https://dirac.run — open-source, efficiency-focused Cline fork; 65.2% TB-2 with
+# gemini-3-flash-preview, #1 published at the time) via the adapter in
+# harbor_agents/dirac_agent.py: npm-installed into each task container (Node 22 via
+# nvm) and pointed at the same MODEL_BASE_URL/MODEL_API_KEY/MODEL_NAME over Dirac's
+# OpenAI-compatible provider. Any other TB_AGENT value is passed to harbor verbatim
+# (built-in name or module.path:ClassName import path). Dirac knobs:
+#   DIRAC_VERSION=0.5.15        pin the dirac-cli npm version (default: latest)
+#   DIRAC_TIMEOUT_SEC=3600      Dirac's own -t wall clock per task (harbor's task timeout still applies)
+#   DIRAC_MAX_MISTAKES=5        --max-consecutive-mistakes (halt a looping run early)
+#   DIRAC_AGENT_KWARGS="subagents=true double_check_completion=true"   any extra key=value kwargs
+#
 # Score: fraction of tasks the agent resolves (verifier reward == 1), computed from
 #        each trial's result.json (verifier_result.rewards.reward == 1).
 # =============================================================================
 set -euo pipefail
 
+# `uv tool install harbor` puts the binary in ~/.local/bin, which non-login shells
+# (ssh host 'cmd', cron, nohup) often lack on PATH.
+command -v harbor >/dev/null 2>&1 || export PATH="$HOME/.local/bin:$PATH"
+
 MODEL_BASE_URL="${MODEL_BASE_URL:?set MODEL_BASE_URL (OpenAI-compatible /v1 base)}"
 MODEL_API_KEY="${MODEL_API_KEY:-dummy}"
 MODEL_NAME="${MODEL_NAME:-your-model}"     # harbor/litellm sees this as openai/$MODEL_NAME
-AGENT="${TB_AGENT:-terminus-2}"            # harbor's reference agent (BYO model via LiteLLM)
+AGENT="${TB_AGENT:-terminus-2}"            # harbor's reference agent (BYO model via LiteLLM); dirac = Dirac coding agent
 CONC="${CONC:-4}"                          # harbor -n / --n-concurrent
 ENV_MODE="${TB_ENV:-docker}"               # docker (default) or modal
 OUT="${OUT:-tb_$(date -u +%Y%m%d-%H%M%S)}"
@@ -83,7 +104,15 @@ case "$TB_VERSION" in
 esac
 LIMIT="${LIMIT:-$DEFAULT_LIMIT}"
 
-# Context window for a CUSTOM model name. terminus-2 asks LiteLLM for the model's
+# Resolve TB_AGENT. "dirac" / "hermes" -> our import-path adapters (harbor_agents/*.py,
+# loaded from this directory via PYTHONPATH, nothing installed into harbor's venv);
+# anything else is passed to harbor verbatim. See harbor_agents/resolve_agent.sh.
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=harbor_agents/resolve_agent.sh
+source "$SCRIPT_DIR/harbor_agents/resolve_agent.sh"
+resolve_harbor_agent
+
+# Context window for a CUSTOM model name (terminus agents only). terminus-2 asks LiteLLM for the model's
 # max_input_tokens to drive proactive context summarization; for a name LiteLLM
 # doesn't know (any pareto-* / self-hosted slug) harbor falls back to 1,000,000,
 # so summarization never fires and a 262k-window model returns 400
@@ -91,14 +120,22 @@ LIMIT="${LIMIT:-$DEFAULT_LIMIT}"
 # until the task timeout (seen 2026-09-10 against pareto-26.9: 3/63 TB-4.0 tasks
 # lost this way). Set MODEL_MAX_INPUT_TOKENS a bit under the served window
 # (e.g. 250000 for a 262144 model). Values are parsed by harbor as JSON.
-if [ -n "${MODEL_MAX_INPUT_TOKENS:-}" ]; then
+if [ -n "${MODEL_MAX_INPUT_TOKENS:-}" ] && [[ "$AGENT" == terminus* ]]; then
   EXTRA+=(--agent-kwarg "model_info={\"max_input_tokens\": ${MODEL_MAX_INPUT_TOKENS}, \"max_output_tokens\": ${MODEL_MAX_OUTPUT_TOKENS:-32768}}")
   echo "NOTE: registering model_info max_input_tokens=${MODEL_MAX_INPUT_TOKENS} for openai/$MODEL_NAME (proactive summarization)." >&2
 fi
 
-# Optional exact-name task subset (one per line), e.g. to rerun a few tasks.
+# Optional exact-name task subset (one per line), e.g. to rerun a few tasks. Hub task
+# names are namespaced ("terminal-bench/<task>") and a bare name matches nothing
+# (harbor then just lists the 66 available names and exits), so pass both spellings.
 if [ -n "${TASKS_FILE:-}" ]; then
-  while IFS= read -r t; do [ -n "$t" ] && EXTRA+=(--include-task-name "$t"); done < "$TASKS_FILE"
+  while IFS= read -r t; do [ -n "$t" ] && EXTRA+=(--include-task-name "$t" --include-task-name "terminal-bench/$t"); done < "$TASKS_FILE"
+fi
+# Optional exact-name task EXCLUDES (one per line), e.g. to resume a run that crashed
+# part-way: exclude the tasks already graded. Names are namespaced ("terminal-bench/<task>")
+# so, as with the GPU excludes above, both spellings are passed.
+if [ -n "${TB_EXCLUDE_FILE:-}" ]; then
+  while IFS= read -r t; do [ -n "$t" ] && EXTRA+=(--exclude-task-name "$t" --exclude-task-name "terminal-bench/$t"); done < "$TB_EXCLUDE_FILE"
 fi
 echo "TB-$TB_VERSION: dataset=$DATASET  agent=$AGENT  model=openai/$MODEL_NAME  limit=$LIMIT  conc=$CONC  env=$ENV_MODE  out=$OUT"
 harbor run \
@@ -111,3 +148,6 @@ harbor run \
   --yes -o "$OUT"
 
 echo "Done. Score = resolved/total across $OUT/*/*/result.json (verifier_result.rewards.reward == 1)."
+[ "$AGENT" = "harbor_agents.dirac_agent:DiracAgent" ] && echo "      Dirac transcripts: $OUT/*/*/agent/dirac.txt (JSON lines; tokens/cost also in result.json agent_result)."
+[ "$AGENT" = "harbor_agents.hermes_agent:HermesAgent" ] && echo "      Hermes transcripts: $OUT/*/*/agent/hermes.txt + trajectory.json; tokens in result.json agent_result. Hermes Index: python3 $SCRIPT_DIR/hermes_index.py --tb4 $OUT --summary"
+true

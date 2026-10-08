@@ -58,7 +58,19 @@ five launches:
 | Toolathlon-Verified | tool-use / MCP orchestration (108) | 3/5 | [public service](agentic/run_toolathlon.sh) |
 | CyberGym | vulnerability reproduction (1,507 vulns) | 3/5 | [server + BYO agent](agentic/run_cybergym.sh) |
 | ARC-AGI-3 (public set) | interactive reasoning — 25 public game envs, human-efficiency-normalized | — (added 2026-09; leaderboard uses the semi-private set) | [official `arc-agi-3-benchmarking`](agentic/run_arc_agi_3.sh) |
+| Terminal-Bench-Science 0.1 | research-workflow terminal tasks across 5 sciences (70) | — (Hermes Index suite, added 2026-10) | [`harbor`](agentic/run_tb_science.sh) |
+| SkillsBench | agent skill use, curated skills + deterministic verifiers (87) | — (Hermes Index suite, added 2026-10) | [`harbor`](agentic/run_skillsbench.sh) |
 | DRACO | deep-research, LLM-judged rubrics | — (kept) | vendored Node runner in [`draco/`](draco/) |
+
+**Hermes Index (Nous Research, 2026-10-06).** The index is the mean score (and mean $/task)
+of four suites run inside the open-source **Hermes Agent** harness at pass@1, reasoning
+effort high: Hermes Bench (closed), Terminal-Bench 4.0 minus GPU tasks, Terminal-Bench-Science
+and SkillsBench. The three open suites run here through harbor's Hermes agent
+(`TB_AGENT=hermes`, [adapter](agentic/harbor_agents/hermes_agent.py)), and
+[`agentic/hermes_index.py`](agentic/hermes_index.py) extrapolates the full index from them
+(Hermes Bench is predicted from the published leaderboard; leave-one-out error ≈ ±1 point,
+±2% on $/task). One command: [`agentic/run_hermes_index.sh`](agentic/run_hermes_index.sh).
+Details in [`agentic/README.md`](agentic/README.md#hermes-index).
 
 **Legacy agentic** (still selectable; no 2026 launch featured them — DeepSWE supersedes):
 `swe_verified` (SWE-bench Verified) and `swe_rebench`, both via `mini-swe-agent`.
@@ -83,6 +95,9 @@ terms of use:
 | Toolathlon-Verified | `hkust-nlp/Toolathlon` (GitHub) | **none stated** — review before redistributing |
 | CyberGym | `sunblaze-ucb/cybergym` (GitHub/HF) | Apache-2.0 |
 | ARC-AGI-3 (public) | hosted game API at `arcprize.org` (free key); harness `arcprize/arc-agi-3-benchmarking` | harness MIT; games served under ARC Prize's terms (scorecards are stored on their server) |
+| Terminal-Bench-Science 0.1 | `harbor-framework/terminal-bench-science` (Harbor Hub `terminal-bench-science/terminal-bench-science@0.1.0`) | Apache-2.0 |
+| SkillsBench | `benchflow-ai/skillsbench` (Harbor Hub `benchflow/skillsbench@latest`) | Apache-2.0 |
+| Hermes Agent (harness) | `NousResearch/hermes-agent`, installed into each task container by harbor's adapter | MIT |
 | DRACO | `perplexity-ai/draco` (HF) | MIT |
 | GPQA-Diamond *(legacy)* | `Idavidrein/gpqa` (HF) | CC BY 4.0 (gated) |
 | ARC-AGI-2 *(legacy)* | ARC Prize | Apache-2.0 |
