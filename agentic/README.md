@@ -361,7 +361,11 @@ python3 agentic/hermes_index.py --skills skillsbench_<ts> --summary
   current Hermes) into `agent_result`, so `tokens × price` honours
   `MODEL_CACHE_PRICE_PER_MTOK` when set; without prices, `hermes_index.py` falls back to
   Hermes's own list-price estimate from the session record (`cost_status: estimated`),
-  and a strip_proxy USAGE_LOG with inline cost is exact.
+  and a strip_proxy USAGE_LOG with inline cost is exact. Note Hermes drives OpenAI-
+  compatible endpoints through **`/v1/responses`**, not chat completions: the proxy logs
+  those usage frames since 2026-10-08 (older copies logged almost nothing for Hermes), and
+  an endpoint that only attaches inline cost to chat completions (Pareto) reports none
+  there — price from tokens.
 - *Hermes version.* Nous does not publish the hermes-agent commit used. The adapter
   installs `main` by default; set `HERMES_VERSION=<tag>` to pin a run. (With hermes-agent
   `main` as of 2026-10, harbor ≤ 0.24.0's own install step fails every trial in setup:

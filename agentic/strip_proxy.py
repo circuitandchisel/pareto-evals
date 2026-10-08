@@ -103,7 +103,25 @@ def _log(msg):
     sys.stderr.flush()
 
 
+def _normalize_usage(usage):
+    """Map an OpenAI *Responses* API usage block (input_tokens / output_tokens /
+    input_tokens_details.cached_tokens) onto the chat-completions names the log uses.
+    Hermes Agent drives OpenAI-compatible endpoints through /v1/responses, so without this
+    its calls left no usage rows (2026-10-08, Hermes Index slate). Chat usage passes through."""
+    if not isinstance(usage, dict) or "prompt_tokens" in usage or "input_tokens" not in usage:
+        return usage
+    details = usage.get("input_tokens_details") if isinstance(usage.get("input_tokens_details"), dict) else {}
+    out = dict(usage)
+    out["prompt_tokens"] = usage.get("input_tokens")
+    out["completion_tokens"] = usage.get("output_tokens")
+    out.setdefault("total_tokens", (usage.get("input_tokens") or 0) + (usage.get("output_tokens") or 0))
+    out["prompt_tokens_details"] = {"cached_tokens": details.get("cached_tokens")}
+    out["api"] = "responses"
+    return out
+
+
 def _record_usage(path, latency_ms, usage, model, request_model=None, retries=0):
+    usage = _normalize_usage(usage)
     if not USAGE_LOG or not isinstance(usage, dict):
         return
     row = {
@@ -120,6 +138,7 @@ def _record_usage(path, latency_ms, usage, model, request_model=None, retries=0)
         # present on Pareto responses: prompt-cache hits and the served-cost estimate
         "cached_tokens": (usage.get("prompt_tokens_details") or {}).get("cached_tokens") if isinstance(usage.get("prompt_tokens_details"), dict) else None,
         "cost": usage.get("cost"),
+        "api": usage.get("api", "chat"),   # chat | responses
     }
     try:
         with _ulock, open(USAGE_LOG, "a") as f:
@@ -390,6 +409,12 @@ class Handler(BaseHTTPRequestHandler):
                 model = obj.get("model") or model
                 if obj.get("usage"):
                     usage = obj["usage"]
+                # Responses API stream: the totals ride the final `response.completed` event.
+                resp = obj.get("response")
+                if obj.get("type") == "response.completed" and isinstance(resp, dict):
+                    model = resp.get("model") or model
+                    if resp.get("usage"):
+                        usage = resp["usage"]
         if usage:
             _record_usage(self.path, latency_ms, usage, model, request_model, retries)
 
