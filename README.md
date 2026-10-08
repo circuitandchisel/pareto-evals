@@ -70,7 +70,9 @@ and SkillsBench. The three open suites run here through harbor's Hermes agent
 [`agentic/hermes_index.py`](agentic/hermes_index.py) extrapolates the full index from them
 (Hermes Bench is predicted from the published leaderboard; leave-one-out error ≈ ±1 point,
 ±2% on $/task). One command: [`agentic/run_hermes_index.sh`](agentic/run_hermes_index.sh).
-Details in [`agentic/README.md`](agentic/README.md#hermes-index).
+Details in [`agentic/README.md`](agentic/README.md#hermes-index). The same treatment for
+[Parallel's Search Capability Leaderboard](https://parallel.ai/leaderboard) (DSQA + HLE open,
+WISER closed) is [`agentic/parallel_search_index.py`](agentic/parallel_search_index.py).
 
 **Legacy agentic** (still selectable; no 2026 launch featured them — DeepSWE supersedes):
 `swe_verified` (SWE-bench Verified) and `swe_rebench`, both via `mini-swe-agent`.

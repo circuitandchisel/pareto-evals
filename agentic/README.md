@@ -374,6 +374,46 @@ python3 agentic/hermes_index.py --skills skillsbench_<ts> --summary
   install step does the repair and probes either spelling, so current main and older tags
   both work.)
 
+## Parallel Search Capability Leaderboard
+
+[Parallel's leaderboard](https://parallel.ai/leaderboard) (31 models, update of 2026-10-05)
+has the same shape as the Hermes Index: an equal-weight mean over suites, one of them closed.
+Its **Search Intelligence Score** = (DSQA F1 + HLE accuracy + WISER accuracy) / 3, every model
+run through one agent harness with **Parallel Search (Fast mode) + Extract** as tools, fixed
+tool budgets, code execution off, provider-recommended reasoning settings, 100 questions per
+suite, then once more with tools disabled (lift = with − without):
+
+| Suite | What | Open? | Grading |
+|---|---|---|---|
+| DSQA | Google DeepMind's DeepSearchQA (900 multi-step research tasks; 100 sampled) | yes (Kaggle / HF) | answer extracted without the reference, F1 |
+| HLE | Humanity's Last Exam (100 sampled) | yes | correct / incorrect |
+| WISER | Parallel's business-research queries (100) | **no** | correct / incorrect |
+
+Failed or pending tasks count as 0. $/1K tasks = inference + estimated Search/Extract usage
+(grading excluded; Parallel flags its cost records as incomplete). The **Search Efficiency**
+board ranks models at or above the median score (62.7) by that cost. Pareto is already on the
+board (`unbiased/pareto-26.9` #3 at 72.5, $184/1K; `pareto-26.10` #7 at 68.6, $116/1K).
+
+`search_index/leaderboard_2026-10-05.csv` holds the scraped per-model numbers (with and
+without search) and `parallel_search_index.py` projects the score from the two open suites:
+
+```bash
+python3 agentic/parallel_search_index.py --dsqa 87.6 --hle 58.0 --cost-per-1k 184   # project
+python3 agentic/parallel_search_index.py --model pareto                             # board rows
+python3 agentic/parallel_search_index.py --check                                    # LOO table
+```
+
+WISER ≈ 4.6 + 0.39·DSQA + 0.66·HLE (with-search numbers) fits the board with leave-one-out
+MAE 4.2 WISER points (≈ ±1.4 on the score, worst 4.3). **Pareto is the fit's outlier**: 26.9's
+WISER sits 5 below the fit and 26.10's 12 above (26.10 scores 78 on WISER with only 43 on HLE),
+so a Pareto projection is honest at about ±4 points, and the measured rows win whenever
+Parallel has run the version in question. Caveats: the 100-question samples are not
+published, so a self-run DSQA/HLE number is only comparable if run through the same tool
+setup (Parallel Search Fast + Extract, same budgets, F1 / binary grading); this repo's `hle`
+benchmark is the no-tools variant and is not a substitute. A reproduction harness would need a
+tool-calling agent loop over Parallel's Search/Extract APIs (API key), DSQA from Kaggle, and
+Parallel's extraction-then-F1 grader for DSQA.
+
 ## Legacy SWE benchmarks
 
 ### SWE-bench Verified — `run_swe_verified.py`
