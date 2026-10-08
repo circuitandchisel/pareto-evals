@@ -96,6 +96,23 @@ class HermesAgent(Hermes):
     async def install(self, environment: BaseEnvironment) -> None:
         # Same as harbor's Hermes.install (0.24.0) except for the version probe at the end.
         await self.ensure_system_dependencies(environment, ("curl", "git", "ripgrep", "xz"))
+        # Hermes's bundled node needs libatomic, which slim Debian images lack
+        # ("✗ node: ... libatomic.so.1: cannot open shared object file" → "pm install
+        # failed"; seen on TB-4.0 risk-scorer-replay and rs-archive-clone 2026-10-08).
+        # harbor's helper only knows its fixed package list, so install it directly (best
+        # effort, as root; the image's agent user may be `nobody`).
+        try:
+            await environment.exec(
+                command=(
+                    "{ command -v apt-get >/dev/null 2>&1 && { apt-get install -y -qq libatomic1 >/dev/null 2>&1 "
+                    "|| { apt-get update -qq >/dev/null 2>&1 && apt-get install -y -qq libatomic1 >/dev/null 2>&1; }; }; } "
+                    "|| { command -v apk >/dev/null 2>&1 && apk add --no-cache libatomic >/dev/null 2>&1; } "
+                    "|| { command -v dnf >/dev/null 2>&1 && dnf install -y -q libatomic >/dev/null 2>&1; } || true"
+                ),
+                user="root",
+            )
+        except Exception:  # never fail setup over an optional library
+            self.logger.warning("libatomic install step failed; continuing")
         # install.sh takes --branch <name> or --commit <sha>; harbor only knows --branch, so a
         # pinned SHA (what you want for a multi-hour run whose containers install at different
         # times) is routed to --commit here.
