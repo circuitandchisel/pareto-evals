@@ -138,7 +138,9 @@ def run_benchmark(
         "n_priced": len(item_costs),
         "total_retries": sum(r.get("retries") or 0 for r in rows),
     }
-    if summary["cost_usd_total"] is not None and n:
+    if item_costs:
+        summary["cost_usd_per_task"] = round(sum(item_costs) / len(item_costs), 5)
+    elif summary["cost_usd_total"] is not None and n:
         summary["cost_usd_per_task"] = round(summary["cost_usd_total"] / n, 5)
 
     # jsonl already written incrementally above; just the summary here.
