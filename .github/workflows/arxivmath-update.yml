@@ -33,7 +33,7 @@ jobs:
         id: app-token
         with:
           app-id: 5584695
-          private-key: ${{ secrets.ARXIVMATH_APP_PRIVATE_KEY }}
+          private-key: ${{ secrets.PARETO_RELEASE_BUMPER_APP_PRIVATE_KEY }}
           owner: circuitandchisel
           repositories: pareto-evals
       - name: Biweekly gate
@@ -73,8 +73,8 @@ jobs:
             exit 0
           fi
           git switch -c "$branch"
-          git config user.name 'arxivmath-updater[bot]'
-          git config user.email '5584695+arxivmath-updater[bot]@users.noreply.github.com'
+          git config user.name 'pareto-evals-release-bumper[bot]'
+          git config user.email '5584695+pareto-evals-release-bumper[bot]@users.noreply.github.com'
           git add arxivmath.json
           git commit -m "chore: update ArXivMath edition ${edition}"
           git push origin "$branch"
@@ -82,4 +82,4 @@ jobs:
             --title "Update ArXivMath ${edition} (${revision:0:8})" \
             --body "Updates the pinned official question dataset in arxivmath.json. The pinned dataset was downloaded and its question count, unique IDs, and nonempty problems/answers validated. No question contents are committed. See this workflow's log for the before/after manifest: https://github.com/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}
 
-          Manual review required: confirm edition, schema, license, question count and grading compatibility. No model inference was performed. This does not deploy to unbiased-analysis: update its engine/dataset pins, filename, question-count contracts and pricing assumptions in a separate reviewed release. Existing purchases must retain their original artifacts. This PR was opened as arxivmath-updater[bot]; its CI can run normally. No automatic merge."
+          Manual review required: confirm edition, schema, license, question count and grading compatibility. No model inference was performed. This does not deploy to unbiased-analysis: update its engine/dataset pins, filename, question-count contracts and pricing assumptions in a separate reviewed release. Existing purchases must retain their original artifacts. This PR was opened as pareto-evals-release-bumper[bot]; its CI can run normally. No automatic merge."
