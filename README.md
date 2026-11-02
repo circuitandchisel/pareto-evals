@@ -168,11 +168,12 @@ deduplication marker, so it is not recreated on every check. A failed PR creatio
 after a successful push needs a human to open the PR from that existing branch.
 No force-push, branch deletion, automatic merge or production deployment occurs.
 
-The workflow needs GitHub Actions enabled and permission for `GITHUB_TOKEN` to
-write repository contents and create PRs. It uses no provider key or AWS access.
-PRs created by `GITHUB_TOKEN` generally do not trigger other workflows; validation
-therefore runs before opening the PR. Reviewers must explicitly arrange any
-additional required checks rather than assuming they ran.
+The workflow needs GitHub Actions enabled and the org-owned
+`pareto-evals-release-bumper` GitHub App private key stored as
+`PARETO_RELEASE_BUMPER_APP_PRIVATE_KEY`. It mints a scoped installation token
+with Contents/PR write for this repository only, then pushes and opens PRs as
+`pareto-evals-release-bumper[bot]`, so downstream CI can trigger normally.
+The workflow's own `GITHUB_TOKEN` remains read-only.
 
 The dependency-free regression suite runs with `python -m unittest discover -s tests -v`
 on PRs, pushes to main, and before scheduled discovery. It covers revision-safe
