@@ -10,12 +10,14 @@ judge configured it falls back to symbolic-only and prints a warning (not the he
 """
 from __future__ import annotations
 import json, os
+from pathlib import Path
 from model import model_complete
 from harness import run_benchmark
 from benchmarks.hmmt_2026 import _extract, grade as symbolic_grade  # strict math-verify+numeric
 from openai import OpenAI
 
-DATA = os.environ.get("ARXIV_FILE", "datasets/arxivmath_0526.json")
+_EDITION = json.loads((Path(__file__).resolve().parents[1] / "arxivmath.json").read_text())
+DATA = os.environ.get("ARXIV_FILE", "datasets/arxivmath_" + _EDITION["dataset"].rsplit("-", 1)[1] + ".json")
 INSTR = ("You are given a difficult question. Your task is to solve the problem.\n"
          "Put the final answer you find within \\boxed{}.")
 

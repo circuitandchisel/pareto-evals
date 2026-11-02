@@ -1,0 +1,8 @@
+{
+  "dataset": "MathArena/arxivmath-0526",
+  "revision": "69f701c7f266bfba235ef302ff9b19093f7455bb",
+  "edition": "2026-05",
+  "split": "train",
+  "rows": 40,
+  "license": "cc-by-sa-4.0"
+}
