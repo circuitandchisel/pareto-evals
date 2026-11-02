@@ -139,8 +139,11 @@ does not yet provide version locking for all six datasets.
 
 `arxivmath.json` is the authoritative dataset ID, edition, revision, split,
 question count and license. The preparation script and benchmark use it to
-select the dated filename, so old local editions are not overwritten or silently
-reused. The initial manifest preserves May 2026; this automation does not change
+select a revision-qualified filename such as
+`arxivmath_0526_69f701c7f266bfba235ef302ff9b19093f7455bb.json`.
+Old revisions cannot load under a newer manifest; rerun preparation after pulling
+an update. `ARXIV_FILE` may select another directory, but its basename must match
+the reviewed edition and full revision. The initial manifest preserves May 2026; this automation does not change
 the current questions until an update PR is reviewed and merged.
 
 The `Check ArXivMath editions` GitHub Actions workflow checks every other Monday
@@ -170,6 +173,10 @@ write repository contents and create PRs. It uses no provider key or AWS access.
 PRs created by `GITHUB_TOKEN` generally do not trigger other workflows; validation
 therefore runs before opening the PR. Reviewers must explicitly arrange any
 additional required checks rather than assuming they ran.
+
+The dependency-free regression suite runs with `python -m unittest discover -s tests -v`
+on PRs, pushes to main, and before scheduled discovery. It covers revision-safe
+loading, pagination, cadence, exclusions, downgrades and metadata changes.
 
 For a read-only local discovery check, run `python scripts/update_arxivmath.py`.
 `--write` updates only the manifest; `python datasets/prepare_arxiv_math.py`

@@ -3,13 +3,17 @@ import json
 import os
 from pathlib import Path
 import tempfile
+import sys
 
 from datasets import load_dataset
 
-CONFIG = json.loads((Path(__file__).resolve().parents[1] / "arxivmath.json").read_text())
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from arxivmath_config import artifact_name, configuration
+
+CONFIG = configuration()
 REPO = CONFIG["dataset"]
 REVISION = CONFIG["revision"]
-OUT = Path(__file__).parent / ("arxivmath_" + REPO.rsplit("-", 1)[1] + ".json")
+OUT = Path(__file__).parent / artifact_name(CONFIG)
 
 
 def prepare(rows) -> list[dict]:

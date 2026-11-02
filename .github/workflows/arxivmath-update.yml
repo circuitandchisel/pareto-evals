@@ -38,6 +38,8 @@ jobs:
           else
             echo "due=$(python scripts/update_arxivmath.py --check-due)" >> "$GITHUB_OUTPUT"
           fi
+      - name: Offline regression tests
+        run: python -m unittest discover -s tests -v
       - name: Discover, validate and propose
         if: steps.cadence.outputs.due == 'true'
         shell: bash
@@ -53,7 +55,7 @@ jobs:
           if git diff --quiet -- arxivmath.json; then exit 0; fi
           python -m pip install 'datasets==3.6.0'
           python datasets/prepare_arxiv_math.py
-          python -m compileall -q scripts/update_arxivmath.py datasets/prepare_arxiv_math.py benchmarks/arxiv_math.py
+          python -m compileall -q arxivmath_config.py scripts/update_arxivmath.py datasets/prepare_arxiv_math.py benchmarks/arxiv_math.py
           edition=$(python -c 'import json; print(json.load(open("arxivmath.json"))["edition"])')
           revision=$(python -c 'import json; print(json.load(open("arxivmath.json"))["revision"])')
           branch="automation/arxivmath-${edition}-${revision}"
