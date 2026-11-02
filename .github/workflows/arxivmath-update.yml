@@ -17,10 +17,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     permissions:
-      contents: write
-      pull-requests: write
+      contents: read
+      pull-requests: read
     env:
-      GH_TOKEN: ${{ github.token }}
       GH_REPO: ${{ github.repository }}
       HF_HUB_DISABLE_IMPLICIT_TOKEN: '1'
     steps:
@@ -30,6 +29,13 @@ jobs:
       - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
         with:
           python-version: '3.12'
+      - uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510
+        id: app-token
+        with:
+          app-id: 5584695
+          private-key: ${{ secrets.ARXIVMATH_APP_PRIVATE_KEY }}
+          owner: circuitandchisel
+          repositories: pareto-evals
       - name: Biweekly gate
         id: cadence
         run: |
@@ -43,6 +49,8 @@ jobs:
       - name: Discover, validate and propose
         if: steps.cadence.outputs.due == 'true'
         shell: bash
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
           set -euo pipefail
           pending=$(gh pr list --state open --base main --limit 1000 --json headRefName --jq '[.[] | select(.headRefName | startswith("automation/arxivmath-"))] | length')
@@ -65,8 +73,8 @@ jobs:
             exit 0
           fi
           git switch -c "$branch"
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git config user.name 'arxivmath-updater[bot]'
+          git config user.email '5584695+arxivmath-updater[bot]@users.noreply.github.com'
           git add arxivmath.json
           git commit -m "chore: update ArXivMath edition ${edition}"
           git push origin "$branch"
@@ -74,4 +82,4 @@ jobs:
             --title "Update ArXivMath ${edition} (${revision:0:8})" \
             --body "Updates the pinned official question dataset in arxivmath.json. The pinned dataset was downloaded and its question count, unique IDs, and nonempty problems/answers validated. No question contents are committed. See this workflow's log for the before/after manifest: https://github.com/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}
 
-          Manual review required: confirm edition, schema, license, question count and grading compatibility. No model inference was performed. This does not deploy to unbiased-analysis: update its engine/dataset pins, filename, question-count contracts and pricing assumptions in a separate reviewed release. Existing purchases must retain their original artifacts. This PR was opened using GITHUB_TOKEN; other workflows may not trigger automatically. No automatic merge."
+          Manual review required: confirm edition, schema, license, question count and grading compatibility. No model inference was performed. This does not deploy to unbiased-analysis: update its engine/dataset pins, filename, question-count contracts and pricing assumptions in a separate reviewed release. Existing purchases must retain their original artifacts. This PR was opened as arxivmath-updater[bot]; its CI can run normally. No automatic merge."
