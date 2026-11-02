@@ -1,0 +1,68 @@
+name: Bump pareto-evals engine pin
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pareto-release-bumper
+  cancel-in-progress: false
+
+jobs:
+  bump:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      GH_REPO: circuitandchisel/unbiased-analysis
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 0
+      - uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510
+        id: app-token
+        with:
+          app-id: 5584695
+          private-key: ${{ secrets.PARETO_RELEASE_BUMPER_APP_PRIVATE_KEY }}
+          owner: circuitandchisel
+          repositories: unbiased-analysis
+      - name: Open engine-pin update PR
+        shell: bash
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: |
+          set -euo pipefail
+          tag_name="${GITHUB_REF_NAME}"
+          engine_commit="$(git rev-parse "${tag_name}^{commit}")"
+          if ! [[ "$engine_commit" =~ ^[a-f0-9]{40}$ ]]; then
+            echo 'Tag does not resolve to a commit SHA; aborting.'
+            exit 1
+          fi
+          workdir=$(mktemp -d)
+          git clone --quiet --depth 1 "https://x-access-token:${GH_TOKEN}@github.com/circuitandchisel/unbiased-analysis.git" "$workdir/ua"
+          cd "$workdir/ua"
+          current=$(python3 -c 'import json; print(json.load(open("worker/config.json"))["pareto_commit"])')
+          if [ "$current" = "$engine_commit" ]; then
+            echo 'Engine pin already current; nothing to do.'
+            exit 0
+          fi
+          sed -i "s/\"pareto_commit\": \".*\"/\"pareto_commit\": \"${engine_commit}\"/" worker/config.json
+          branch="automation/pareto-engine-${tag_name}"
+          if git ls-remote --heads origin "refs/heads/$branch" | grep -q .; then
+            echo "Automation branch for ${tag_name} already exists; skipping."
+            exit 0
+          fi
+          git switch -c "$branch"
+          git config user.name 'pareto-evals-release-bumper[bot]'
+          git config user.email '5584695+pareto-evals-release-bumper[bot]@users.noreply.github.com'
+          git add worker/config.json
+          git commit -m "chore: update pareto-evals to ${tag_name} (${engine_commit:0:8})"
+          git push origin "$branch"
+          gh pr create --repo circuitandchisel/unbiased-analysis --base main --head "$branch" \
+            --title "Bump pareto-evals to ${tag_name} (${engine_commit:0:8})" \
+            --body "Updates the pinned engine commit in worker/config.json to the pareto-evals release tag ${tag_name}. This triggers the standard backend deploy pipeline on merge. CI and release preflight will verify the new pin."
