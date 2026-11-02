@@ -10,12 +10,13 @@ judge configured it falls back to symbolic-only and prints a warning (not the he
 """
 from __future__ import annotations
 import json, os
+from arxivmath_config import load_items as load_reviewed_items
 from model import model_complete
 from harness import run_benchmark
 from benchmarks.hmmt_2026 import _extract, grade as symbolic_grade  # strict math-verify+numeric
 from openai import OpenAI
 
-DATA = os.environ.get("ARXIV_FILE", "datasets/arxivmath_0526.json")
+DATA = os.environ.get("ARXIV_FILE")
 INSTR = ("You are given a difficult question. Your task is to solve the problem.\n"
          "Put the final answer you find within \\boxed{}.")
 
@@ -26,7 +27,7 @@ if os.environ.get("JUDGE_BASE_URL"):
 
 
 def load_items() -> list[dict]:
-    return json.load(open(DATA))
+    return load_reviewed_items(DATA)
 
 
 def _prompt(it: dict) -> str:

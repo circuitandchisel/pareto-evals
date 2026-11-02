@@ -1,14 +1,19 @@
-"""Download pinned MathArena ArXivMath May 2026; no arXiv bulk access needed."""
+"""Download the reviewed ArXivMath edition; no arXiv bulk access needed."""
 import json
 import os
 from pathlib import Path
 import tempfile
+import sys
 
 from datasets import load_dataset
 
-REPO = "MathArena/arxivmath-0526"
-REVISION = "69f701c7f266bfba235ef302ff9b19093f7455bb"
-OUT = Path(__file__).parent / "arxivmath_0526.json"
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from arxivmath_config import artifact_name, configuration
+
+CONFIG = configuration()
+REPO = CONFIG["dataset"]
+REVISION = CONFIG["revision"]
+OUT = Path(__file__).parent / artifact_name(CONFIG)
 
 
 def prepare(rows) -> list[dict]:
@@ -27,13 +32,13 @@ def prepare(rows) -> list[dict]:
         seen.add(item_id)
         items.append({"id": item_id, "problem": row["problem"], "answer": row["answer"],
                       **{key: row[key] for key in ("source", "title", "authors") if key in row}})
-    if len(items) != 40:
-        raise ValueError(f"Expected 40 ArXivMath May 2026 rows, got {len(items)}")
+    if len(items) != CONFIG["rows"]:
+        raise ValueError(f"Expected {CONFIG['rows']} ArXivMath {CONFIG['edition']} rows, got {len(items)}")
     return items
 
 
 def main():
-    rows = load_dataset(REPO, split="train", revision=REVISION, token=os.environ.get("HF_TOKEN"))
+    rows = load_dataset(REPO, split=CONFIG["split"], revision=REVISION, token=os.environ.get("HF_TOKEN"))
     items = prepare(rows)
     temporary = None
     try:

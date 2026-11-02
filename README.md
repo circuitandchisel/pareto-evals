@@ -90,7 +90,7 @@ terms of use:
 |---|---|---|
 | HLE | `cais/hle` (HF) | per dataset card |
 | MMMU-Pro | `MMMU/MMMU_Pro` (HF) | per dataset card |
-| ArXiv-math | `MathArena/arxivmath-0526` (HF) | CC BY-SA 4.0 |
+| ArXiv-math | Dated `MathArena/arxivmath-MMYY` edition pinned in `arxivmath.json` (HF) | CC BY-SA 4.0 |
 | HMMT Feb 2026 | MathArena HMMT-Feb-2026 | per source |
 | DeepSWE v1.1 | `datacurve-ai/deep-swe` (GitHub) | Apache-2.0 (Datacurve parts; upstream repos keep their own) |
 | Terminal-Bench 4.0 / 3.0 | `harbor-framework/terminal-bench` (Harbor Hub) | per repo |
@@ -129,11 +129,61 @@ image-containing JSON file (roughly 540 MB). Preparation stops at the first fail
 reruns regenerate selected outputs and may reuse upstream download caches.
 
 The new GPQA and ArXivMath scripts pin upstream revisions and validate row counts
-(198 and 40). GPQA choice order uses seed 0 and each record ID, so repeated
+(198 for GPQA; the reviewed manifest count for ArXivMath). GPQA choice order uses seed 0 and each record ID, so repeated
 preparation gives the same questions and answer letters. ArXivMath uses the
 published `train` split as its evaluation set and preserves source-paper metadata.
 The older preparation scripts still follow their upstream defaults; this command
 does not yet provide version locking for all six datasets.
+
+### ArXivMath edition updates
+
+`arxivmath.json` is the authoritative dataset ID, edition, revision, split,
+question count and license. The preparation script and benchmark use it to
+select a revision-qualified filename such as
+`arxivmath_0526_69f701c7f266bfba235ef302ff9b19093f7455bb.json`.
+Old revisions cannot load under a newer manifest; rerun preparation after pulling
+an update. `ARXIV_FILE` may select another directory, but its basename must match
+the reviewed edition and full revision. The initial manifest preserves May 2026; this automation does not change
+the current questions until an update PR is reviewed and merged.
+
+The `Check ArXivMath editions` GitHub Actions workflow checks every other Monday
+at 10:00 UTC, anchored on November 2, 2026. GitHub cron wakes weekly and a 14-day
+gate skips alternating weeks (cron has no reliable every-other-week syntax).
+It runs only after this workflow lands on `main`. Manual `workflow_dispatch`
+bypasses the cadence gate; it still follows all validation and deduplication rules.
+GitHub schedules are best effort; a failed check must be inspected or retried manually.
+
+The check discovers the official Hugging Face dated question datasets with
+pagination, excludes training/output collections and future editions, and compares
+the newest edition chronologically, not by modification time. It also detects a
+revision or metadata change within the selected edition. It pins metadata to the
+discovered SHA, downloads that exact dataset, and validates unique IDs, nonempty
+problems/answers and row count before opening a **ready, non-draft PR**. Changed
+licenses or incompatible schemas fail for manual review; no model calls are made.
+Dataset contents stay git-ignored. Review the grading compatibility separately.
+
+Only one automation update PR is left open at a time. Existing PRs are neither
+modified nor commented on; closing an exact proposal leaves its branch as a
+deduplication marker, so it is not recreated on every check. A failed PR creation
+after a successful push needs a human to open the PR from that existing branch.
+No force-push, branch deletion, automatic merge or production deployment occurs.
+
+The workflow needs GitHub Actions enabled and permission for `GITHUB_TOKEN` to
+write repository contents and create PRs. It uses no provider key or AWS access.
+PRs created by `GITHUB_TOKEN` generally do not trigger other workflows; validation
+therefore runs before opening the PR. Reviewers must explicitly arrange any
+additional required checks rather than assuming they ran.
+
+The dependency-free regression suite runs with `python -m unittest discover -s tests -v`
+on PRs, pushes to main, and before scheduled discovery. It covers revision-safe
+loading, pagination, cadence, exclusions, downgrades and metadata changes.
+
+For a read-only local discovery check, run `python scripts/update_arxivmath.py`.
+`--write` updates only the manifest; `python datasets/prepare_arxiv_math.py`
+then prepares the pinned data. Updating this repository alone does not update
+`unbiased-analysis`: that project must separately update its pinned engine,
+dataset artifact/filename, question counts, pricing assumptions and customer
+edition labels. Existing paid runs must keep their original artifacts.
 
 ---
 
