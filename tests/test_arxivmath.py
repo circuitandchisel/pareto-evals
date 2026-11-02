@@ -11,12 +11,22 @@ import arxivmath_config as config
 from scripts import update_arxivmath as updater
 
 
+def manifest_fixture():
+    return {"dataset": "MathArena/arxivmath-0526", "revision": "a" * 40,
+            "edition": "2026-05", "split": "train", "rows": 40, "license": "cc-by-sa-4.0"}
+
+
+class ManifestTests(unittest.TestCase):
+    def test_checked_in_manifest_is_valid(self):
+        self.assertEqual(config.configuration(), json.loads((config.ROOT / "arxivmath.json").read_text()))
+
+
 class ArtifactTests(unittest.TestCase):
     def setUp(self):
         self.directory = tempfile.TemporaryDirectory()
         self.addCleanup(self.directory.cleanup)
         self.root = Path(self.directory.name)
-        self.pin = config.configuration()
+        self.pin = manifest_fixture()
         self.pin["rows"] = 1
         self.write_pin()
         (self.root / "datasets").mkdir()
@@ -62,7 +72,7 @@ class ArtifactTests(unittest.TestCase):
 
 class DiscoveryTests(unittest.TestCase):
     def setUp(self):
-        self.current = config.configuration()
+        self.current = manifest_fixture()
         self.metadata = {"id": "MathArena/arxivmath-0926", "sha": "a" * 40,
             "private": False, "gated": False, "disabled": False, "cardData": {
                 "license": "cc-by-sa-4.0", "dataset_info": {
