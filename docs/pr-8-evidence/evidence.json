@@ -1,0 +1,2688 @@
+{
+  "scenario": "40 synthetic tasks per version per condition: 20 blank, 10 correct, 10 wrong",
+  "conditions": [
+    "no_judge",
+    "judge_outage_http_503"
+  ],
+  "live_model_calls": 0,
+  "results": {
+    "before": {
+      "commit": "984f576dc58d41aa6dd34448b831fe2e64243c0b",
+      "conditions": {
+        "no_judge": {
+          "command": "python -m benchmarks.hle",
+          "exit_code": 0,
+          "calls": {
+            "model": 40,
+            "judge": 0
+          },
+          "blanks_credited": 20,
+          "summary": {
+            "benchmark": "evidence",
+            "n": 40,
+            "resolved": 30,
+            "accuracy": 75.0,
+            "errored": 0,
+            "latency_median_s": 0.0,
+            "latency_mean_s": 0.01,
+            "wall_s": 0.1,
+            "cost_usd_total": null,
+            "cost_source": null,
+            "n_priced": 0,
+            "total_retries": 0
+          },
+          "rows": [
+            {
+              "id": "blank-1",
+              "correct": true,
+              "started_at": 1790884397.155,
+              "finished_at": 1790884397.191,
+              "latency_s": 0.036,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": ""
+            },
+            {
+              "id": "blank-0",
+              "correct": true,
+              "started_at": 1790884397.154,
+              "finished_at": 1790884397.191,
+              "latency_s": 0.037,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": ""
+            },
+            {
+              "id": "blank-3",
+              "correct": true,
+              "started_at": 1790884397.155,
+              "finished_at": 1790884397.192,
+              "latency_s": 0.037,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": ""
+            },
+            {
+              "id": "blank-2",
+              "correct": true,
+              "started_at": 1790884397.155,
+              "finished_at": 1790884397.193,
+              "latency_s": 0.038,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": ""
+            },
+            {
+              "id": "blank-6",
+              "correct": true,
+              "started_at": 1790884397.192,
+              "finished_at": 1790884397.193,
+              "latency_s": 0.001,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": ""
+            },
+            {
+              "id": "blank-5",
+              "correct": true,
+              "started_at": 1790884397.191,
+              "finished_at": 1790884397.194,
+              "latency_s": 0.002,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": ""
+            },
+            {
+              "id": "blank-4",
+              "correct": true,
+              "started_at": 1790884397.191,
+              "finished_at": 1790884397.194,
+              "latency_s": 0.003,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": ""
+            },
+            {
+              "id": "blank-7",
+              "correct": true,
+              "started_at": 1790884397.193,
+              "finished_at": 1790884397.195,
+              "latency_s": 0.002,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": ""
+            },
+            {
+              "id": "blank-8",
+              "correct": true,
+              "started_at": 1790884397.193,
+              "finished_at": 1790884397.195,
+              "latency_s": 0.002,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": ""
+            },
+            {
+              "id": "blank-9",
+              "correct": true,
+              "started_at": 1790884397.194,
+              "finished_at": 1790884397.196,
+              "latency_s": 0.002,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": ""
+            },
+            {
+              "id": "blank-10",
+              "correct": true,
+              "started_at": 1790884397.194,
+              "finished_at": 1790884397.196,
+              "latency_s": 0.002,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": ""
+            },
+            {
+              "id": "blank-11",
+              "correct": true,
+              "started_at": 1790884397.195,
+              "finished_at": 1790884397.197,
+              "latency_s": 0.002,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": ""
+            },
+            {
+              "id": "blank-12",
+              "correct": true,
+              "started_at": 1790884397.195,
+              "finished_at": 1790884397.197,
+              "latency_s": 0.002,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": ""
+            },
+            {
+              "id": "blank-13",
+              "correct": true,
+              "started_at": 1790884397.196,
+              "finished_at": 1790884397.198,
+              "latency_s": 0.002,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": ""
+            },
+            {
+              "id": "blank-14",
+              "correct": true,
+              "started_at": 1790884397.196,
+              "finished_at": 1790884397.198,
+              "latency_s": 0.002,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": ""
+            },
+            {
+              "id": "blank-15",
+              "correct": true,
+              "started_at": 1790884397.197,
+              "finished_at": 1790884397.199,
+              "latency_s": 0.002,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": ""
+            },
+            {
+              "id": "blank-17",
+              "correct": true,
+              "started_at": 1790884397.198,
+              "finished_at": 1790884397.199,
+              "latency_s": 0.002,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": ""
+            },
+            {
+              "id": "blank-16",
+              "correct": true,
+              "started_at": 1790884397.197,
+              "finished_at": 1790884397.2,
+              "latency_s": 0.002,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": ""
+            },
+            {
+              "id": "blank-18",
+              "correct": true,
+              "started_at": 1790884397.198,
+              "finished_at": 1790884397.2,
+              "latency_s": 0.002,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": ""
+            },
+            {
+              "id": "blank-19",
+              "correct": true,
+              "started_at": 1790884397.199,
+              "finished_at": 1790884397.201,
+              "latency_s": 0.002,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": ""
+            },
+            {
+              "id": "correct-0",
+              "correct": true,
+              "started_at": 1790884397.199,
+              "finished_at": 1790884397.201,
+              "latency_s": 0.002,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": "4"
+            },
+            {
+              "id": "correct-1",
+              "correct": true,
+              "started_at": 1790884397.2,
+              "finished_at": 1790884397.202,
+              "latency_s": 0.002,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": "4"
+            },
+            {
+              "id": "correct-2",
+              "correct": true,
+              "started_at": 1790884397.2,
+              "finished_at": 1790884397.202,
+              "latency_s": 0.002,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": "4"
+            },
+            {
+              "id": "correct-3",
+              "correct": true,
+              "started_at": 1790884397.201,
+              "finished_at": 1790884397.203,
+              "latency_s": 0.002,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": "4"
+            },
+            {
+              "id": "correct-4",
+              "correct": true,
+              "started_at": 1790884397.201,
+              "finished_at": 1790884397.203,
+              "latency_s": 0.002,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": "4"
+            },
+            {
+              "id": "correct-5",
+              "correct": true,
+              "started_at": 1790884397.202,
+              "finished_at": 1790884397.204,
+              "latency_s": 0.002,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": "4"
+            },
+            {
+              "id": "correct-6",
+              "correct": true,
+              "started_at": 1790884397.202,
+              "finished_at": 1790884397.204,
+              "latency_s": 0.002,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": "4"
+            },
+            {
+              "id": "correct-7",
+              "correct": true,
+              "started_at": 1790884397.203,
+              "finished_at": 1790884397.205,
+              "latency_s": 0.002,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": "4"
+            },
+            {
+              "id": "correct-9",
+              "correct": true,
+              "started_at": 1790884397.204,
+              "finished_at": 1790884397.206,
+              "latency_s": 0.002,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": "4"
+            },
+            {
+              "id": "correct-8",
+              "correct": true,
+              "started_at": 1790884397.203,
+              "finished_at": 1790884397.206,
+              "latency_s": 0.003,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": "4"
+            },
+            {
+              "id": "wrong-1",
+              "correct": false,
+              "started_at": 1790884397.205,
+              "finished_at": 1790884397.206,
+              "latency_s": 0.001,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": "9"
+            },
+            {
+              "id": "wrong-0",
+              "correct": false,
+              "started_at": 1790884397.204,
+              "finished_at": 1790884397.207,
+              "latency_s": 0.003,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": "9"
+            },
+            {
+              "id": "wrong-3",
+              "correct": false,
+              "started_at": 1790884397.206,
+              "finished_at": 1790884397.207,
+              "latency_s": 0.001,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": "9"
+            },
+            {
+              "id": "wrong-2",
+              "correct": false,
+              "started_at": 1790884397.206,
+              "finished_at": 1790884397.208,
+              "latency_s": 0.002,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": "9"
+            },
+            {
+              "id": "wrong-4",
+              "correct": false,
+              "started_at": 1790884397.206,
+              "finished_at": 1790884397.208,
+              "latency_s": 0.002,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": "9"
+            },
+            {
+              "id": "wrong-6",
+              "correct": false,
+              "started_at": 1790884397.207,
+              "finished_at": 1790884397.209,
+              "latency_s": 0.002,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": "9"
+            },
+            {
+              "id": "wrong-7",
+              "correct": false,
+              "started_at": 1790884397.208,
+              "finished_at": 1790884397.209,
+              "latency_s": 0.002,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": "9"
+            },
+            {
+              "id": "wrong-8",
+              "correct": false,
+              "started_at": 1790884397.208,
+              "finished_at": 1790884397.21,
+              "latency_s": 0.001,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": "9"
+            },
+            {
+              "id": "wrong-5",
+              "correct": false,
+              "started_at": 1790884397.207,
+              "finished_at": 1790884397.21,
+              "latency_s": 0.003,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": "9"
+            },
+            {
+              "id": "wrong-9",
+              "correct": false,
+              "started_at": 1790884397.209,
+              "finished_at": 1790884397.21,
+              "latency_s": 0.001,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": "9"
+            }
+          ],
+          "stdout": "WARNING: no JUDGE configured \u2014 using normalized containment match (not valid for publication)\nWARNING: no JUDGE configured \u2014 using normalized containment match (not valid for publication)\nWARNING: no JUDGE configured \u2014 using normalized containment match (not valid for publication)\nWARNING: no JUDGE configured \u2014 using normalized containment match (not valid for publication)\nWARNING: no JUDGE configured \u2014 using normalized containment match (not valid for publication)\nWARNING: no JUDGE configured \u2014 using normalized containment match (not valid for publication)\nWARNING: no JUDGE configured \u2014 using normalized containment match (not valid for publication)\nWARNING: no JUDGE configured \u2014 using normalized containment match (not valid for publication)\nWARNING: no JUDGE configured \u2014 using normalized containment match (not valid for publication)\nWARNING: no JUDGE configured \u2014 using normalized containment match (not valid for publication)\n[evidence] progress 10/40  ok=10 err=0\nWARNING: no JUDGE configured \u2014 using normalized containment match (not valid for publication)\nWARNING: no JUDGE configured \u2014 using normalized containment match (not valid for publication)\nWARNING: no JUDGE configured \u2014 using normalized containment match (not valid for publication)\nWARNING: no JUDGE configured \u2014 using normalized containment match (not valid for publication)\nWARNING: no JUDGE configured \u2014 using normalized containment match (not valid for publication)\nWARNING: no JUDGE configured \u2014 using normalized containment match (not valid for publication)\nWARNING: no JUDGE configured \u2014 using normalized containment match (not valid for publication)\nWARNING: no JUDGE configured \u2014 using normalized containment match (not valid for publication)\nWARNING: no JUDGE configured \u2014 using normalized containment match (not valid for publication)\nWARNING: no JUDGE configured \u2014 using normalized containment match (not valid for publication)\n[evidence] progress 20/40  ok=20 err=0\nWARNING: no JUDGE configured \u2014 using normalized containment match (not valid for publication)\nWARNING: no JUDGE configured \u2014 using normalized containment match (not valid for publication)\nWARNING: no JUDGE configured \u2014 using normalized containment match (not valid for publication)\nWARNING: no JUDGE configured \u2014 using normalized containment match (not valid for publication)\nWARNING: no JUDGE configured \u2014 using normalized containment match (not valid for publication)\nWARNING: no JUDGE configured \u2014 using normalized containment match (not valid for publication)\nWARNING: no JUDGE configured \u2014 using normalized containment match (not valid for publication)\nWARNING: no JUDGE configured \u2014 using normalized containment match (not valid for publication)\nWARNING: no JUDGE configured \u2014 using normalized containment match (not valid for publication)\nWARNING: no JUDGE configured \u2014 using normalized containment match (not valid for publication)\nWARNING: no JUDGE configured \u2014 using normalized containment match (not valid for publication)\n[evidence] progress 30/40  ok=30 err=0\nWARNING: no JUDGE configured \u2014 using normalized containment match (not valid for publication)\nWARNING: no JUDGE configured \u2014 using normalized containment match (not valid for publication)\nWARNING: no JUDGE configured \u2014 using normalized containment match (not valid for publication)\nWARNING: no JUDGE configured \u2014 using normalized containment match (not valid for publication)\nWARNING: no JUDGE configured \u2014 using normalized containment match (not valid for publication)\nWARNING: no JUDGE configured \u2014 using normalized containment match (not valid for publication)\nWARNING: no JUDGE configured \u2014 using normalized containment match (not valid for publication)\nWARNING: no JUDGE configured \u2014 using normalized containment match (not valid for publication)\nWARNING: no JUDGE configured \u2014 using normalized containment match (not valid for publication)\n[evidence] progress 40/40  ok=30 err=0\n[evidence] 75.0%  (30/40, 0 err)  lat_med=0.0s  $/task=None\n",
+          "stderr": ""
+        },
+        "judge_outage_http_503": {
+          "command": "python -m benchmarks.hle",
+          "exit_code": 0,
+          "calls": {
+            "model": 40,
+            "judge": 120
+          },
+          "blanks_credited": 20,
+          "summary": {
+            "benchmark": "evidence",
+            "n": 40,
+            "resolved": 30,
+            "accuracy": 75.0,
+            "errored": 0,
+            "latency_median_s": 0.0,
+            "latency_mean_s": 0.0,
+            "wall_s": 13.5,
+            "cost_usd_total": null,
+            "cost_source": null,
+            "n_priced": 0,
+            "total_retries": 0
+          },
+          "rows": [
+            {
+              "id": "blank-2",
+              "correct": true,
+              "started_at": 1790884397.428,
+              "finished_at": 1790884398.69,
+              "latency_s": 0.027,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": ""
+            },
+            {
+              "id": "blank-3",
+              "correct": true,
+              "started_at": 1790884397.428,
+              "finished_at": 1790884398.839,
+              "latency_s": 0.029,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": ""
+            },
+            {
+              "id": "blank-0",
+              "correct": true,
+              "started_at": 1790884397.428,
+              "finished_at": 1790884398.855,
+              "latency_s": 0.028,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": ""
+            },
+            {
+              "id": "blank-1",
+              "correct": true,
+              "started_at": 1790884397.428,
+              "finished_at": 1790884398.893,
+              "latency_s": 0.028,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": ""
+            },
+            {
+              "id": "blank-4",
+              "correct": true,
+              "started_at": 1790884398.69,
+              "finished_at": 1790884400.016,
+              "latency_s": 0.001,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": ""
+            },
+            {
+              "id": "blank-5",
+              "correct": true,
+              "started_at": 1790884398.839,
+              "finished_at": 1790884400.153,
+              "latency_s": 0.001,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": ""
+            },
+            {
+              "id": "blank-7",
+              "correct": true,
+              "started_at": 1790884398.893,
+              "finished_at": 1790884400.198,
+              "latency_s": 0.001,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": ""
+            },
+            {
+              "id": "blank-6",
+              "correct": true,
+              "started_at": 1790884398.855,
+              "finished_at": 1790884400.245,
+              "latency_s": 0.001,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": ""
+            },
+            {
+              "id": "blank-8",
+              "correct": true,
+              "started_at": 1790884400.016,
+              "finished_at": 1790884401.273,
+              "latency_s": 0.001,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": ""
+            },
+            {
+              "id": "blank-9",
+              "correct": true,
+              "started_at": 1790884400.153,
+              "finished_at": 1790884401.455,
+              "latency_s": 0.001,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": ""
+            },
+            {
+              "id": "blank-10",
+              "correct": true,
+              "started_at": 1790884400.198,
+              "finished_at": 1790884401.468,
+              "latency_s": 0.001,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": ""
+            },
+            {
+              "id": "blank-11",
+              "correct": true,
+              "started_at": 1790884400.245,
+              "finished_at": 1790884401.58,
+              "latency_s": 0.001,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": ""
+            },
+            {
+              "id": "blank-12",
+              "correct": true,
+              "started_at": 1790884401.273,
+              "finished_at": 1790884402.699,
+              "latency_s": 0.001,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": ""
+            },
+            {
+              "id": "blank-13",
+              "correct": true,
+              "started_at": 1790884401.455,
+              "finished_at": 1790884402.89,
+              "latency_s": 0.001,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": ""
+            },
+            {
+              "id": "blank-15",
+              "correct": true,
+              "started_at": 1790884401.58,
+              "finished_at": 1790884402.89,
+              "latency_s": 0.001,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": ""
+            },
+            {
+              "id": "blank-14",
+              "correct": true,
+              "started_at": 1790884401.468,
+              "finished_at": 1790884402.894,
+              "latency_s": 0.001,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": ""
+            },
+            {
+              "id": "blank-16",
+              "correct": true,
+              "started_at": 1790884402.699,
+              "finished_at": 1790884403.93,
+              "latency_s": 0.002,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": ""
+            },
+            {
+              "id": "blank-17",
+              "correct": true,
+              "started_at": 1790884402.89,
+              "finished_at": 1790884404.092,
+              "latency_s": 0.003,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": ""
+            },
+            {
+              "id": "blank-19",
+              "correct": true,
+              "started_at": 1790884402.894,
+              "finished_at": 1790884404.196,
+              "latency_s": 0.001,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": ""
+            },
+            {
+              "id": "blank-18",
+              "correct": true,
+              "started_at": 1790884402.89,
+              "finished_at": 1790884404.302,
+              "latency_s": 0.001,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": ""
+            },
+            {
+              "id": "correct-0",
+              "correct": true,
+              "started_at": 1790884403.93,
+              "finished_at": 1790884405.269,
+              "latency_s": 0.001,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": "4"
+            },
+            {
+              "id": "correct-1",
+              "correct": true,
+              "started_at": 1790884404.092,
+              "finished_at": 1790884405.481,
+              "latency_s": 0.001,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": "4"
+            },
+            {
+              "id": "correct-2",
+              "correct": true,
+              "started_at": 1790884404.196,
+              "finished_at": 1790884405.663,
+              "latency_s": 0.001,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": "4"
+            },
+            {
+              "id": "correct-3",
+              "correct": true,
+              "started_at": 1790884404.302,
+              "finished_at": 1790884405.706,
+              "latency_s": 0.001,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": "4"
+            },
+            {
+              "id": "correct-4",
+              "correct": true,
+              "started_at": 1790884405.269,
+              "finished_at": 1790884406.696,
+              "latency_s": 0.001,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": "4"
+            },
+            {
+              "id": "correct-5",
+              "correct": true,
+              "started_at": 1790884405.481,
+              "finished_at": 1790884406.749,
+              "latency_s": 0.001,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": "4"
+            },
+            {
+              "id": "correct-6",
+              "correct": true,
+              "started_at": 1790884405.663,
+              "finished_at": 1790884406.865,
+              "latency_s": 0.001,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": "4"
+            },
+            {
+              "id": "correct-7",
+              "correct": true,
+              "started_at": 1790884405.706,
+              "finished_at": 1790884407.073,
+              "latency_s": 0.001,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": "4"
+            },
+            {
+              "id": "correct-8",
+              "correct": true,
+              "started_at": 1790884406.696,
+              "finished_at": 1790884408.011,
+              "latency_s": 0.001,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": "4"
+            },
+            {
+              "id": "correct-9",
+              "correct": true,
+              "started_at": 1790884406.749,
+              "finished_at": 1790884408.076,
+              "latency_s": 0.001,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": "4"
+            },
+            {
+              "id": "wrong-0",
+              "correct": false,
+              "started_at": 1790884406.865,
+              "finished_at": 1790884408.153,
+              "latency_s": 0.001,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": "9"
+            },
+            {
+              "id": "wrong-1",
+              "correct": false,
+              "started_at": 1790884407.073,
+              "finished_at": 1790884408.375,
+              "latency_s": 0.001,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": "9"
+            },
+            {
+              "id": "wrong-4",
+              "correct": false,
+              "started_at": 1790884408.153,
+              "finished_at": 1790884409.34,
+              "latency_s": 0.001,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": "9"
+            },
+            {
+              "id": "wrong-2",
+              "correct": false,
+              "started_at": 1790884408.011,
+              "finished_at": 1790884409.366,
+              "latency_s": 0.001,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": "9"
+            },
+            {
+              "id": "wrong-3",
+              "correct": false,
+              "started_at": 1790884408.076,
+              "finished_at": 1790884409.421,
+              "latency_s": 0.001,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": "9"
+            },
+            {
+              "id": "wrong-5",
+              "correct": false,
+              "started_at": 1790884408.375,
+              "finished_at": 1790884409.631,
+              "latency_s": 0.001,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": "9"
+            },
+            {
+              "id": "wrong-7",
+              "correct": false,
+              "started_at": 1790884409.366,
+              "finished_at": 1790884410.607,
+              "latency_s": 0.001,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": "9"
+            },
+            {
+              "id": "wrong-8",
+              "correct": false,
+              "started_at": 1790884409.421,
+              "finished_at": 1790884410.644,
+              "latency_s": 0.001,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": "9"
+            },
+            {
+              "id": "wrong-6",
+              "correct": false,
+              "started_at": 1790884409.34,
+              "finished_at": 1790884410.652,
+              "latency_s": 0.001,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": "9"
+            },
+            {
+              "id": "wrong-9",
+              "correct": false,
+              "started_at": 1790884409.631,
+              "finished_at": 1790884410.883,
+              "latency_s": 0.002,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": "9"
+            }
+          ],
+          "stdout": "WARNING: judge failed (InternalServerError: Error code: 503 - {'error': {'message': 'Controlled judge outage', 'type': 'server_error'}}); containment fallback for this item\nWARNING: judge failed (InternalServerError: Error code: 503 - {'error': {'message': 'Controlled judge outage', 'type': 'server_error'}}); containment fallback for this item\nWARNING: judge failed (InternalServerError: Error code: 503 - {'error': {'message': 'Controlled judge outage', 'type': 'server_error'}}); containment fallback for this item\nWARNING: judge failed (InternalServerError: Error code: 503 - {'error': {'message': 'Controlled judge outage', 'type': 'server_error'}}); containment fallback for this item\nWARNING: judge failed (InternalServerError: Error code: 503 - {'error': {'message': 'Controlled judge outage', 'type': 'server_error'}}); containment fallback for this item\nWARNING: judge failed (InternalServerError: Error code: 503 - {'error': {'message': 'Controlled judge outage', 'type': 'server_error'}}); containment fallback for this item\nWARNING: judge failed (InternalServerError: Error code: 503 - {'error': {'message': 'Controlled judge outage', 'type': 'server_error'}}); containment fallback for this item\nWARNING: judge failed (InternalServerError: Error code: 503 - {'error': {'message': 'Controlled judge outage', 'type': 'server_error'}}); containment fallback for this item\nWARNING: judge failed (InternalServerError: Error code: 503 - {'error': {'message': 'Controlled judge outage', 'type': 'server_error'}}); containment fallback for this item\nWARNING: judge failed (InternalServerError: Error code: 503 - {'error': {'message': 'Controlled judge outage', 'type': 'server_error'}}); containment fallback for this item\n[evidence] progress 10/40  ok=10 err=0\nWARNING: judge failed (InternalServerError: Error code: 503 - {'error': {'message': 'Controlled judge outage', 'type': 'server_error'}}); containment fallback for this item\nWARNING: judge failed (InternalServerError: Error code: 503 - {'error': {'message': 'Controlled judge outage', 'type': 'server_error'}}); containment fallback for this item\nWARNING: judge failed (InternalServerError: Error code: 503 - {'error': {'message': 'Controlled judge outage', 'type': 'server_error'}}); containment fallback for this item\nWARNING: judge failed (InternalServerError: Error code: 503 - {'error': {'message': 'Controlled judge outage', 'type': 'server_error'}}); containment fallback for this item\nWARNING: judge failed (InternalServerError: Error code: 503 - {'error': {'message': 'Controlled judge outage', 'type': 'server_error'}}); containment fallback for this item\nWARNING: judge failed (InternalServerError: Error code: 503 - {'error': {'message': 'Controlled judge outage', 'type': 'server_error'}}); containment fallback for this item\nWARNING: judge failed (InternalServerError: Error code: 503 - {'error': {'message': 'Controlled judge outage', 'type': 'server_error'}}); containment fallback for this item\nWARNING: judge failed (InternalServerError: Error code: 503 - {'error': {'message': 'Controlled judge outage', 'type': 'server_error'}}); containment fallback for this item\nWARNING: judge failed (InternalServerError: Error code: 503 - {'error': {'message': 'Controlled judge outage', 'type': 'server_error'}}); containment fallback for this item\nWARNING: judge failed (InternalServerError: Error code: 503 - {'error': {'message': 'Controlled judge outage', 'type': 'server_error'}}); containment fallback for this item\n[evidence] progress 20/40  ok=20 err=0\nWARNING: judge failed (InternalServerError: Error code: 503 - {'error': {'message': 'Controlled judge outage', 'type': 'server_error'}}); containment fallback for this item\nWARNING: judge failed (InternalServerError: Error code: 503 - {'error': {'message': 'Controlled judge outage', 'type': 'server_error'}}); containment fallback for this item\nWARNING: judge failed (InternalServerError: Error code: 503 - {'error': {'message': 'Controlled judge outage', 'type': 'server_error'}}); containment fallback for this item\nWARNING: judge failed (InternalServerError: Error code: 503 - {'error': {'message': 'Controlled judge outage', 'type': 'server_error'}}); containment fallback for this item\nWARNING: judge failed (InternalServerError: Error code: 503 - {'error': {'message': 'Controlled judge outage', 'type': 'server_error'}}); containment fallback for this item\nWARNING: judge failed (InternalServerError: Error code: 503 - {'error': {'message': 'Controlled judge outage', 'type': 'server_error'}}); containment fallback for this item\nWARNING: judge failed (InternalServerError: Error code: 503 - {'error': {'message': 'Controlled judge outage', 'type': 'server_error'}}); containment fallback for this item\nWARNING: judge failed (InternalServerError: Error code: 503 - {'error': {'message': 'Controlled judge outage', 'type': 'server_error'}}); containment fallback for this item\nWARNING: judge failed (InternalServerError: Error code: 503 - {'error': {'message': 'Controlled judge outage', 'type': 'server_error'}}); containment fallback for this item\nWARNING: judge failed (InternalServerError: Error code: 503 - {'error': {'message': 'Controlled judge outage', 'type': 'server_error'}}); containment fallback for this item\n[evidence] progress 30/40  ok=30 err=0\nWARNING: judge failed (InternalServerError: Error code: 503 - {'error': {'message': 'Controlled judge outage', 'type': 'server_error'}}); containment fallback for this item\nWARNING: judge failed (InternalServerError: Error code: 503 - {'error': {'message': 'Controlled judge outage', 'type': 'server_error'}}); containment fallback for this item\nWARNING: judge failed (InternalServerError: Error code: 503 - {'error': {'message': 'Controlled judge outage', 'type': 'server_error'}}); containment fallback for this item\nWARNING: judge failed (InternalServerError: Error code: 503 - {'error': {'message': 'Controlled judge outage', 'type': 'server_error'}}); containment fallback for this item\nWARNING: judge failed (InternalServerError: Error code: 503 - {'error': {'message': 'Controlled judge outage', 'type': 'server_error'}}); containment fallback for this item\nWARNING: judge failed (InternalServerError: Error code: 503 - {'error': {'message': 'Controlled judge outage', 'type': 'server_error'}}); containment fallback for this item\nWARNING: judge failed (InternalServerError: Error code: 503 - {'error': {'message': 'Controlled judge outage', 'type': 'server_error'}}); containment fallback for this item\nWARNING: judge failed (InternalServerError: Error code: 503 - {'error': {'message': 'Controlled judge outage', 'type': 'server_error'}}); containment fallback for this item\nWARNING: judge failed (InternalServerError: Error code: 503 - {'error': {'message': 'Controlled judge outage', 'type': 'server_error'}}); containment fallback for this item\nWARNING: judge failed (InternalServerError: Error code: 503 - {'error': {'message': 'Controlled judge outage', 'type': 'server_error'}}); containment fallback for this item\n[evidence] progress 40/40  ok=30 err=0\n[evidence] 75.0%  (30/40, 0 err)  lat_med=0.0s  $/task=None\n",
+          "stderr": ""
+        }
+      }
+    },
+    "after": {
+      "commit": "090a3e78305b0ef1a3af1a24ea9347425212db4c",
+      "conditions": {
+        "no_judge": {
+          "command": "python -m benchmarks.hle",
+          "exit_code": 0,
+          "calls": {
+            "model": 40,
+            "judge": 0
+          },
+          "blanks_credited": 0,
+          "summary": {
+            "benchmark": "evidence",
+            "n": 40,
+            "resolved": 10,
+            "accuracy": 25.0,
+            "errored": 0,
+            "latency_median_s": 0.0,
+            "latency_mean_s": 0.0,
+            "wall_s": 0.0,
+            "cost_usd_total": null,
+            "cost_source": null,
+            "n_priced": 0,
+            "total_retries": 0
+          },
+          "rows": [
+            {
+              "id": "blank-3",
+              "correct": false,
+              "started_at": 1790884411.184,
+              "finished_at": 1790884411.212,
+              "latency_s": 0.029,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": ""
+            },
+            {
+              "id": "blank-0",
+              "correct": false,
+              "started_at": 1790884411.184,
+              "finished_at": 1790884411.213,
+              "latency_s": 0.029,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": ""
+            },
+            {
+              "id": "blank-1",
+              "correct": false,
+              "started_at": 1790884411.184,
+              "finished_at": 1790884411.213,
+              "latency_s": 0.03,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": ""
+            },
+            {
+              "id": "blank-2",
+              "correct": false,
+              "started_at": 1790884411.184,
+              "finished_at": 1790884411.214,
+              "latency_s": 0.03,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": ""
+            },
+            {
+              "id": "blank-6",
+              "correct": false,
+              "started_at": 1790884411.213,
+              "finished_at": 1790884411.215,
+              "latency_s": 0.001,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": ""
+            },
+            {
+              "id": "blank-7",
+              "correct": false,
+              "started_at": 1790884411.214,
+              "finished_at": 1790884411.215,
+              "latency_s": 0.001,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": ""
+            },
+            {
+              "id": "blank-5",
+              "correct": false,
+              "started_at": 1790884411.213,
+              "finished_at": 1790884411.216,
+              "latency_s": 0.003,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": ""
+            },
+            {
+              "id": "blank-9",
+              "correct": false,
+              "started_at": 1790884411.215,
+              "finished_at": 1790884411.216,
+              "latency_s": 0.001,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": ""
+            },
+            {
+              "id": "blank-4",
+              "correct": false,
+              "started_at": 1790884411.212,
+              "finished_at": 1790884411.217,
+              "latency_s": 0.005,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": ""
+            },
+            {
+              "id": "blank-10",
+              "correct": false,
+              "started_at": 1790884411.216,
+              "finished_at": 1790884411.218,
+              "latency_s": 0.002,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": ""
+            },
+            {
+              "id": "blank-8",
+              "correct": false,
+              "started_at": 1790884411.215,
+              "finished_at": 1790884411.218,
+              "latency_s": 0.003,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": ""
+            },
+            {
+              "id": "blank-12",
+              "correct": false,
+              "started_at": 1790884411.217,
+              "finished_at": 1790884411.219,
+              "latency_s": 0.002,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": ""
+            },
+            {
+              "id": "blank-11",
+              "correct": false,
+              "started_at": 1790884411.216,
+              "finished_at": 1790884411.219,
+              "latency_s": 0.003,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": ""
+            },
+            {
+              "id": "blank-13",
+              "correct": false,
+              "started_at": 1790884411.218,
+              "finished_at": 1790884411.22,
+              "latency_s": 0.002,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": ""
+            },
+            {
+              "id": "blank-14",
+              "correct": false,
+              "started_at": 1790884411.218,
+              "finished_at": 1790884411.22,
+              "latency_s": 0.002,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": ""
+            },
+            {
+              "id": "blank-15",
+              "correct": false,
+              "started_at": 1790884411.219,
+              "finished_at": 1790884411.221,
+              "latency_s": 0.002,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": ""
+            },
+            {
+              "id": "blank-19",
+              "correct": false,
+              "started_at": 1790884411.221,
+              "finished_at": 1790884411.222,
+              "latency_s": 0.001,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": ""
+            },
+            {
+              "id": "blank-18",
+              "correct": false,
+              "started_at": 1790884411.22,
+              "finished_at": 1790884411.222,
+              "latency_s": 0.002,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": ""
+            },
+            {
+              "id": "blank-16",
+              "correct": false,
+              "started_at": 1790884411.219,
+              "finished_at": 1790884411.223,
+              "latency_s": 0.003,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": ""
+            },
+            {
+              "id": "correct-0",
+              "correct": true,
+              "started_at": 1790884411.222,
+              "finished_at": 1790884411.223,
+              "latency_s": 0.002,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": "4"
+            },
+            {
+              "id": "blank-17",
+              "correct": false,
+              "started_at": 1790884411.22,
+              "finished_at": 1790884411.224,
+              "latency_s": 0.004,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": ""
+            },
+            {
+              "id": "correct-2",
+              "correct": true,
+              "started_at": 1790884411.223,
+              "finished_at": 1790884411.224,
+              "latency_s": 0.002,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": "4"
+            },
+            {
+              "id": "correct-1",
+              "correct": true,
+              "started_at": 1790884411.222,
+              "finished_at": 1790884411.225,
+              "latency_s": 0.003,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": "4"
+            },
+            {
+              "id": "correct-4",
+              "correct": true,
+              "started_at": 1790884411.224,
+              "finished_at": 1790884411.225,
+              "latency_s": 0.002,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": "4"
+            },
+            {
+              "id": "correct-3",
+              "correct": true,
+              "started_at": 1790884411.223,
+              "finished_at": 1790884411.226,
+              "latency_s": 0.002,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": "4"
+            },
+            {
+              "id": "correct-5",
+              "correct": true,
+              "started_at": 1790884411.224,
+              "finished_at": 1790884411.226,
+              "latency_s": 0.002,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": "4"
+            },
+            {
+              "id": "correct-6",
+              "correct": true,
+              "started_at": 1790884411.225,
+              "finished_at": 1790884411.227,
+              "latency_s": 0.002,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": "4"
+            },
+            {
+              "id": "correct-8",
+              "correct": true,
+              "started_at": 1790884411.226,
+              "finished_at": 1790884411.227,
+              "latency_s": 0.001,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": "4"
+            },
+            {
+              "id": "correct-7",
+              "correct": true,
+              "started_at": 1790884411.225,
+              "finished_at": 1790884411.228,
+              "latency_s": 0.002,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": "4"
+            },
+            {
+              "id": "wrong-0",
+              "correct": false,
+              "started_at": 1790884411.227,
+              "finished_at": 1790884411.228,
+              "latency_s": 0.002,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": "9"
+            },
+            {
+              "id": "wrong-1",
+              "correct": false,
+              "started_at": 1790884411.227,
+              "finished_at": 1790884411.229,
+              "latency_s": 0.002,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": "9"
+            },
+            {
+              "id": "wrong-2",
+              "correct": false,
+              "started_at": 1790884411.228,
+              "finished_at": 1790884411.229,
+              "latency_s": 0.002,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": "9"
+            },
+            {
+              "id": "correct-9",
+              "correct": true,
+              "started_at": 1790884411.226,
+              "finished_at": 1790884411.23,
+              "latency_s": 0.003,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": "4"
+            },
+            {
+              "id": "wrong-3",
+              "correct": false,
+              "started_at": 1790884411.228,
+              "finished_at": 1790884411.231,
+              "latency_s": 0.002,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": "9"
+            },
+            {
+              "id": "wrong-5",
+              "correct": false,
+              "started_at": 1790884411.229,
+              "finished_at": 1790884411.231,
+              "latency_s": 0.002,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": "9"
+            },
+            {
+              "id": "wrong-6",
+              "correct": false,
+              "started_at": 1790884411.23,
+              "finished_at": 1790884411.231,
+              "latency_s": 0.002,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": "9"
+            },
+            {
+              "id": "wrong-4",
+              "correct": false,
+              "started_at": 1790884411.229,
+              "finished_at": 1790884411.232,
+              "latency_s": 0.003,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": "9"
+            },
+            {
+              "id": "wrong-9",
+              "correct": false,
+              "started_at": 1790884411.231,
+              "finished_at": 1790884411.232,
+              "latency_s": 0.001,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": "9"
+            },
+            {
+              "id": "wrong-8",
+              "correct": false,
+              "started_at": 1790884411.231,
+              "finished_at": 1790884411.232,
+              "latency_s": 0.002,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": "9"
+            },
+            {
+              "id": "wrong-7",
+              "correct": false,
+              "started_at": 1790884411.231,
+              "finished_at": 1790884411.233,
+              "latency_s": 0.002,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": "9"
+            }
+          ],
+          "stdout": "[evidence] progress 10/40  ok=0 err=0\nWARNING: no JUDGE configured \u2014 using normalized containment match (not valid for publication)\n[evidence] progress 20/40  ok=1 err=0\nWARNING: no JUDGE configured \u2014 using normalized containment match (not valid for publication)\nWARNING: no JUDGE configured \u2014 using normalized containment match (not valid for publication)\nWARNING: no JUDGE configured \u2014 using normalized containment match (not valid for publication)\nWARNING: no JUDGE configured \u2014 using normalized containment match (not valid for publication)\nWARNING: no JUDGE configured \u2014 using normalized containment match (not valid for publication)\nWARNING: no JUDGE configured \u2014 using normalized containment match (not valid for publication)\nWARNING: no JUDGE configured \u2014 using normalized containment match (not valid for publication)\nWARNING: no JUDGE configured \u2014 using normalized containment match (not valid for publication)\nWARNING: no JUDGE configured \u2014 using normalized containment match (not valid for publication)\nWARNING: no JUDGE configured \u2014 using normalized containment match (not valid for publication)\n[evidence] progress 30/40  ok=9 err=0\nWARNING: no JUDGE configured \u2014 using normalized containment match (not valid for publication)\nWARNING: no JUDGE configured \u2014 using normalized containment match (not valid for publication)\nWARNING: no JUDGE configured \u2014 using normalized containment match (not valid for publication)\nWARNING: no JUDGE configured \u2014 using normalized containment match (not valid for publication)\nWARNING: no JUDGE configured \u2014 using normalized containment match (not valid for publication)\nWARNING: no JUDGE configured \u2014 using normalized containment match (not valid for publication)\nWARNING: no JUDGE configured \u2014 using normalized containment match (not valid for publication)\nWARNING: no JUDGE configured \u2014 using normalized containment match (not valid for publication)\nWARNING: no JUDGE configured \u2014 using normalized containment match (not valid for publication)\n[evidence] progress 40/40  ok=10 err=0\n[evidence] 25.0%  (10/40, 0 err)  lat_med=0.0s  $/task=None\n",
+          "stderr": ""
+        },
+        "judge_outage_http_503": {
+          "command": "python -m benchmarks.hle",
+          "exit_code": 0,
+          "calls": {
+            "model": 40,
+            "judge": 60
+          },
+          "blanks_credited": 0,
+          "summary": {
+            "benchmark": "evidence",
+            "n": 40,
+            "resolved": 10,
+            "accuracy": 25.0,
+            "errored": 0,
+            "latency_median_s": 0.0,
+            "latency_mean_s": 0.0,
+            "wall_s": 6.8,
+            "cost_usd_total": null,
+            "cost_source": null,
+            "n_priced": 0,
+            "total_retries": 0
+          },
+          "rows": [
+            {
+              "id": "blank-0",
+              "correct": false,
+              "started_at": 1790884411.454,
+              "finished_at": 1790884411.481,
+              "latency_s": 0.027,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": ""
+            },
+            {
+              "id": "blank-1",
+              "correct": false,
+              "started_at": 1790884411.454,
+              "finished_at": 1790884411.482,
+              "latency_s": 0.028,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": ""
+            },
+            {
+              "id": "blank-3",
+              "correct": false,
+              "started_at": 1790884411.454,
+              "finished_at": 1790884411.482,
+              "latency_s": 0.028,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": ""
+            },
+            {
+              "id": "blank-2",
+              "correct": false,
+              "started_at": 1790884411.454,
+              "finished_at": 1790884411.483,
+              "latency_s": 0.029,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": ""
+            },
+            {
+              "id": "blank-4",
+              "correct": false,
+              "started_at": 1790884411.481,
+              "finished_at": 1790884411.484,
+              "latency_s": 0.002,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": ""
+            },
+            {
+              "id": "blank-5",
+              "correct": false,
+              "started_at": 1790884411.482,
+              "finished_at": 1790884411.484,
+              "latency_s": 0.002,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": ""
+            },
+            {
+              "id": "blank-7",
+              "correct": false,
+              "started_at": 1790884411.483,
+              "finished_at": 1790884411.485,
+              "latency_s": 0.002,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": ""
+            },
+            {
+              "id": "blank-6",
+              "correct": false,
+              "started_at": 1790884411.482,
+              "finished_at": 1790884411.485,
+              "latency_s": 0.003,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": ""
+            },
+            {
+              "id": "blank-8",
+              "correct": false,
+              "started_at": 1790884411.484,
+              "finished_at": 1790884411.486,
+              "latency_s": 0.002,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": ""
+            },
+            {
+              "id": "blank-9",
+              "correct": false,
+              "started_at": 1790884411.484,
+              "finished_at": 1790884411.486,
+              "latency_s": 0.002,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": ""
+            },
+            {
+              "id": "blank-11",
+              "correct": false,
+              "started_at": 1790884411.485,
+              "finished_at": 1790884411.487,
+              "latency_s": 0.002,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": ""
+            },
+            {
+              "id": "blank-10",
+              "correct": false,
+              "started_at": 1790884411.485,
+              "finished_at": 1790884411.487,
+              "latency_s": 0.003,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": ""
+            },
+            {
+              "id": "blank-12",
+              "correct": false,
+              "started_at": 1790884411.486,
+              "finished_at": 1790884411.488,
+              "latency_s": 0.002,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": ""
+            },
+            {
+              "id": "blank-15",
+              "correct": false,
+              "started_at": 1790884411.487,
+              "finished_at": 1790884411.489,
+              "latency_s": 0.002,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": ""
+            },
+            {
+              "id": "blank-14",
+              "correct": false,
+              "started_at": 1790884411.487,
+              "finished_at": 1790884411.489,
+              "latency_s": 0.002,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": ""
+            },
+            {
+              "id": "blank-16",
+              "correct": false,
+              "started_at": 1790884411.488,
+              "finished_at": 1790884411.49,
+              "latency_s": 0.002,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": ""
+            },
+            {
+              "id": "blank-13",
+              "correct": false,
+              "started_at": 1790884411.486,
+              "finished_at": 1790884411.49,
+              "latency_s": 0.004,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": ""
+            },
+            {
+              "id": "blank-18",
+              "correct": false,
+              "started_at": 1790884411.489,
+              "finished_at": 1790884411.491,
+              "latency_s": 0.002,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": ""
+            },
+            {
+              "id": "blank-19",
+              "correct": false,
+              "started_at": 1790884411.49,
+              "finished_at": 1790884411.492,
+              "latency_s": 0.002,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": ""
+            },
+            {
+              "id": "blank-17",
+              "correct": false,
+              "started_at": 1790884411.489,
+              "finished_at": 1790884411.493,
+              "latency_s": 0.004,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": ""
+            },
+            {
+              "id": "correct-2",
+              "correct": true,
+              "started_at": 1790884411.492,
+              "finished_at": 1790884412.668,
+              "latency_s": 0.002,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": "4"
+            },
+            {
+              "id": "correct-0",
+              "correct": true,
+              "started_at": 1790884411.49,
+              "finished_at": 1790884412.731,
+              "latency_s": 0.002,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": "4"
+            },
+            {
+              "id": "correct-1",
+              "correct": true,
+              "started_at": 1790884411.491,
+              "finished_at": 1790884412.756,
+              "latency_s": 0.002,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": "4"
+            },
+            {
+              "id": "correct-3",
+              "correct": true,
+              "started_at": 1790884411.493,
+              "finished_at": 1790884412.867,
+              "latency_s": 0.002,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": "4"
+            },
+            {
+              "id": "correct-4",
+              "correct": true,
+              "started_at": 1790884412.668,
+              "finished_at": 1790884413.852,
+              "latency_s": 0.001,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": "4"
+            },
+            {
+              "id": "correct-5",
+              "correct": true,
+              "started_at": 1790884412.731,
+              "finished_at": 1790884414.035,
+              "latency_s": 0.002,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": "4"
+            },
+            {
+              "id": "correct-6",
+              "correct": true,
+              "started_at": 1790884412.756,
+              "finished_at": 1790884414.113,
+              "latency_s": 0.001,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": "4"
+            },
+            {
+              "id": "correct-7",
+              "correct": true,
+              "started_at": 1790884412.867,
+              "finished_at": 1790884414.221,
+              "latency_s": 0.001,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": "4"
+            },
+            {
+              "id": "correct-8",
+              "correct": true,
+              "started_at": 1790884413.852,
+              "finished_at": 1790884415.056,
+              "latency_s": 0.001,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": "4"
+            },
+            {
+              "id": "correct-9",
+              "correct": true,
+              "started_at": 1790884414.035,
+              "finished_at": 1790884415.291,
+              "latency_s": 0.001,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": "4"
+            },
+            {
+              "id": "wrong-0",
+              "correct": false,
+              "started_at": 1790884414.113,
+              "finished_at": 1790884415.479,
+              "latency_s": 0.001,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": "9"
+            },
+            {
+              "id": "wrong-1",
+              "correct": false,
+              "started_at": 1790884414.221,
+              "finished_at": 1790884415.599,
+              "latency_s": 0.001,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": "9"
+            },
+            {
+              "id": "wrong-2",
+              "correct": false,
+              "started_at": 1790884415.056,
+              "finished_at": 1790884416.312,
+              "latency_s": 0.002,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": "9"
+            },
+            {
+              "id": "wrong-3",
+              "correct": false,
+              "started_at": 1790884415.291,
+              "finished_at": 1790884416.694,
+              "latency_s": 0.002,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": "9"
+            },
+            {
+              "id": "wrong-4",
+              "correct": false,
+              "started_at": 1790884415.479,
+              "finished_at": 1790884416.807,
+              "latency_s": 0.003,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": "9"
+            },
+            {
+              "id": "wrong-5",
+              "correct": false,
+              "started_at": 1790884415.599,
+              "finished_at": 1790884416.926,
+              "latency_s": 0.002,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": "9"
+            },
+            {
+              "id": "wrong-6",
+              "correct": false,
+              "started_at": 1790884416.312,
+              "finished_at": 1790884417.576,
+              "latency_s": 0.003,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": "9"
+            },
+            {
+              "id": "wrong-8",
+              "correct": false,
+              "started_at": 1790884416.807,
+              "finished_at": 1790884418.014,
+              "latency_s": 0.002,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": "9"
+            },
+            {
+              "id": "wrong-7",
+              "correct": false,
+              "started_at": 1790884416.694,
+              "finished_at": 1790884418.016,
+              "latency_s": 0.002,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": "9"
+            },
+            {
+              "id": "wrong-9",
+              "correct": false,
+              "started_at": 1790884416.926,
+              "finished_at": 1790884418.212,
+              "latency_s": 0.002,
+              "usage": {
+                "prompt": 1,
+                "completion": 1,
+                "total": 2
+              },
+              "cost_usd": null,
+              "retries": 0,
+              "finish": "stop",
+              "pred": "9"
+            }
+          ],
+          "stdout": "[evidence] progress 10/40  ok=0 err=0\n[evidence] progress 20/40  ok=0 err=0\nWARNING: judge failed (InternalServerError: Error code: 503 - {'error': {'message': 'Controlled judge outage', 'type': 'server_error'}}); containment fallback for this item\nWARNING: judge failed (InternalServerError: Error code: 503 - {'error': {'message': 'Controlled judge outage', 'type': 'server_error'}}); containment fallback for this item\nWARNING: judge failed (InternalServerError: Error code: 503 - {'error': {'message': 'Controlled judge outage', 'type': 'server_error'}}); containment fallback for this item\nWARNING: judge failed (InternalServerError: Error code: 503 - {'error': {'message': 'Controlled judge outage', 'type': 'server_error'}}); containment fallback for this item\nWARNING: judge failed (InternalServerError: Error code: 503 - {'error': {'message': 'Controlled judge outage', 'type': 'server_error'}}); containment fallback for this item\nWARNING: judge failed (InternalServerError: Error code: 503 - {'error': {'message': 'Controlled judge outage', 'type': 'server_error'}}); containment fallback for this item\nWARNING: judge failed (InternalServerError: Error code: 503 - {'error': {'message': 'Controlled judge outage', 'type': 'server_error'}}); containment fallback for this item\nWARNING: judge failed (InternalServerError: Error code: 503 - {'error': {'message': 'Controlled judge outage', 'type': 'server_error'}}); containment fallback for this item\nWARNING: judge failed (InternalServerError: Error code: 503 - {'error': {'message': 'Controlled judge outage', 'type': 'server_error'}}); containment fallback for this item\nWARNING: judge failed (InternalServerError: Error code: 503 - {'error': {'message': 'Controlled judge outage', 'type': 'server_error'}}); containment fallback for this item\n[evidence] progress 30/40  ok=10 err=0\nWARNING: judge failed (InternalServerError: Error code: 503 - {'error': {'message': 'Controlled judge outage', 'type': 'server_error'}}); containment fallback for this item\nWARNING: judge failed (InternalServerError: Error code: 503 - {'error': {'message': 'Controlled judge outage', 'type': 'server_error'}}); containment fallback for this item\nWARNING: judge failed (InternalServerError: Error code: 503 - {'error': {'message': 'Controlled judge outage', 'type': 'server_error'}}); containment fallback for this item\nWARNING: judge failed (InternalServerError: Error code: 503 - {'error': {'message': 'Controlled judge outage', 'type': 'server_error'}}); containment fallback for this item\nWARNING: judge failed (InternalServerError: Error code: 503 - {'error': {'message': 'Controlled judge outage', 'type': 'server_error'}}); containment fallback for this item\nWARNING: judge failed (InternalServerError: Error code: 503 - {'error': {'message': 'Controlled judge outage', 'type': 'server_error'}}); containment fallback for this item\nWARNING: judge failed (InternalServerError: Error code: 503 - {'error': {'message': 'Controlled judge outage', 'type': 'server_error'}}); containment fallback for this item\nWARNING: judge failed (InternalServerError: Error code: 503 - {'error': {'message': 'Controlled judge outage', 'type': 'server_error'}}); containment fallback for this item\nWARNING: judge failed (InternalServerError: Error code: 503 - {'error': {'message': 'Controlled judge outage', 'type': 'server_error'}}); containment fallback for this item\nWARNING: judge failed (InternalServerError: Error code: 503 - {'error': {'message': 'Controlled judge outage', 'type': 'server_error'}}); containment fallback for this item\n[evidence] progress 40/40  ok=10 err=0\n[evidence] 25.0%  (10/40, 0 err)  lat_med=0.0s  $/task=None\n",
+          "stderr": ""
+        }
+      }
+    }
+  }
+}
