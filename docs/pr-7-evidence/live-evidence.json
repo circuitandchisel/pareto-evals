@@ -1,0 +1,2046 @@
+{
+  "benchmark": "GPQA-Diamond",
+  "requested_model": "pareto-26.10-preview",
+  "before_commit": "984f576dc58d41aa6dd34448b831fe2e64243c0b",
+  "after_commit": "a0734c2d1988cd01b0c5937a7e0f9d3b78fc55c4",
+  "source_sha256": "41d1213cd7a4998605a26c2798500652572007161b3a92817ba46b35befcd305",
+  "seed": 20261001,
+  "sample_size_per_arm": 100,
+  "max_tokens": 24000,
+  "concurrency": 4,
+  "sampling_parameters": "omitted; provider defaults, not deterministic",
+  "batch_order": "before/after on even batches, after/before on odd batches",
+  "rows": {
+    "before": [
+      {
+        "id": "gpqa-diamond-135",
+        "correct": true,
+        "cost_usd": 0.0001672,
+        "started_at": 1790882087.266,
+        "finished_at": 1790882102.498,
+        "latency_s": 15.231,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-092",
+        "correct": true,
+        "cost_usd": 0.0003216,
+        "started_at": 1790882087.266,
+        "finished_at": 1790882106.039,
+        "latency_s": 18.772,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-148",
+        "correct": true,
+        "cost_usd": 0.0023752000000000005,
+        "started_at": 1790882102.498,
+        "finished_at": 1790882108.273,
+        "latency_s": 5.775,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-060",
+        "correct": true,
+        "cost_usd": 0.0003888,
+        "started_at": 1790882087.266,
+        "finished_at": 1790882108.343,
+        "latency_s": 21.077,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-082",
+        "correct": true,
+        "cost_usd": 0.0050648,
+        "started_at": 1790882087.266,
+        "finished_at": 1790882112.397,
+        "latency_s": 25.13,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-161",
+        "correct": true,
+        "cost_usd": 0.007364000000000001,
+        "started_at": 1790882108.273,
+        "finished_at": 1790882121.741,
+        "latency_s": 13.467,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-100",
+        "correct": true,
+        "cost_usd": 0.008772,
+        "started_at": 1790882108.343,
+        "finished_at": 1790882122.886,
+        "latency_s": 14.542,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-153",
+        "correct": true,
+        "cost_usd": 0.0033304000000000003,
+        "started_at": 1790882121.741,
+        "finished_at": 1790882132.058,
+        "latency_s": 10.318,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-183",
+        "correct": true,
+        "cost_usd": 0.03216709,
+        "started_at": 1790882106.039,
+        "finished_at": 1790882151.015,
+        "latency_s": 44.974,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-031",
+        "correct": true,
+        "cost_usd": 0.0003232,
+        "started_at": 1790882112.397,
+        "finished_at": 1790882154.13,
+        "latency_s": 41.734,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-019",
+        "correct": true,
+        "cost_usd": 0.0003424,
+        "started_at": 1790882330.153,
+        "finished_at": 1790882337.713,
+        "latency_s": 7.56,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-038",
+        "correct": true,
+        "cost_usd": 0.0027392000000000002,
+        "started_at": 1790882330.153,
+        "finished_at": 1790882341.565,
+        "latency_s": 11.412,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-009",
+        "correct": true,
+        "cost_usd": 0.0001464,
+        "started_at": 1790882341.566,
+        "finished_at": 1790882354.789,
+        "latency_s": 13.223,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-034",
+        "correct": true,
+        "cost_usd": 0.004939570000000001,
+        "started_at": 1790882337.713,
+        "finished_at": 1790882355.929,
+        "latency_s": 18.215,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-173",
+        "correct": true,
+        "cost_usd": 0.0061848,
+        "started_at": 1790882330.153,
+        "finished_at": 1790882358.795,
+        "latency_s": 28.642,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-047",
+        "correct": true,
+        "cost_usd": 0.00034005000000000005,
+        "started_at": 1790882354.789,
+        "finished_at": 1790882396.113,
+        "latency_s": 41.323,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-054",
+        "correct": true,
+        "cost_usd": 0.005023200000000001,
+        "started_at": 1790882396.113,
+        "finished_at": 1790882404.884,
+        "latency_s": 8.771,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-097",
+        "correct": true,
+        "cost_usd": 0.000424,
+        "started_at": 1790882358.795,
+        "finished_at": 1790882416.144,
+        "latency_s": 57.349,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-048",
+        "correct": true,
+        "cost_usd": 0.00029829000000000005,
+        "started_at": 1790882330.153,
+        "finished_at": 1790882427.814,
+        "latency_s": 97.661,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-118",
+        "correct": true,
+        "cost_usd": 0.00162341,
+        "started_at": 1790882355.929,
+        "finished_at": 1790882442.638,
+        "latency_s": 86.71,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-049",
+        "correct": true,
+        "cost_usd": 0.0023807999999999998,
+        "started_at": 1790882443.026,
+        "finished_at": 1790882450.05,
+        "latency_s": 7.023,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-087",
+        "correct": true,
+        "cost_usd": 0.0012152,
+        "started_at": 1790882443.026,
+        "finished_at": 1790882450.853,
+        "latency_s": 7.827,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-065",
+        "correct": true,
+        "cost_usd": 0.0011032000000000001,
+        "started_at": 1790882450.05,
+        "finished_at": 1790882455.358,
+        "latency_s": 5.308,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-190",
+        "correct": true,
+        "cost_usd": 0.0097744,
+        "started_at": 1790882450.853,
+        "finished_at": 1790882467.65,
+        "latency_s": 16.797,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-068",
+        "correct": true,
+        "cost_usd": 0.00036,
+        "started_at": 1790882443.026,
+        "finished_at": 1790882468.47,
+        "latency_s": 25.444,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-080",
+        "correct": true,
+        "cost_usd": 0.0063144,
+        "started_at": 1790882467.65,
+        "finished_at": 1790882479.956,
+        "latency_s": 12.305,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-006",
+        "correct": true,
+        "cost_usd": 0.006379200000000001,
+        "started_at": 1790882468.47,
+        "finished_at": 1790882482.112,
+        "latency_s": 13.641,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-052",
+        "correct": true,
+        "cost_usd": 0.024281600000000004,
+        "started_at": 1790882455.358,
+        "finished_at": 1790882488.797,
+        "latency_s": 33.439,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-144",
+        "correct": true,
+        "cost_usd": 0.00030261000000000003,
+        "started_at": 1790882443.026,
+        "finished_at": 1790882488.969,
+        "latency_s": 45.942,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-059",
+        "correct": true,
+        "cost_usd": 0.000244,
+        "started_at": 1790882479.956,
+        "finished_at": 1790882501.504,
+        "latency_s": 21.548,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-122",
+        "correct": true,
+        "cost_usd": 0.000268,
+        "started_at": 1790882638.074,
+        "finished_at": 1790882650.438,
+        "latency_s": 12.363,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-067",
+        "correct": true,
+        "cost_usd": 0.0062943999999999995,
+        "started_at": 1790882638.074,
+        "finished_at": 1790882650.572,
+        "latency_s": 12.498,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-181",
+        "correct": true,
+        "cost_usd": 0.0016784,
+        "started_at": 1790882650.572,
+        "finished_at": 1790882656.433,
+        "latency_s": 5.861,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-063",
+        "correct": true,
+        "cost_usd": 0.0161032,
+        "started_at": 1790882638.074,
+        "finished_at": 1790882665.646,
+        "latency_s": 27.572,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-195",
+        "correct": true,
+        "cost_usd": 0.0035688,
+        "started_at": 1790882656.433,
+        "finished_at": 1790882668.925,
+        "latency_s": 12.492,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-140",
+        "correct": true,
+        "cost_usd": 0.01828261,
+        "started_at": 1790882638.074,
+        "finished_at": 1790882673.221,
+        "latency_s": 35.147,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-099",
+        "correct": true,
+        "cost_usd": 0.0004008,
+        "started_at": 1790882665.646,
+        "finished_at": 1790882687.126,
+        "latency_s": 21.48,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-115",
+        "correct": false,
+        "cost_usd": 0.024668690000000004,
+        "started_at": 1790882650.438,
+        "finished_at": 1790882692.824,
+        "latency_s": 42.386,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-014",
+        "correct": true,
+        "cost_usd": 0.00029920000000000006,
+        "started_at": 1790882673.221,
+        "finished_at": 1790882695.13,
+        "latency_s": 21.909,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-128",
+        "correct": true,
+        "cost_usd": 0.00055461,
+        "started_at": 1790882668.925,
+        "finished_at": 1790882724.672,
+        "latency_s": 55.746,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-151",
+        "correct": true,
+        "cost_usd": 0.0006872,
+        "started_at": 1790882725.049,
+        "finished_at": 1790882734.721,
+        "latency_s": 9.672,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-124",
+        "correct": true,
+        "cost_usd": 0.002768,
+        "started_at": 1790882725.049,
+        "finished_at": 1790882735.732,
+        "latency_s": 10.683,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-160",
+        "correct": false,
+        "cost_usd": 0.0011194100000000002,
+        "started_at": 1790882725.049,
+        "finished_at": 1790882744.24,
+        "latency_s": 19.191,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-163",
+        "correct": true,
+        "cost_usd": 0.00026,
+        "started_at": 1790882725.049,
+        "finished_at": 1790882745.766,
+        "latency_s": 20.717,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-189",
+        "correct": true,
+        "cost_usd": 0.0038264,
+        "started_at": 1790882734.721,
+        "finished_at": 1790882749.596,
+        "latency_s": 14.875,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-027",
+        "correct": true,
+        "cost_usd": 0.010765809999999999,
+        "started_at": 1790882735.732,
+        "finished_at": 1790882753.756,
+        "latency_s": 18.024,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-045",
+        "correct": true,
+        "cost_usd": 0.00037840000000000004,
+        "started_at": 1790882749.596,
+        "finished_at": 1790882787.342,
+        "latency_s": 37.746,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-108",
+        "correct": true,
+        "cost_usd": 0.01228901,
+        "started_at": 1790882753.756,
+        "finished_at": 1790882799.326,
+        "latency_s": 45.569,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-126",
+        "correct": true,
+        "cost_usd": 0.00057381,
+        "started_at": 1790882744.24,
+        "finished_at": 1790882800.96,
+        "latency_s": 56.72,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-179",
+        "correct": true,
+        "cost_usd": 0.00030240000000000003,
+        "started_at": 1790882745.766,
+        "finished_at": 1790882819.202,
+        "latency_s": 73.436,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-072",
+        "correct": true,
+        "cost_usd": 0.0033808,
+        "started_at": 1790882987.542,
+        "finished_at": 1790882998.086,
+        "latency_s": 10.544,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-134",
+        "correct": true,
+        "cost_usd": 0.003915200000000001,
+        "started_at": 1790882987.542,
+        "finished_at": 1790882999.604,
+        "latency_s": 12.062,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-149",
+        "correct": true,
+        "cost_usd": 0.00035440000000000005,
+        "started_at": 1790882987.542,
+        "finished_at": 1790883005.547,
+        "latency_s": 18.005,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-013",
+        "correct": true,
+        "cost_usd": 0.01345781,
+        "started_at": 1790882987.542,
+        "finished_at": 1790883009.76,
+        "latency_s": 22.218,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-113",
+        "correct": false,
+        "cost_usd": 0.0044704,
+        "started_at": 1790882999.604,
+        "finished_at": 1790883009.761,
+        "latency_s": 10.157,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-154",
+        "correct": true,
+        "cost_usd": 0.00458677,
+        "started_at": 1790882998.086,
+        "finished_at": 1790883018.152,
+        "latency_s": 20.066,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-004",
+        "correct": true,
+        "cost_usd": 0.005832370000000001,
+        "started_at": 1790883005.547,
+        "finished_at": 1790883021.636,
+        "latency_s": 16.089,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-112",
+        "correct": true,
+        "cost_usd": 0.005640800000000001,
+        "started_at": 1790883009.761,
+        "finished_at": 1790883021.943,
+        "latency_s": 12.182,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-146",
+        "correct": true,
+        "cost_usd": 0.0001856,
+        "started_at": 1790883018.152,
+        "finished_at": 1790883036.46,
+        "latency_s": 18.308,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-061",
+        "correct": true,
+        "cost_usd": 0.00035781000000000007,
+        "started_at": 1790883009.76,
+        "finished_at": 1790883071.544,
+        "latency_s": 61.784,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-192",
+        "correct": true,
+        "cost_usd": 0.0001832,
+        "started_at": 1790883171.327,
+        "finished_at": 1790883182.099,
+        "latency_s": 10.772,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-057",
+        "correct": true,
+        "cost_usd": 0.0006232,
+        "started_at": 1790883182.099,
+        "finished_at": 1790883190.3,
+        "latency_s": 8.201,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-157",
+        "correct": true,
+        "cost_usd": 0.00032661,
+        "started_at": 1790883171.327,
+        "finished_at": 1790883191.105,
+        "latency_s": 19.778,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-174",
+        "correct": false,
+        "cost_usd": 0.0002168,
+        "started_at": 1790883171.327,
+        "finished_at": 1790883221.314,
+        "latency_s": 49.987,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-121",
+        "correct": true,
+        "cost_usd": 0.0007850100000000002,
+        "started_at": 1790883171.327,
+        "finished_at": 1790883224.186,
+        "latency_s": 52.859,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-023",
+        "correct": true,
+        "cost_usd": 0.00043840000000000003,
+        "started_at": 1790883191.105,
+        "finished_at": 1790883224.253,
+        "latency_s": 33.148,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-166",
+        "correct": true,
+        "cost_usd": 0.00051061,
+        "started_at": 1790883190.3,
+        "finished_at": 1790883238.313,
+        "latency_s": 48.012,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-176",
+        "correct": true,
+        "cost_usd": 0.000288,
+        "started_at": 1790883221.314,
+        "finished_at": 1790883240.096,
+        "latency_s": 18.782,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-051",
+        "correct": true,
+        "cost_usd": 0.0003688000000000001,
+        "started_at": 1790883224.186,
+        "finished_at": 1790883246.311,
+        "latency_s": 22.125,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-053",
+        "correct": true,
+        "cost_usd": 0.020473810000000002,
+        "started_at": 1790883224.253,
+        "finished_at": 1790883274.641,
+        "latency_s": 50.387,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-175",
+        "correct": true,
+        "cost_usd": 0.005860800000000001,
+        "started_at": 1790883514.024,
+        "finished_at": 1790883532.514,
+        "latency_s": 18.49,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-150",
+        "correct": true,
+        "cost_usd": 0.0037312000000000005,
+        "started_at": 1790883514.024,
+        "finished_at": 1790883533.578,
+        "latency_s": 19.554,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-026",
+        "correct": true,
+        "cost_usd": 0.0020392,
+        "started_at": 1790883532.514,
+        "finished_at": 1790883539.266,
+        "latency_s": 6.752,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-158",
+        "correct": true,
+        "cost_usd": 0.00036720000000000004,
+        "started_at": 1790883539.266,
+        "finished_at": 1790883556.471,
+        "latency_s": 17.205,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-042",
+        "correct": true,
+        "cost_usd": 0.027532800000000003,
+        "started_at": 1790883514.024,
+        "finished_at": 1790883566.582,
+        "latency_s": 52.558,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-056",
+        "correct": true,
+        "cost_usd": 0.0180752,
+        "started_at": 1790883533.578,
+        "finished_at": 1790883575.814,
+        "latency_s": 42.235,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-040",
+        "correct": true,
+        "cost_usd": 0.0001968,
+        "started_at": 1790883566.582,
+        "finished_at": 1790883592.482,
+        "latency_s": 25.9,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-155",
+        "correct": true,
+        "cost_usd": 0.0003208,
+        "started_at": 1790883575.814,
+        "finished_at": 1790883594.154,
+        "latency_s": 18.339,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-145",
+        "correct": true,
+        "cost_usd": 0.010438610000000001,
+        "started_at": 1790883514.024,
+        "finished_at": 1790883622.724,
+        "latency_s": 108.7,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-162",
+        "correct": true,
+        "cost_usd": 0.0005048,
+        "started_at": 1790883556.471,
+        "finished_at": 1790883626.681,
+        "latency_s": 70.21,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-083",
+        "correct": true,
+        "cost_usd": 0.00045301000000000006,
+        "started_at": 1790883627.054,
+        "finished_at": 1790883630.1,
+        "latency_s": 3.046,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-133",
+        "correct": false,
+        "cost_usd": 0.0056008,
+        "started_at": 1790883630.1,
+        "finished_at": 1790883644.742,
+        "latency_s": 14.642,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-010",
+        "correct": true,
+        "cost_usd": 0.00050021,
+        "started_at": 1790883627.054,
+        "finished_at": 1790883645.666,
+        "latency_s": 18.612,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-098",
+        "correct": true,
+        "cost_usd": 0.0004688,
+        "started_at": 1790883627.054,
+        "finished_at": 1790883655.492,
+        "latency_s": 28.438,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-105",
+        "correct": true,
+        "cost_usd": 0.00036960000000000004,
+        "started_at": 1790883644.742,
+        "finished_at": 1790883663.377,
+        "latency_s": 18.634,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-116",
+        "correct": true,
+        "cost_usd": 0.0031600000000000005,
+        "started_at": 1790883645.666,
+        "finished_at": 1790883674.728,
+        "latency_s": 29.062,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-062",
+        "correct": true,
+        "cost_usd": 0.008344210000000001,
+        "started_at": 1790883663.377,
+        "finished_at": 1790883676.999,
+        "latency_s": 13.622,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-018",
+        "correct": true,
+        "cost_usd": 0.0006218100000000001,
+        "started_at": 1790883627.054,
+        "finished_at": 1790883687.732,
+        "latency_s": 60.678,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-066",
+        "correct": true,
+        "cost_usd": 0.0025648000000000003,
+        "started_at": 1790883674.728,
+        "finished_at": 1790883692.97,
+        "latency_s": 18.242,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-168",
+        "correct": true,
+        "cost_usd": 0.0005368,
+        "started_at": 1790883655.492,
+        "finished_at": 1790883705.088,
+        "latency_s": 49.596,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-132",
+        "correct": true,
+        "cost_usd": 0.000336,
+        "started_at": 1790883931.468,
+        "finished_at": 1790883950.726,
+        "latency_s": 19.257,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-138",
+        "correct": true,
+        "cost_usd": 0.00037360000000000003,
+        "started_at": 1790883931.468,
+        "finished_at": 1790883970.889,
+        "latency_s": 39.42,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-084",
+        "correct": true,
+        "cost_usd": 0.004899199999999999,
+        "started_at": 1790883950.726,
+        "finished_at": 1790883972.791,
+        "latency_s": 22.065,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-070",
+        "correct": true,
+        "cost_usd": 0.0025432000000000002,
+        "started_at": 1790883970.889,
+        "finished_at": 1790883983.306,
+        "latency_s": 12.417,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-114",
+        "correct": true,
+        "cost_usd": 0.0102512,
+        "started_at": 1790883972.791,
+        "finished_at": 1790883987.126,
+        "latency_s": 14.334,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-033",
+        "correct": true,
+        "cost_usd": 0.00048245000000000004,
+        "started_at": 1790883931.468,
+        "finished_at": 1790883994.403,
+        "latency_s": 62.935,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-086",
+        "correct": true,
+        "cost_usd": 0.012312000000000002,
+        "started_at": 1790883987.126,
+        "finished_at": 1790884006.217,
+        "latency_s": 19.091,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-177",
+        "correct": true,
+        "cost_usd": 0.0036,
+        "started_at": 1790883994.403,
+        "finished_at": 1790884007.55,
+        "latency_s": 13.147,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-120",
+        "correct": true,
+        "cost_usd": 0.008538770000000001,
+        "started_at": 1790883931.468,
+        "finished_at": 1790884009.493,
+        "latency_s": 78.025,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-024",
+        "correct": true,
+        "cost_usd": 0.00026197000000000004,
+        "started_at": 1790883983.306,
+        "finished_at": 1790884030.278,
+        "latency_s": 46.972,
+        "retries": 0
+      }
+    ],
+    "after": [
+      {
+        "id": "gpqa-diamond-135",
+        "correct": true,
+        "cost_usd": 0.0001864,
+        "started_at": 1790882154.532,
+        "finished_at": 1790882168.404,
+        "latency_s": 13.872,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-092",
+        "correct": true,
+        "cost_usd": 0.00012357,
+        "started_at": 1790882154.532,
+        "finished_at": 1790882171.397,
+        "latency_s": 16.865,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-148",
+        "correct": true,
+        "cost_usd": 0.0035496000000000004,
+        "started_at": 1790882168.404,
+        "finished_at": 1790882174.599,
+        "latency_s": 6.194,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-060",
+        "correct": true,
+        "cost_usd": 0.021527250000000005,
+        "started_at": 1790882154.532,
+        "finished_at": 1790882180.954,
+        "latency_s": 26.422,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-082",
+        "correct": true,
+        "cost_usd": 0.0003,
+        "started_at": 1790882154.532,
+        "finished_at": 1790882186.559,
+        "latency_s": 32.026,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-161",
+        "correct": true,
+        "cost_usd": 0.0051008,
+        "started_at": 1790882174.599,
+        "finished_at": 1790882188.982,
+        "latency_s": 14.382,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-100",
+        "correct": true,
+        "cost_usd": 0.009844,
+        "started_at": 1790882180.954,
+        "finished_at": 1790882196.111,
+        "latency_s": 15.157,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-153",
+        "correct": true,
+        "cost_usd": 0.0040152,
+        "started_at": 1790882188.982,
+        "finished_at": 1790882198.147,
+        "latency_s": 9.165,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-183",
+        "correct": true,
+        "cost_usd": 0.03286149,
+        "started_at": 1790882171.397,
+        "finished_at": 1790882216.934,
+        "latency_s": 45.536,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-031",
+        "correct": false,
+        "cost_usd": 0.02053605,
+        "started_at": 1790882186.559,
+        "finished_at": 1790882227.982,
+        "latency_s": 41.423,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-019",
+        "correct": true,
+        "cost_usd": 0.0013472,
+        "started_at": 1790882228.325,
+        "finished_at": 1790882235.552,
+        "latency_s": 7.226,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-038",
+        "correct": true,
+        "cost_usd": 0.0030816000000000003,
+        "started_at": 1790882228.325,
+        "finished_at": 1790882237.109,
+        "latency_s": 8.784,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-173",
+        "correct": true,
+        "cost_usd": 0.0063864,
+        "started_at": 1790882228.325,
+        "finished_at": 1790882248.103,
+        "latency_s": 19.777,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-034",
+        "correct": true,
+        "cost_usd": 0.0050416,
+        "started_at": 1790882235.552,
+        "finished_at": 1790882248.105,
+        "latency_s": 12.553,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-009",
+        "correct": true,
+        "cost_usd": 0.000156,
+        "started_at": 1790882237.109,
+        "finished_at": 1790882248.921,
+        "latency_s": 11.812,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-048",
+        "correct": true,
+        "cost_usd": 0.0009066100000000001,
+        "started_at": 1790882228.325,
+        "finished_at": 1790882281.048,
+        "latency_s": 52.723,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-054",
+        "correct": true,
+        "cost_usd": 0.005695200000000001,
+        "started_at": 1790882281.048,
+        "finished_at": 1790882290.266,
+        "latency_s": 9.218,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-118",
+        "correct": true,
+        "cost_usd": 0.02386661,
+        "started_at": 1790882248.105,
+        "finished_at": 1790882299.051,
+        "latency_s": 50.946,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-047",
+        "correct": true,
+        "cost_usd": 0.0004776,
+        "started_at": 1790882248.103,
+        "finished_at": 1790882325.114,
+        "latency_s": 77.011,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-097",
+        "correct": true,
+        "cost_usd": 0.00048981,
+        "started_at": 1790882248.921,
+        "finished_at": 1790882329.714,
+        "latency_s": 80.792,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-087",
+        "correct": true,
+        "cost_usd": 0.0009880000000000002,
+        "started_at": 1790882501.858,
+        "finished_at": 1790882508.369,
+        "latency_s": 6.511,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-049",
+        "correct": true,
+        "cost_usd": 0.0014864000000000001,
+        "started_at": 1790882501.858,
+        "finished_at": 1790882511.172,
+        "latency_s": 9.314,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-144",
+        "correct": true,
+        "cost_usd": 0.006807200000000001,
+        "started_at": 1790882501.858,
+        "finished_at": 1790882513.221,
+        "latency_s": 11.364,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-065",
+        "correct": true,
+        "cost_usd": 0.0029080000000000004,
+        "started_at": 1790882508.369,
+        "finished_at": 1790882513.716,
+        "latency_s": 5.347,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-080",
+        "correct": true,
+        "cost_usd": 0.0073608,
+        "started_at": 1790882513.716,
+        "finished_at": 1790882524.635,
+        "latency_s": 10.919,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-068",
+        "correct": true,
+        "cost_usd": 0.0131744,
+        "started_at": 1790882501.858,
+        "finished_at": 1790882530.212,
+        "latency_s": 28.355,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-190",
+        "correct": true,
+        "cost_usd": 0.0093296,
+        "started_at": 1790882511.172,
+        "finished_at": 1790882534.511,
+        "latency_s": 23.339,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-052",
+        "correct": true,
+        "cost_usd": 0.0139296,
+        "started_at": 1790882513.221,
+        "finished_at": 1790882537.64,
+        "latency_s": 24.418,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-006",
+        "correct": true,
+        "cost_usd": 0.0029712000000000002,
+        "started_at": 1790882524.635,
+        "finished_at": 1790882546.09,
+        "latency_s": 21.455,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-059",
+        "correct": true,
+        "cost_usd": 0.0002632,
+        "started_at": 1790882530.212,
+        "finished_at": 1790882549.149,
+        "latency_s": 18.937,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-067",
+        "correct": true,
+        "cost_usd": 0.0017704,
+        "started_at": 1790882549.668,
+        "finished_at": 1790882563.197,
+        "latency_s": 13.529,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-122",
+        "correct": true,
+        "cost_usd": 0.0086616,
+        "started_at": 1790882549.668,
+        "finished_at": 1790882566.438,
+        "latency_s": 16.77,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-181",
+        "correct": true,
+        "cost_usd": 0.0020591999999999997,
+        "started_at": 1790882566.438,
+        "finished_at": 1790882574.251,
+        "latency_s": 7.812,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-195",
+        "correct": true,
+        "cost_usd": 0.0031112,
+        "started_at": 1790882574.251,
+        "finished_at": 1790882587.711,
+        "latency_s": 13.46,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-063",
+        "correct": true,
+        "cost_usd": 0.023706400000000002,
+        "started_at": 1790882549.668,
+        "finished_at": 1790882589.076,
+        "latency_s": 39.408,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-140",
+        "correct": true,
+        "cost_usd": 0.0005354099999999999,
+        "started_at": 1790882549.668,
+        "finished_at": 1790882591.101,
+        "latency_s": 41.433,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-115",
+        "correct": false,
+        "cost_usd": 0.026136210000000003,
+        "started_at": 1790882563.197,
+        "finished_at": 1790882604.258,
+        "latency_s": 41.06,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-014",
+        "correct": true,
+        "cost_usd": 0.00029920000000000006,
+        "started_at": 1790882591.101,
+        "finished_at": 1790882606.73,
+        "latency_s": 15.629,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-099",
+        "correct": true,
+        "cost_usd": 0.023892,
+        "started_at": 1790882587.711,
+        "finished_at": 1790882621.968,
+        "latency_s": 34.256,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-128",
+        "correct": true,
+        "cost_usd": 0.00050661,
+        "started_at": 1790882589.076,
+        "finished_at": 1790882637.675,
+        "latency_s": 48.599,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-151",
+        "correct": true,
+        "cost_usd": 0.0019448000000000002,
+        "started_at": 1790882819.562,
+        "finished_at": 1790882829.439,
+        "latency_s": 9.877,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-124",
+        "correct": true,
+        "cost_usd": 0.003392,
+        "started_at": 1790882819.562,
+        "finished_at": 1790882833.73,
+        "latency_s": 14.169,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-160",
+        "correct": false,
+        "cost_usd": 0.0007632,
+        "started_at": 1790882819.562,
+        "finished_at": 1790882839.37,
+        "latency_s": 19.809,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-189",
+        "correct": true,
+        "cost_usd": 0.00826757,
+        "started_at": 1790882829.439,
+        "finished_at": 1790882844.405,
+        "latency_s": 14.965,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-163",
+        "correct": true,
+        "cost_usd": 0.00026320000000000006,
+        "started_at": 1790882819.562,
+        "finished_at": 1790882844.464,
+        "latency_s": 24.902,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-045",
+        "correct": true,
+        "cost_usd": 0.00032661,
+        "started_at": 1790882844.464,
+        "finished_at": 1790882868.954,
+        "latency_s": 24.49,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-027",
+        "correct": true,
+        "cost_usd": 0.00015093000000000002,
+        "started_at": 1790882833.731,
+        "finished_at": 1790882882.779,
+        "latency_s": 49.049,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-108",
+        "correct": true,
+        "cost_usd": 0.0005864,
+        "started_at": 1790882868.954,
+        "finished_at": 1790882888.86,
+        "latency_s": 19.906,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-126",
+        "correct": true,
+        "cost_usd": 0.03595301,
+        "started_at": 1790882839.37,
+        "finished_at": 1790882889.058,
+        "latency_s": 49.687,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-179",
+        "correct": true,
+        "cost_usd": 0.0003056,
+        "started_at": 1790882844.405,
+        "finished_at": 1790882906.435,
+        "latency_s": 62.03,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-013",
+        "correct": true,
+        "cost_usd": 0.0013632,
+        "started_at": 1790882906.81,
+        "finished_at": 1790882915.042,
+        "latency_s": 8.232,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-072",
+        "correct": true,
+        "cost_usd": 0.0036464000000000006,
+        "started_at": 1790882906.81,
+        "finished_at": 1790882920.771,
+        "latency_s": 13.96,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-134",
+        "correct": true,
+        "cost_usd": 0.0055184,
+        "started_at": 1790882906.81,
+        "finished_at": 1790882921.895,
+        "latency_s": 15.084,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-113",
+        "correct": false,
+        "cost_usd": 0.0035360000000000005,
+        "started_at": 1790882920.771,
+        "finished_at": 1790882930.292,
+        "latency_s": 9.522,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-154",
+        "correct": true,
+        "cost_usd": 0.0042056,
+        "started_at": 1790882915.042,
+        "finished_at": 1790882932.955,
+        "latency_s": 17.913,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-149",
+        "correct": true,
+        "cost_usd": 0.00046581,
+        "started_at": 1790882906.81,
+        "finished_at": 1790882934.8,
+        "latency_s": 27.99,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-004",
+        "correct": true,
+        "cost_usd": 0.0034552000000000003,
+        "started_at": 1790882921.895,
+        "finished_at": 1790882940.532,
+        "latency_s": 18.638,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-112",
+        "correct": true,
+        "cost_usd": 0.0038936,
+        "started_at": 1790882932.955,
+        "finished_at": 1790882944.427,
+        "latency_s": 11.472,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-146",
+        "correct": true,
+        "cost_usd": 0.0073344000000000005,
+        "started_at": 1790882934.8,
+        "finished_at": 1790882949.268,
+        "latency_s": 14.468,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-061",
+        "correct": true,
+        "cost_usd": 0.00045381,
+        "started_at": 1790882930.292,
+        "finished_at": 1790882987.182,
+        "latency_s": 56.89,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-192",
+        "correct": true,
+        "cost_usd": 0.00016720000000000003,
+        "started_at": 1790883275.011,
+        "finished_at": 1790883285.198,
+        "latency_s": 10.187,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-057",
+        "correct": true,
+        "cost_usd": 0.0005976,
+        "started_at": 1790883285.198,
+        "finished_at": 1790883291.562,
+        "latency_s": 6.363,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-174",
+        "correct": false,
+        "cost_usd": 0.0002264,
+        "started_at": 1790883275.011,
+        "finished_at": 1790883292.483,
+        "latency_s": 17.472,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-157",
+        "correct": true,
+        "cost_usd": 0.00035221000000000004,
+        "started_at": 1790883275.011,
+        "finished_at": 1790883304.464,
+        "latency_s": 29.453,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-166",
+        "correct": true,
+        "cost_usd": 0.0006016,
+        "started_at": 1790883291.562,
+        "finished_at": 1790883312.717,
+        "latency_s": 21.155,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-176",
+        "correct": true,
+        "cost_usd": 0.0003328,
+        "started_at": 1790883304.464,
+        "finished_at": 1790883316.033,
+        "latency_s": 11.569,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-051",
+        "correct": true,
+        "cost_usd": 0.0003976,
+        "started_at": 1790883312.717,
+        "finished_at": 1790883338.869,
+        "latency_s": 26.153,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-023",
+        "correct": true,
+        "cost_usd": 0.00045440000000000004,
+        "started_at": 1790883292.483,
+        "finished_at": 1790883342.659,
+        "latency_s": 50.175,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-121",
+        "correct": true,
+        "cost_usd": 0.00072997,
+        "started_at": 1790883275.011,
+        "finished_at": 1790883348.7,
+        "latency_s": 73.689,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-053",
+        "correct": true,
+        "cost_usd": 0.000604,
+        "started_at": 1790883316.033,
+        "finished_at": 1790883374.289,
+        "latency_s": 58.256,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-175",
+        "correct": true,
+        "cost_usd": 0.0042448,
+        "started_at": 1790883374.641,
+        "finished_at": 1790883396.767,
+        "latency_s": 22.126,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-150",
+        "correct": true,
+        "cost_usd": 0.004656,
+        "started_at": 1790883374.641,
+        "finished_at": 1790883401.204,
+        "latency_s": 26.563,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-026",
+        "correct": true,
+        "cost_usd": 0.0029224000000000003,
+        "started_at": 1790883396.767,
+        "finished_at": 1790883403.072,
+        "latency_s": 6.305,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-158",
+        "correct": true,
+        "cost_usd": 0.0003064,
+        "started_at": 1790883403.072,
+        "finished_at": 1790883421.611,
+        "latency_s": 18.539,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-056",
+        "correct": true,
+        "cost_usd": 0.007320800000000001,
+        "started_at": 1790883401.204,
+        "finished_at": 1790883426.056,
+        "latency_s": 24.851,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-042",
+        "correct": true,
+        "cost_usd": 0.00035861000000000004,
+        "started_at": 1790883374.641,
+        "finished_at": 1790883426.542,
+        "latency_s": 51.902,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-155",
+        "correct": true,
+        "cost_usd": 0.0047016,
+        "started_at": 1790883426.542,
+        "finished_at": 1790883438.491,
+        "latency_s": 11.949,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-040",
+        "correct": true,
+        "cost_usd": 0.0001968,
+        "started_at": 1790883426.056,
+        "finished_at": 1790883440.863,
+        "latency_s": 14.807,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-145",
+        "correct": false,
+        "cost_usd": 0.00588181,
+        "started_at": 1790883374.641,
+        "finished_at": 1790883452.357,
+        "latency_s": 77.716,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-162",
+        "correct": true,
+        "cost_usd": 0.00046500999999999997,
+        "started_at": 1790883421.611,
+        "finished_at": 1790883513.644,
+        "latency_s": 92.033,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-083",
+        "correct": true,
+        "cost_usd": 0.00034421,
+        "started_at": 1790883705.448,
+        "finished_at": 1790883708.63,
+        "latency_s": 2.48,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-098",
+        "correct": true,
+        "cost_usd": 0.0006608,
+        "started_at": 1790883705.448,
+        "finished_at": 1790883724.309,
+        "latency_s": 18.105,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-133",
+        "correct": true,
+        "cost_usd": 0.00554,
+        "started_at": 1790883708.63,
+        "finished_at": 1790883725.815,
+        "latency_s": 17.13,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-010",
+        "correct": true,
+        "cost_usd": 0.0007914100000000001,
+        "started_at": 1790883705.448,
+        "finished_at": 1790883729.194,
+        "latency_s": 22.99,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-116",
+        "correct": true,
+        "cost_usd": 0.000216,
+        "started_at": 1790883725.815,
+        "finished_at": 1790883740.159,
+        "latency_s": 14.344,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-105",
+        "correct": true,
+        "cost_usd": 0.00036,
+        "started_at": 1790883724.309,
+        "finished_at": 1790883746.234,
+        "latency_s": 21.925,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-062",
+        "correct": true,
+        "cost_usd": 0.010194130000000001,
+        "started_at": 1790883740.159,
+        "finished_at": 1790883755.592,
+        "latency_s": 15.433,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-018",
+        "correct": true,
+        "cost_usd": 0.00018645,
+        "started_at": 1790883705.448,
+        "finished_at": 1790883765.266,
+        "latency_s": 59.061,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-066",
+        "correct": true,
+        "cost_usd": 0.0134768,
+        "started_at": 1790883746.234,
+        "finished_at": 1790883767.931,
+        "latency_s": 21.696,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-168",
+        "correct": true,
+        "cost_usd": 0.00042325,
+        "started_at": 1790883729.194,
+        "finished_at": 1790883811.056,
+        "latency_s": 81.861,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-132",
+        "correct": true,
+        "cost_usd": 0.0003936,
+        "started_at": 1790883811.43,
+        "finished_at": 1790883837.146,
+        "latency_s": 25.716,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-138",
+        "correct": true,
+        "cost_usd": 0.000348,
+        "started_at": 1790883811.43,
+        "finished_at": 1790883842.989,
+        "latency_s": 31.559,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-070",
+        "correct": true,
+        "cost_usd": 0.0026264000000000005,
+        "started_at": 1790883842.99,
+        "finished_at": 1790883854.802,
+        "latency_s": 11.812,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-084",
+        "correct": true,
+        "cost_usd": 0.000432,
+        "started_at": 1790883837.146,
+        "finished_at": 1790883868.797,
+        "latency_s": 31.651,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-033",
+        "correct": true,
+        "cost_usd": 0.00077621,
+        "started_at": 1790883811.43,
+        "finished_at": 1790883880.673,
+        "latency_s": 69.243,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-114",
+        "correct": true,
+        "cost_usd": 0.0043152,
+        "started_at": 1790883854.802,
+        "finished_at": 1790883881.295,
+        "latency_s": 26.493,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-024",
+        "correct": true,
+        "cost_usd": 0.00037039999999999995,
+        "started_at": 1790883868.797,
+        "finished_at": 1790883887.74,
+        "latency_s": 18.943,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-177",
+        "correct": true,
+        "cost_usd": 0.0027136,
+        "started_at": 1790883881.295,
+        "finished_at": 1790883894.498,
+        "latency_s": 13.202,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-120",
+        "correct": true,
+        "cost_usd": 0.00075781,
+        "started_at": 1790883811.43,
+        "finished_at": 1790883915.796,
+        "latency_s": 104.366,
+        "retries": 0
+      },
+      {
+        "id": "gpqa-diamond-086",
+        "correct": true,
+        "cost_usd": 0.000296,
+        "started_at": 1790883880.673,
+        "finished_at": 1790883931.108,
+        "latency_s": 50.435,
+        "retries": 0
+      }
+    ]
+  },
+  "batches": {
+    "before": [
+      {
+        "batch": 0,
+        "artifact_sha256": "126511e1481c5c2d9684ef493de905bf5ba7d336a175546c840b33ed53a2cdfe",
+        "started_at": 1790882086.981517,
+        "finished_at": 1790882154.229383,
+        "exit_code": 0,
+        "tasks": 10,
+        "errors": 0
+      },
+      {
+        "batch": 1,
+        "artifact_sha256": "ccd43fb13df7d6256d67d78495d267665088dafc9202acfb3f3a6452a3282dc6",
+        "started_at": 1790882329.8206432,
+        "finished_at": 1790882442.7146082,
+        "exit_code": 0,
+        "tasks": 10,
+        "errors": 0
+      },
+      {
+        "batch": 2,
+        "artifact_sha256": "49876f24fe9377c113cc7a18604556d238f1d95de9374022564818583d856e66",
+        "started_at": 1790882442.7154539,
+        "finished_at": 1790882501.558152,
+        "exit_code": 0,
+        "tasks": 10,
+        "errors": 0
+      },
+      {
+        "batch": 3,
+        "artifact_sha256": "f4afcd058e169813259db345969eb1ecae151eaf8c37b22335fb84ea524ff722",
+        "started_at": 1790882637.7623942,
+        "finished_at": 1790882724.747087,
+        "exit_code": 0,
+        "tasks": 10,
+        "errors": 0
+      },
+      {
+        "batch": 4,
+        "artifact_sha256": "4877891ce94c1b341d2f85b54ab31412291fd797ddadb9340343e70e58421721",
+        "started_at": 1790882724.747584,
+        "finished_at": 1790882819.2897458,
+        "exit_code": 0,
+        "tasks": 10,
+        "errors": 0
+      },
+      {
+        "batch": 5,
+        "artifact_sha256": "0a19de1557b42b3a6599006c1c03b40c26ef5dddc76e6e8505b02ffbab875b3d",
+        "started_at": 1790882987.267315,
+        "finished_at": 1790883071.637717,
+        "exit_code": 0,
+        "tasks": 10,
+        "errors": 0
+      },
+      {
+        "batch": 6,
+        "artifact_sha256": "f78e860042631a5c3468e9791cb5ccfbdc4a203d7de93ad057bcd8d0ffd58c42",
+        "started_at": 1790883170.984556,
+        "finished_at": 1790883274.711504,
+        "exit_code": 0,
+        "tasks": 10,
+        "errors": 0
+      },
+      {
+        "batch": 7,
+        "artifact_sha256": "d33ce6c4ee437596e08a56d68e306ee21424314c451c93787277b94aff9cea51",
+        "started_at": 1790883513.721035,
+        "finished_at": 1790883626.752977,
+        "exit_code": 0,
+        "tasks": 10,
+        "errors": 0
+      },
+      {
+        "batch": 8,
+        "artifact_sha256": "532d01d5eaf68aba8b46039c47659c26ff509a6dbc60afe8cf13faa2f8b125e2",
+        "started_at": 1790883626.753402,
+        "finished_at": 1790883705.148062,
+        "exit_code": 0,
+        "tasks": 10,
+        "errors": 0
+      },
+      {
+        "batch": 9,
+        "artifact_sha256": "8f3646442bf76b99e5cd1d5c2b4057af24a321913d3e619cf4d478fd7eae3ccf",
+        "started_at": 1790883931.190748,
+        "finished_at": 1790884030.342548,
+        "exit_code": 0,
+        "tasks": 10,
+        "errors": 0
+      }
+    ],
+    "after": [
+      {
+        "batch": 0,
+        "artifact_sha256": "a4cb491e2c77b05a4b2e74f58a8fbfd5ab60fd07bc6161bed5e4d88227dbbee2",
+        "started_at": 1790882154.229934,
+        "finished_at": 1790882228.052292,
+        "exit_code": 0,
+        "tasks": 10,
+        "errors": 0
+      },
+      {
+        "batch": 1,
+        "artifact_sha256": "b3211fd01e5f3af94c54aa6a189542d8f53079b540be1b88eb4df4fca6fedf4d",
+        "started_at": 1790882228.052793,
+        "finished_at": 1790882329.819582,
+        "exit_code": 0,
+        "tasks": 10,
+        "errors": 0
+      },
+      {
+        "batch": 2,
+        "artifact_sha256": "061bc38bdc6676f859c859eb8ddf6d65fb26a87770c2118bf704ede63b8c5e6d",
+        "started_at": 1790882501.558601,
+        "finished_at": 1790882549.255988,
+        "exit_code": 0,
+        "tasks": 10,
+        "errors": 0
+      },
+      {
+        "batch": 3,
+        "artifact_sha256": "679ba843b6e459b293f1227ab0369d2738406673a5c0024f528441b568aaf4fa",
+        "started_at": 1790882549.256363,
+        "finished_at": 1790882637.761198,
+        "exit_code": 0,
+        "tasks": 10,
+        "errors": 0
+      },
+      {
+        "batch": 4,
+        "artifact_sha256": "283ab81f28f21c9cc934ab2498404cfb655b3d757fce0bbe10ecedd650d81076",
+        "started_at": 1790882819.2901819,
+        "finished_at": 1790882906.507296,
+        "exit_code": 0,
+        "tasks": 10,
+        "errors": 0
+      },
+      {
+        "batch": 5,
+        "artifact_sha256": "55aef078fe3bd54cd7b274cc001be99b3a64231eb27d10c5f6ee0908041e1bce",
+        "started_at": 1790882906.507993,
+        "finished_at": 1790882987.2667809,
+        "exit_code": 0,
+        "tasks": 10,
+        "errors": 0
+      },
+      {
+        "batch": 6,
+        "artifact_sha256": "4d0b9e8bdb0914b126af4ff1c75b239ac74699d3638f3d485021587779ed8efb",
+        "started_at": 1790883274.711901,
+        "finished_at": 1790883374.344567,
+        "exit_code": 0,
+        "tasks": 10,
+        "errors": 0
+      },
+      {
+        "batch": 7,
+        "artifact_sha256": "9bacc77cba9a78432fc81254a87bdf35d42fa5d3e45d36a049d46a587a2b1fc4",
+        "started_at": 1790883374.344946,
+        "finished_at": 1790883513.720425,
+        "exit_code": 0,
+        "tasks": 10,
+        "errors": 0
+      },
+      {
+        "batch": 8,
+        "artifact_sha256": "932cdbc84b4c7e86ed7caa0f04066d97af6096f0aa139a92515f850ec55ba4ad",
+        "started_at": 1790883705.1484768,
+        "finished_at": 1790883811.1302788,
+        "exit_code": 0,
+        "tasks": 10,
+        "errors": 0
+      },
+      {
+        "batch": 9,
+        "artifact_sha256": "ee7880d9f2342c820a98ec73a31cbc53f6458aaab2cdefd2c864d761044656ee",
+        "started_at": 1790883811.13074,
+        "finished_at": 1790883931.1900868,
+        "exit_code": 0,
+        "tasks": 10,
+        "errors": 0
+      }
+    ]
+  },
+  "limitations": [
+    "100 matched questions per arm; not the full 198-question dataset or verification of advertised scores.",
+    "Provider sampling is nondeterministic; differences cannot be attributed to this PR alone.",
+    "Approximate paired normal 95% interval; no prespecified noninferiority margin or power calculation.",
+    "HTTP-attempt logs are unavailable; returned model identity and complete retry billing are unverified.",
+    "Costs are response-reported, not independently reconciled charges; interrupted requests may cost extra.",
+    "The run was interrupted after six completed batches per arm and resumed with the same settings.",
+    "Only PR #7 nonstreaming GPQA; no HLE, streaming, or agentic benchmark validation."
+  ],
+  "summary": {
+    "before": {
+      "tasks": 100,
+      "correct": 95,
+      "priced_tasks": 100,
+      "response_cost_usd": 0.44146241,
+      "mean_response_cost_usd": 0.0044146241,
+      "median_wall_latency_s": 19.224500060081482,
+      "mean_wall_latency_s": 28.029120013713836,
+      "retries_reported": 0
+    },
+    "after": {
+      "tasks": 100,
+      "correct": 94,
+      "priced_tasks": 100,
+      "response_cost_usd": 0.46195564,
+      "mean_response_cost_usd": 0.0046195564000000005,
+      "median_wall_latency_s": 19.792999863624573,
+      "mean_wall_latency_s": 27.795979998111726,
+      "retries_reported": 0
+    },
+    "paired": {
+      "delta_percentage_points": -1.0,
+      "approximate_95_percent_ci": [
+        -4.406230773275364,
+        2.4062307732753636
+      ],
+      "improved": 1,
+      "regressed": 2,
+      "unchanged": 97
+    }
+  }
+}

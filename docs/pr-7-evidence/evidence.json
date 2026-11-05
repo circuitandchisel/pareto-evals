@@ -1,0 +1,30 @@
+{
+  "scenario": "Synthetic prior run; current benchmark subprocess exits 23 before producing results",
+  "sample_size": 100,
+  "prior_correct": 80,
+  "live_model_calls": 0,
+  "results": {
+    "before": {
+      "commit": "984f576dc58d41aa6dd34448b831fe2e64243c0b",
+      "exit_code": 0,
+      "markdown_report_exists": true,
+      "csv_report_exists": true,
+      "old_jsonl_exists": true,
+      "old_summary_exists": true,
+      "report": "| Benchmark | n | Synthetic fixture score | Synthetic fixture $/task |\n|---|---|---|---|\n| gpqa | 100 | 80.0% | $0.0100 |\n",
+      "stdout": "Benchmarks: gpqa\nModels: Synthetic fixture\nSlices: gpqa=100\n\n  \u25b6 gpqa \u00d7 Synthetic fixture  (limit=100, model=synthetic-fixture)\n    ! gpqa \u00d7 Synthetic fixture exited 23 (see output above)\n  \u2713 gpqa: Pareto 80.0% $0.01\n\n| Benchmark | n | Synthetic fixture score | Synthetic fixture $/task |\n|---|---|---|---|\n| gpqa | 100 | 80.0% | $0.0100 |\n\nWrote /private/var/folders/9m/v844n0b93vj73ch1l946wm4c0000gn/T/tmp6u00i62_/results/comparison.md and /private/var/folders/9m/v844n0b93vj73ch1l946wm4c0000gn/T/tmp6u00i62_/results/comparison.csv\n",
+      "stderr": ""
+    },
+    "after": {
+      "commit": "7f6b856285aadefb95b4e0780ad01018a57a93d5",
+      "exit_code": 1,
+      "markdown_report_exists": false,
+      "csv_report_exists": false,
+      "old_jsonl_exists": false,
+      "old_summary_exists": false,
+      "report": null,
+      "stdout": "Benchmarks: gpqa\nModels: Synthetic fixture\nSlices: gpqa=100\n\n  \u25b6 gpqa \u00d7 Synthetic fixture  (limit=100, model=synthetic-fixture)\n",
+      "stderr": "gpqa \u00d7 Synthetic fixture exited 23; results will not be aggregated\n"
+    }
+  }
+}
