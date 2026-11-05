@@ -1,0 +1,120 @@
+{
+  "calls": {
+    "model": 4,
+    "judge": 4
+  },
+  "results": {
+    "before": {
+      "command": "uv run --with openai python -m benchmarks.hle",
+      "commit": "984f576dc58d41aa6dd34448b831fe2e64243c0b",
+      "exit_code": 0,
+      "stdout": "[/tmp/pr9-before] progress 2/2  ok=2 err=0\n[/tmp/pr9-before] 100.0%  (2/2, 0 err)  lat_med=0.01s  $/task=0.05",
+      "stderr": "",
+      "summary": {
+        "benchmark": "/tmp/pr9-before",
+        "n": 2,
+        "resolved": 2,
+        "accuracy": 100.0,
+        "errored": 0,
+        "latency_median_s": 0.01,
+        "latency_mean_s": 0.01,
+        "wall_s": 0.0,
+        "cost_usd_total": 0.1,
+        "cost_source": "per_item_response",
+        "n_priced": 1,
+        "total_retries": 0,
+        "cost_usd_per_task": 0.05
+      },
+      "jsonl": [
+        {
+          "id": "priced",
+          "correct": true,
+          "started_at": 1790874832.423,
+          "finished_at": 1790874832.445,
+          "latency_s": 0.022,
+          "usage": {
+            "prompt": 10,
+            "completion": 10,
+            "total": 20
+          },
+          "cost_usd": 0.1,
+          "retries": 0,
+          "finish": "stop",
+          "pred": "4"
+        },
+        {
+          "id": "unpriced",
+          "correct": true,
+          "started_at": 1790874832.445,
+          "finished_at": 1790874832.447,
+          "latency_s": 0.001,
+          "usage": {
+            "prompt": 10,
+            "completion": 10,
+            "total": 20
+          },
+          "cost_usd": null,
+          "retries": 0,
+          "finish": "stop",
+          "pred": "4"
+        }
+      ]
+    },
+    "after": {
+      "command": "uv run --with openai python -m benchmarks.hle",
+      "commit": "31bc8b3479872acdea9d804008ef6151ae24c7ab",
+      "exit_code": 0,
+      "stdout": "[/tmp/pr9-after] progress 2/2  ok=2 err=0\n[/tmp/pr9-after] 100.0%  (2/2, 0 err)  lat_med=0.01s  $/task=0.1",
+      "stderr": "",
+      "summary": {
+        "benchmark": "/tmp/pr9-after",
+        "n": 2,
+        "resolved": 2,
+        "accuracy": 100.0,
+        "errored": 0,
+        "latency_median_s": 0.01,
+        "latency_mean_s": 0.01,
+        "wall_s": 0.0,
+        "cost_usd_total": 0.1,
+        "cost_source": "per_item_response",
+        "n_priced": 1,
+        "total_retries": 0,
+        "cost_usd_per_task": 0.1
+      },
+      "jsonl": [
+        {
+          "id": "priced",
+          "correct": true,
+          "started_at": 1790874832.743,
+          "finished_at": 1790874832.768,
+          "latency_s": 0.024,
+          "usage": {
+            "prompt": 10,
+            "completion": 10,
+            "total": 20
+          },
+          "cost_usd": 0.1,
+          "retries": 0,
+          "finish": "stop",
+          "pred": "4"
+        },
+        {
+          "id": "unpriced",
+          "correct": true,
+          "started_at": 1790874832.768,
+          "finished_at": 1790874832.769,
+          "latency_s": 0.001,
+          "usage": {
+            "prompt": 10,
+            "completion": 10,
+            "total": 20
+          },
+          "cost_usd": null,
+          "retries": 0,
+          "finish": "stop",
+          "pred": "4"
+        }
+      ]
+    }
+  }
+}

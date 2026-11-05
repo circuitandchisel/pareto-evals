@@ -1,0 +1,126 @@
+{
+  "scenario": "Two correct synthetic HLE tasks: one costs $0.10, one omits cost",
+  "live_model_calls": 0,
+  "results": {
+    "before": {
+      "commit": "984f576dc58d41aa6dd34448b831fe2e64243c0b",
+      "command": "python -m benchmarks.hle",
+      "exit_code": 0,
+      "calls": {
+        "model": 2,
+        "judge": 2
+      },
+      "summary": {
+        "benchmark": "evidence",
+        "n": 2,
+        "resolved": 2,
+        "accuracy": 100.0,
+        "errored": 0,
+        "latency_median_s": 0.01,
+        "latency_mean_s": 0.01,
+        "wall_s": 0.0,
+        "cost_usd_total": 0.1,
+        "cost_source": "per_item_response",
+        "n_priced": 1,
+        "total_retries": 0,
+        "cost_usd_per_task": 0.05
+      },
+      "jsonl": [
+        {
+          "id": "priced",
+          "correct": true,
+          "started_at": 1790884461.113,
+          "finished_at": 1790884461.134,
+          "latency_s": 0.021,
+          "usage": {
+            "prompt": 10,
+            "completion": 10,
+            "total": 20
+          },
+          "cost_usd": 0.1,
+          "retries": 0,
+          "finish": "stop",
+          "pred": "4"
+        },
+        {
+          "id": "unpriced",
+          "correct": true,
+          "started_at": 1790884461.134,
+          "finished_at": 1790884461.136,
+          "latency_s": 0.001,
+          "usage": {
+            "prompt": 10,
+            "completion": 10,
+            "total": 20
+          },
+          "cost_usd": null,
+          "retries": 0,
+          "finish": "stop",
+          "pred": "4"
+        }
+      ],
+      "stdout": "[evidence] progress 2/2  ok=2 err=0\n[evidence] 100.0%  (2/2, 0 err)  lat_med=0.01s  $/task=0.05\n",
+      "stderr": ""
+    },
+    "after": {
+      "commit": "31bc8b3479872acdea9d804008ef6151ae24c7ab",
+      "command": "python -m benchmarks.hle",
+      "exit_code": 0,
+      "calls": {
+        "model": 2,
+        "judge": 2
+      },
+      "summary": {
+        "benchmark": "evidence",
+        "n": 2,
+        "resolved": 2,
+        "accuracy": 100.0,
+        "errored": 0,
+        "latency_median_s": 0.01,
+        "latency_mean_s": 0.01,
+        "wall_s": 0.0,
+        "cost_usd_total": 0.1,
+        "cost_source": "per_item_response",
+        "n_priced": 1,
+        "total_retries": 0,
+        "cost_usd_per_task": 0.1
+      },
+      "jsonl": [
+        {
+          "id": "priced",
+          "correct": true,
+          "started_at": 1790884461.374,
+          "finished_at": 1790884461.396,
+          "latency_s": 0.021,
+          "usage": {
+            "prompt": 10,
+            "completion": 10,
+            "total": 20
+          },
+          "cost_usd": 0.1,
+          "retries": 0,
+          "finish": "stop",
+          "pred": "4"
+        },
+        {
+          "id": "unpriced",
+          "correct": true,
+          "started_at": 1790884461.396,
+          "finished_at": 1790884461.397,
+          "latency_s": 0.001,
+          "usage": {
+            "prompt": 10,
+            "completion": 10,
+            "total": 20
+          },
+          "cost_usd": null,
+          "retries": 0,
+          "finish": "stop",
+          "pred": "4"
+        }
+      ],
+      "stdout": "[evidence] progress 2/2  ok=2 err=0\n[evidence] 100.0%  (2/2, 0 err)  lat_med=0.01s  $/task=0.1\n",
+      "stderr": ""
+    }
+  }
+}
