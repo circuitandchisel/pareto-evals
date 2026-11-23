@@ -44,16 +44,15 @@ def _n_options(it: dict) -> int:
 
 
 def _extract_letter(text: str | None, n_opts: int = 10):
-    """Pull the answer letter, tolerant of chatty output. Preference order:
-    an explicit 'Answer: X' / 'answer is X', then '(X)', then a lone trailing
-    letter, then the first standalone letter. Only letters within range."""
+    """Prefer boxed answers, then markers, parentheses, lines, and standalone letters."""
     if not text:
         return None
     up = text.strip().upper()
     hi = string.ascii_uppercase[max(0, n_opts - 1)]  # e.g. 'J' for 10 options
     rng = f"A-{hi}"
     for pat in (
-        rf"ANSWER\s*(?:IS|:|=)?\s*\(?([{rng}])\)?",
+        rf"\\BOXED\s*\{{\s*([{rng}])\s*\}}",
+        rf"\bANSWER\s*(?:IS|:|=)?\s*\(?([{rng}])\)?(?!\w)",
         rf"\(([{rng}])\)",
         rf"(?:^|\n)\s*([{rng}])\s*(?:$|\.|\))",
     ):

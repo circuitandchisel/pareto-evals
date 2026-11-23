@@ -46,7 +46,7 @@ def _extract(text: str | None):
                     depth -= 1
                     if depth == 0:
                         return text[i + 1:j].strip()
-    nums = re.findall(r"-?\d+(?:/\d+)?", text)
+    nums = re.findall(r"-?(?:\d+(?:\.\d+)?|\.\d+)(?:/\d+)?", text)
     return nums[-1] if nums else None
 
 
